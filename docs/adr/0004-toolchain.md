@@ -26,6 +26,8 @@
 
 构建仍是 Vite —— `vp build` 即 Vite(Rolldown)产线,与"构建走 Vite"一致;Vite+ 只是把它和 lint/format/test/类型检查收进同一 CLI 与同一份根 `vite.config.ts`。
 
+> **`server` 例外(W1 落地校准)**:`server` 是 Cloudflare Workers,构建 / 本地 dev / 部署走 `wrangler`(内置 esbuild),**不走 `vp build` / `vite`**;`vp` 在 server 端只用于 `vp check`(lint/format/类型)与(待 #13001)测试。`vp build` / `vp dev` / `vite.config.ts` 主要服务 `app-uni`。
+
 ### ⚠️ 唯一例外:`server` 测试池
 
 `@cloudflare/vitest-pool-workers` 在 workerd 内跑 Vitest,会 import `vitest/worker` 子路径,而 Vite+ 的测试层(`@voidzero-dev/vite-plus-test`)当前未 re-export 该子路径 → 运行期 `No such module "vitest/worker"`(workers-sdk Issue #13001,截至本 ADR **未确认修复**)。

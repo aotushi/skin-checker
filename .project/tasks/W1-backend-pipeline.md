@@ -11,7 +11,7 @@
 
 ## 范围
 
-- [ ] `server/` scaffold:Cloudflare Workers + Hono(`wrangler.toml`、`.dev.vars`)
+- [x] `server/` scaffold:Cloudflare Workers + Hono(`wrangler.jsonc`、`.dev.vars`)
 - [ ] 图片上传接口 → R2 临时对象(用后即删,见 ADR 0003)
 - [ ] 调通义千问 VL 多模态分析,传入 `shared/skin-report.schema.json` 约束结构化输出
 - [ ] 用 schema 校验 LLM 返回值(如 ajv)
@@ -33,3 +33,4 @@
 |------|---------|--------|
 | 2026-06-16 | 创建任务,W1 范围与验收 | Claude |
 | 2026-06-17 | 补 schema 喂 LLM 的 min/max strict 兼容注意 | Claude |
+| 2026-06-17 | server scaffold(Hono + /health);tsc / wrangler types / dry-run 三层验证过 | Claude |

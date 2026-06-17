@@ -1,0 +1,3 @@
+# 通义千问 VL API key(OpenAI 兼容接口)。
+# 复制本文件为 .dev.vars 填入真实值;.dev.vars 已在根 .gitignore,勿提交。
+QWEN_API_KEY=

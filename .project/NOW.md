@@ -4,11 +4,11 @@
 
 ## 阶段
 
-🟡 **骨架已建,W1 未开始。** 目录结构 + 基础规范 + 契约真相源 + ADR 已落地。
+🟡 **W1 进行中:server 骨架已跑通(`/health`,tsc / wrangler types / dry-run 验证过)。** 目录 / 规范 / 契约 / ADR 已落地。
 
 ## 下一步(W1)
 
-CF 后端核心链路:图片上传(R2)→ 通义千问 VL → JSON Schema 结构化输出 → 校验 → D1 历史。
+server 起步已完成。续做:图片上传(R2)→ 通义千问 VL → JSON Schema 结构化输出 → 校验 → D1 历史。
 详见 `tasks/W1-backend-pipeline.md`。
 
 ## 关键决策(指针)
