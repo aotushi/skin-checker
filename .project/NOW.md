@@ -17,6 +17,7 @@ server 起步已完成。续做:图片上传(R2)→ 通义千问 VL → JSON Sch
 - 只锁三端 → `docs/adr/0002-lock-three-targets.md`
 - 图片用后即删 → `docs/adr/0003-image-ephemeral-storage.md`
 - 工具链(Vite+ 统一 `vp`;Sentry→V2)→ `docs/adr/0004-toolchain.md`
+- 前端样式 / 可访问性(a11y 分端、逻辑属性有限采纳无 polyfill)→ `docs/adr/0005-frontend-a11y-and-css-conventions.md`
 
 ## 备注
 

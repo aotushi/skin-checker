@@ -40,6 +40,11 @@
 - **不引入**:ESLint/Prettier、Biome、Turborepo/Nx(已被 `vp` 覆盖或本项目用不上)。
 - **监控**:MVP 不上 Sentry,靠 CF 原生 observability;Sentry 下沉 V2。
 
+## 前端样式与可访问性(详见 docs/adr/0005-frontend-a11y-and-css-conventions.md)
+
+- **可访问性(a11y)**:分端落地 —— H5 语义化标签 + 关键交互补 `aria-label`/`role`;flutter 用 `Semantics` widget(**非 ARIA**);微信小程序 `aria-*` 尽力而为。MVP **不引自动 a11y lint**(Oxlint 不覆盖 Vue `<template>`,oxc#15761;不为此引 ESLint),靠**约定 + 人工 checklist**;关键路径(拍照 / 结果 / 免责声明)可达可读即可,不追 WCAG AA 全覆盖。
+- **CSS 逻辑属性**:H5 端推荐 `inline-size`/`block-size` 等现代写法(**不强制**);**不引 polyfill**(2021 起 Baseline)。**微信小程序避开** `margin-inline-*`/`padding-inline-*`(Skyline 不支持、报警告),用物理属性 / `rpx` + 条件编译兜;flutter 用 `EdgeInsetsDirectional`。
+
 ## 自维护文档链(继承 resume 约定)
 
 修改代码后按链路更新:`代码注释 → .project/tasks/ → .project/NOW.md → README.md`。
