@@ -1,0 +1,26 @@
+# === 通用 ===
+.DS_Store
+*.log
+.idea/
+.vscode/
+
+# === 密钥 / 环境 ===
+.env
+.env.*
+.dev.vars
+
+# === Node(server / app-uni)===
+node_modules/
+dist/
+.wrangler/
+
+# === uniapp ===
+unpackage/
+
+# === flutter / dart(app-flutter)===
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+build/
+*.iml
+.packages
