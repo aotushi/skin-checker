@@ -61,6 +61,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { requestAnalyze, setPendingAnalysis } from '../../utils/api'
 
 const picked = ref('')
 const analyzing = ref(false)
@@ -86,13 +87,18 @@ function back() {
   uni.navigateBack()
 }
 
-// MVP:前端模拟分析过程后进结果卡;真实上传对接 server /analyze 见 W2 切片 E
-function analyze() {
-  if (!picked.value) return
+// 真传图到 server /analyze(切片 E):成功暂存 envelope 进结果卡;失败 toast 留在本页可重试
+async function analyze() {
+  if (!picked.value || analyzing.value) return
   analyzing.value = true
-  setTimeout(() => {
-    uni.redirectTo({ url: '/pages/result/result' })
-  }, 1400)
+  try {
+    setPendingAnalysis(await requestAnalyze(picked.value))
+    uni.redirectTo({ url: '/pages/result/result?from=analysis' })
+  } catch (err) {
+    uni.showToast({ title: err instanceof Error ? err.message : '分析失败,请重试', icon: 'none' })
+  } finally {
+    analyzing.value = false
+  }
 }
 </script>
 
@@ -164,14 +170,17 @@ function analyze() {
   height: 100%;
 }
 .viewer__empty {
+  width: 100%; /* 撑满取景区,.guide 的百分比宽以此为基准 */
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
 }
 .guide {
-  width: 150px;
-  height: 196px;
+  width: 58%;
+  max-width: 240px; /* 平板/桌面 600 壳内防过大;240×314 恰好兜进 min-height 360 的取景区 */
+  aspect-ratio: 150 / 196; /* 沿用原 150×196 的脸形比例 */
+  min-height: 196px; /* 旧 WebView 不识 aspect-ratio 时的兜底,避免塌成 0 高 */
   border: 1.5px dashed rgba(245, 233, 224, 0.42);
   border-radius: 50% 50% 46% 46% / 40% 40% 60% 60%;
 }

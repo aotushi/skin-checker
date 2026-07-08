@@ -136,11 +136,13 @@ import { onLoad } from '@dcloudio/uni-app'
 import type { SkinReport } from '@/types/skin-report'
 import { sampleReport } from '@/mock/sample-report'
 import { getHistoryItem, saveHistory } from '../../utils/history'
+import { takePendingAnalysis } from '../../utils/api'
 
-// report 来源:带 ?id= 为历史回看(读本地那条),无参为示例 / 新分析(sampleReport)
+// report 来源:?id= 历史回看(读本地那条);?from=analysis 新分析(取拍照页暂存的 envelope);无参为示例(sampleReport)
 const report = ref<SkinReport>(sampleReport)
 const fromHistory = ref(false) // 回看态:隐藏「保存报告」(已在历史中)
 const saved = ref(false) // 本次已存,防重复写入
+const analysisMeta = ref<{ id: string; createdAt: number } | null>(null) // 新分析的 server id/时间,保存历史时沿用
 
 onLoad((q) => {
   const id = q?.id
@@ -149,6 +151,15 @@ onLoad((q) => {
     if (item) {
       report.value = item.report
       fromHistory.value = true
+    }
+    return
+  }
+  // 新分析:暂存单次取用;H5 刷新后暂存已失(模块态),回落示例报告
+  if (q?.from === 'analysis') {
+    const p = takePendingAnalysis()
+    if (p) {
+      report.value = p.report
+      analysisMeta.value = { id: p.id, createdAt: p.createdAt }
     }
   }
 })
@@ -238,10 +249,10 @@ function goBack() {
 function restart() {
   uni.redirectTo({ url: '/pages/capture/capture' })
 }
-// 保存报告到本地历史(uni Storage,游客态仅存设备本地);防重复写入
+// 保存报告到本地历史(uni Storage,游客态仅存设备本地);防重复写入;新分析沿用 server 的 id/时间
 function save() {
   if (saved.value) return
-  saveHistory(report.value)
+  saveHistory(report.value, analysisMeta.value ?? undefined)
   saved.value = true
   uni.showToast({ title: '已保存到本地', icon: 'success' })
 }
