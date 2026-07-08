@@ -16,12 +16,14 @@
 ## 合规文案规则(贯穿所有端)
 
 - 定位"参考/建议",**不得**出现疾病诊断、疗效、治疗等宣称。
-- 结果页 + 启动页必须带免责声明(文案见 `shared/skin-report.schema.json` 的 `disclaimer` 字段与 README)。
+- 免责声明**收敛到结果页一处**展示(详见 `docs/adr/0008`;文案见 `shared/skin-report.schema.json` 的 `disclaimer` 字段);启动页不再强制。「我的 → 免责声明」为可点查看的完整声明入口,与 inline note 不同,保留。
 
 ## 三端打包范围
 
 - 只锁 **H5 / 微信小程序 / Android APK**,其它端口不适配、不处理。
-- uniapp 端差异用条件编译补齐(`#ifdef MP-WEIXIN / H5 / APP-PLUS`),不为未覆盖端做响应式/兼容。
+- **APK 双栈**:flutter 出 APK,uniapp **也**出 App(APK)手机/平板装机(2026-07-08,见 ADR 0009);uniapp 编译目标 = H5 / 微信小程序 / App。
+- uniapp 端差异用条件编译补齐(`#ifdef MP-WEIXIN / H5 / APP-PLUS`,APP-PLUS 现启用),不为未覆盖端做响应式/兼容。
+- **平板(大屏)**:用一层 CSS max-width 容器限宽居中(600px),不做多列响应式;`maxWidth` 配置项仅 H5、rpx 封顶字段 Vue3 App 存疑,故走 CSS 容器(见 ADR 0009)。
 
 ## 密钥管理
 
@@ -33,8 +35,8 @@
 
 ## 工具链(详见 docs/adr/0004-toolchain.md)
 
-- **TS 两端(server / app-uni)**:统一用 **Vite+(`vp` CLI)** —— `vp dev` / `vp build`(构建走 Vite/Rolldown)/ `vp check`(Oxlint+Oxfmt+tsgo)/ `vp test`(Vitest)。Oxlint/Oxfmt/Vitest 都是 Vite+ 的组成部分,不再单独拼装。
-- **唯一例外**:`server` 测试暂不走 `vp test`,用原版 `vitest` + `@cloudflare/vitest-pool-workers`(Vite+ 测试层与该 pool 暂不兼容,workers-sdk #13001;W1 接测试时复查)。
+- **app-uni(uniapp)**:用 uniapp **自带 `uni` CLI** —— `uni` / `uni build`(H5)、`uni -p mp-weixin` / `uni build -p mp-weixin`(小程序);类型 `vue-tsc --noEmit`;样式 `sass` + `pnpm gen:tokens`(design-tokens→tokens.scss)、`pnpm gen:types`(schema→类型)。**不走 Vite+**(Rolldown 会打断针对 Rollup 的 uni 插件链);DCloud 预设版本钉死勿升。(2026-07-06 定,见 ADR 0004 修订)
+- **server(Workers)**:构建 / dev / 部署走 `wrangler`;**Vite+ `vp` 收窄到只服务 server**,仅备用于 `vp check` 与(待 workers-sdk #13001)测试 —— 测试暂用原版 `vitest` + `@cloudflare/vitest-pool-workers`。
 - **app-flutter(Dart)**:`dart format` + `flutter analyze` + flutter test。**Vite+/oxc 不适用 Dart**。
 - **Vite+ 仍 alpha**:`package.json` 钉死版本,勿用 `^`。
 - **不引入**:ESLint/Prettier、Biome、Turborepo/Nx(已被 `vp` 覆盖或本项目用不上)。

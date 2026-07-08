@@ -1,7 +1,7 @@
 # ADR 0004:工具链(Vite+ 统一入口;构建走 Vite;Dart 端独立;Sentry 下沉 V2)
 
 - **状态:** 已采纳
-- **日期:** 2026-06-16(2026-06-17 修订:Vite+ 由"不引入"改为"统一采纳",理由见背景)
+- **日期:** 2026-06-16(2026-06-17 修订:Vite+ 由"不引入"改为"统一采纳",理由见背景;**2026-07-06 再修订:app-uni 改用 uniapp 自带 `uni` CLI、Vite+ 收窄到 `server`**,见「决策」开头)
 
 ## 背景
 
@@ -13,6 +13,15 @@
 - 之前单列的 Oxlint / Oxfmt / Vitest **本就是 Vite+ 的组成部分**,分开装 = 手动拼装 Vite+ 的子集 → 统一收敛到 Vite+。
 
 ## 决策
+
+> **⚠️ 2026-07-06 修订(app-uni 工具链,优先级高于下方原表述):** 实测确认 uniapp 多端编译(H5 / 微信小程序)**必须走它自带的 `uni` CLI**(`@dcloudio/vite-plugin-uni` 驱动,底层钉死 Vite 5 + Rollup);Vite+ 的 Rolldown 会打断针对 Rollup 写的 uni 插件链。故 **`app-uni` 不采纳 Vite+ `vp`**,改用:
+>
+> - **dev / build / 多端编译** → `uni` CLI(`uni`、`uni build`、`uni -p mp-weixin`、`uni build -p mp-weixin`,见 `app-uni/package.json`)
+> - **类型检查** → `vue-tsc --noEmit`(tsgo 对 `.vue` SFC 支持未就绪)
+> - **样式 / 生成** → `sass` + `pnpm gen:tokens`(`design-tokens.json` → `src/styles/tokens.scss`)、`pnpm gen:types`(schema → `src/types/skin-report.ts`);两脚本仿 server 的 `gen-skin-type-map.mjs`,不引重型工具
+> - **版本敏感**:钉死 DCloud 预设版本(`3.0.0-408…` / vite `5.2.8`),不擅自升级
+>
+> **净结果:Vite+ `vp` 收窄到只服务 `server` 端**(server 构建 / dev / 部署本就走 wrangler,`vp` 仅备用于 `vp check` 与待 #13001 的测试)。下方"TS 两端统一 Vite+"表中 **app-uni 部分作废**,server 部分维持。
 
 ### TS 两端(`server` / `app-uni`):统一用 Vite+ `vp`
 
