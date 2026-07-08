@@ -2,6 +2,7 @@
 
 - **状态:** 已采纳
 - **日期:** 2026-06-16
+- **修订(2026-07-08):** uniapp 也正式出 App(APK)、并补平板限宽策略 —— 见 ADR 0009。本 ADR 端范围与「不做」项其余不变。
 
 ## 背景
 
@@ -15,7 +16,7 @@ uniapp 支持 H5 / 各家小程序 / App / 快应用 / PC 等多形态;flutter �
 | --- | --- |
 | H5 | uniapp 编译 |
 | 微信小程序 | uniapp 编译 |
-| Android APK | flutter 出 APK(uniapp 也可出 App 作双栈对照) |
+| Android APK | flutter + uniapp 双栈出 APK(见 ADR 0009) |
 
 **明确不做:** iOS(需 Mac + 开发者账号 + 证书)、PC/桌面端、快应用、微信以外其它家小程序。
 

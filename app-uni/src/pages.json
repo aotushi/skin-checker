@@ -1,0 +1,38 @@
+{
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "肤镜"
+      }
+    },
+    {
+      "path": "pages/capture/capture",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "拍照检测"
+      }
+    },
+    {
+      "path": "pages/result/result",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "肤质报告"
+      }
+    },
+    {
+      "path": "pages/mine/mine",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "我的"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "肤镜",
+    "navigationBarBackgroundColor": "#FDF4EC",
+    "backgroundColor": "#FDF4EC"
+  }
+}

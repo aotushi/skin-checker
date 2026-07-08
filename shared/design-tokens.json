@@ -1,0 +1,112 @@
+{
+  "$description": "肤镜(SKINLENS)设计 token 单一真相源(DTCG 格式)。两端从此派生:H5 / 微信小程序 → CSS 变量 / SCSS,flutter → Dart 常量。改 token 只改此文件,生成方式见 ../shared/README.md 与 ../docs/adr/0007。复合值(渐变、阴影)为务实存法,两端各自拼装,见各项 $description。",
+  "color": {
+    "$type": "color",
+    "brand": {
+      "rose-deep": { "$value": "#A85A48", "$description": "主色:Tab 高亮 / 型号名 / 主要强调" },
+      "rose-wood": { "$value": "#8C4A3A", "$description": "主色深:结果卡型号大字" },
+      "clay": { "$value": "#C77A5E", "$description": "敏感维度 / 次强调" },
+      "gold": { "$value": "#C9913F", "$description": "油脂维度 / 香槟金" }
+    },
+    "text": {
+      "ink": { "$value": "#5A4A42", "$description": "主文本 / 标题" },
+      "brown": { "$value": "#8C6A54", "$description": "次级深:引导句 / 色沉维度" },
+      "muted": { "$value": "#9A8278", "$description": "描述文本" },
+      "muted-soft": { "$value": "#B0917F", "$description": "辅助:未选 Tab / 副标题" },
+      "faint": { "$value": "#C0A294", "$description": "极弱:chevron / 占位" }
+    },
+    "surface": {
+      "card": { "$value": "#FFFDFB", "$description": "卡片底" },
+      "bg-top": { "$value": "#FDF4EC", "$description": "页面渐变·顶(180deg 起)" },
+      "bg-bottom": { "$value": "#F9E7D9", "$description": "页面渐变·底" },
+      "pill": { "$value": "#F7E3D7", "$description": "pill / 小标签底" },
+      "note": { "$value": "#F5EAE0", "$description": "免责 note 底" }
+    },
+    "tint": {
+      "$description": "科普四维卡图标浅底,与对应维度配色成对",
+      "gold": { "$value": "#FBF1E4", "$description": "油脂维度浅底" },
+      "clay": { "$value": "#FBEDE6", "$description": "敏感维度浅底" },
+      "rose": { "$value": "#F8E7DF", "$description": "痘痘维度浅底" },
+      "brown": { "$value": "#F5ECE3", "$description": "色沉维度浅底" }
+    },
+    "spectrum": {
+      "$description": "结果卡双极光谱滑块",
+      "track": { "$value": "#F2E4DA", "$description": "光谱轨道" },
+      "midline": { "$value": "#E3CDBF", "$description": "中线(含糊区)" },
+      "thumb": { "$value": "#D2795C", "$description": "滑块" },
+      "thumb-soft": { "$value": "#E0A981", "$description": "低置信滑块(敏感,虚边)" }
+    },
+    "line": {
+      "hairline": { "$value": "rgba(160,90,72,0.10)", "$description": "Tab 顶边 / 分隔" },
+      "divider": { "$value": "rgba(160,90,72,0.08)", "$description": "列表内分隔线" }
+    },
+    "on-dark": { "$value": "#F5E9E0", "$description": "相机深色态上的文字 / 图标" },
+    "camera-bg": { "$value": "#241E1B", "$description": "拍照取景深色底" }
+  },
+  "gradient": {
+    "$type": "color",
+    "$description": "复合渐变以起止色成对存储,角度见各项 $description;两端各自拼 linear-gradient / LinearGradient",
+    "cta-from": { "$value": "#E3A381", "$description": "主按钮渐变起(与 cta-to 配,135deg)" },
+    "cta-to": { "$value": "#D2795C", "$description": "主按钮渐变止" },
+    "photo-from": { "$value": "#E8C4AC", "$description": "照片 / 头像占位渐变起(与 photo-to 配,160deg)" },
+    "photo-to": { "$value": "#D5A184", "$description": "照片 / 头像占位渐变止" }
+  },
+  "typography": {
+    "family": {
+      "$type": "fontFamily",
+      "sans": { "$value": ["-apple-system", "PingFang SC", "Microsoft YaHei", "sans-serif"], "$description": "正文 / UI 系统字栈" },
+      "display": { "$value": ["Fraunces", "Georgia", "serif"], "$description": "衬线,仅用于数字 / 型号码(.fr)" }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "regular": { "$value": 400 },
+      "medium": { "$value": 500 },
+      "semibold": { "$value": 600 }
+    },
+    "size": {
+      "$type": "dimension",
+      "xs": { "$value": "11px", "$description": "副标 / 极小字" },
+      "sm": { "$value": "12px", "$description": "分组标题 / pill" },
+      "base": { "$value": "13px", "$description": "描述正文" },
+      "md": { "$value": "14px", "$description": "列表项标题" },
+      "lg": { "$value": "15px", "$description": "维度名 / 卡标题" },
+      "xl": { "$value": "17px", "$description": "页面标题栏" },
+      "2xl": { "$value": "20px", "$description": "Hero 主标题" }
+    },
+    "leading": {
+      "$type": "number",
+      "tight": { "$value": 1.2 },
+      "body": { "$value": 1.55, "$description": "描述文本行高" }
+    }
+  },
+  "radius": {
+    "$type": "dimension",
+    "sm": { "$value": "10px", "$description": "小图标圆角" },
+    "md": { "$value": "12px", "$description": "维度图标块" },
+    "lg": { "$value": "14px", "$description": "入口条" },
+    "xl": { "$value": "16px", "$description": "列表卡 / 记录条" },
+    "2xl": { "$value": "18px", "$description": "内容卡" },
+    "3xl": { "$value": "20px", "$description": "用户卡" },
+    "phone": { "$value": "32px", "$description": "设备外框(仅 mockup 参考)" }
+  },
+  "space": {
+    "$type": "dimension",
+    "1": { "$value": "4px" },
+    "2": { "$value": "6px" },
+    "3": { "$value": "8px" },
+    "4": { "$value": "10px" },
+    "5": { "$value": "12px" },
+    "6": { "$value": "14px" },
+    "7": { "$value": "16px" },
+    "8": { "$value": "18px" },
+    "9": { "$value": "20px" },
+    "10": { "$value": "24px" }
+  },
+  "shadow": {
+    "$description": "复合值,$value 为可直接用于 H5 box-shadow 的串;flutter 落地时按分量转 BoxShadow",
+    "card": { "$value": "0 4px 14px rgba(160,90,72,0.06)", "$description": "卡片" },
+    "float": { "$value": "0 14px 36px rgba(160,90,72,0.20)", "$description": "浮起(拍照屏)" },
+    "phone": { "$value": "0 16px 44px rgba(160,90,72,0.20)", "$description": "设备外框" },
+    "cta": { "$value": "0 6px 16px rgba(200,110,80,0.34)", "$description": "主按钮" }
+  }
+}

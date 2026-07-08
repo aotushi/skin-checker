@@ -1,0 +1,74 @@
+/**
+ * ⚙️ 生成产物,请勿手改。
+ * 源:shared/design-tokens.json(DTCG 单一真相源,ADR 0007)
+ * 重新生成:pnpm gen:tokens
+ * H5 挂 :root、小程序根节点挂 page,两处同挂以跨端可用。
+ */
+:root,
+page {
+  --skn-color-brand-rose-deep: #A85A48;
+  --skn-color-brand-rose-wood: #8C4A3A;
+  --skn-color-brand-clay: #C77A5E;
+  --skn-color-brand-gold: #C9913F;
+  --skn-color-text-ink: #5A4A42;
+  --skn-color-text-brown: #8C6A54;
+  --skn-color-text-muted: #9A8278;
+  --skn-color-text-muted-soft: #B0917F;
+  --skn-color-text-faint: #C0A294;
+  --skn-color-surface-card: #FFFDFB;
+  --skn-color-surface-bg-top: #FDF4EC;
+  --skn-color-surface-bg-bottom: #F9E7D9;
+  --skn-color-surface-pill: #F7E3D7;
+  --skn-color-surface-note: #F5EAE0;
+  --skn-color-tint-gold: #FBF1E4;
+  --skn-color-tint-clay: #FBEDE6;
+  --skn-color-tint-rose: #F8E7DF;
+  --skn-color-tint-brown: #F5ECE3;
+  --skn-color-spectrum-track: #F2E4DA;
+  --skn-color-spectrum-midline: #E3CDBF;
+  --skn-color-spectrum-thumb: #D2795C;
+  --skn-color-spectrum-thumb-soft: #E0A981;
+  --skn-color-line-hairline: rgba(160,90,72,0.10);
+  --skn-color-line-divider: rgba(160,90,72,0.08);
+  --skn-color-on-dark: #F5E9E0;
+  --skn-color-camera-bg: #241E1B;
+  --skn-gradient-cta-from: #E3A381;
+  --skn-gradient-cta-to: #D2795C;
+  --skn-gradient-photo-from: #E8C4AC;
+  --skn-gradient-photo-to: #D5A184;
+  --skn-typography-family-sans: -apple-system, PingFang SC, Microsoft YaHei, sans-serif;
+  --skn-typography-family-display: Fraunces, Georgia, serif;
+  --skn-typography-weight-regular: 400;
+  --skn-typography-weight-medium: 500;
+  --skn-typography-weight-semibold: 600;
+  --skn-typography-size-xs: 11px;
+  --skn-typography-size-sm: 12px;
+  --skn-typography-size-base: 13px;
+  --skn-typography-size-md: 14px;
+  --skn-typography-size-lg: 15px;
+  --skn-typography-size-xl: 17px;
+  --skn-typography-size-2xl: 20px;
+  --skn-typography-leading-tight: 1.2;
+  --skn-typography-leading-body: 1.55;
+  --skn-radius-sm: 10px;
+  --skn-radius-md: 12px;
+  --skn-radius-lg: 14px;
+  --skn-radius-xl: 16px;
+  --skn-radius-2xl: 18px;
+  --skn-radius-3xl: 20px;
+  --skn-radius-phone: 32px;
+  --skn-space-1: 4px;
+  --skn-space-2: 6px;
+  --skn-space-3: 8px;
+  --skn-space-4: 10px;
+  --skn-space-5: 12px;
+  --skn-space-6: 14px;
+  --skn-space-7: 16px;
+  --skn-space-8: 18px;
+  --skn-space-9: 20px;
+  --skn-space-10: 24px;
+  --skn-shadow-card: 0 4px 14px rgba(160,90,72,0.06);
+  --skn-shadow-float: 0 14px 36px rgba(160,90,72,0.20);
+  --skn-shadow-phone: 0 16px 44px rgba(160,90,72,0.20);
+  --skn-shadow-cta: 0 6px 16px rgba(200,110,80,0.34);
+}
