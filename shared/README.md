@@ -30,3 +30,22 @@ npx quicktype --src-lang schema shared/skin-report.schema.json \
 - 改契约 → **只改 `skin-report.schema.json`** → 重新跑上面两条生成命令。
 - **禁止**手改生成出来的 `skin-report.ts` / `skin_report.dart`(下次生成会覆盖)。
 - 建议把生成命令固化进各端 `package.json` 的 `scripts`(如 `gen:types`),W1/W3 落地时补。
+
+---
+
+## 设计 token 单一真相源
+
+`design-tokens.json` 是**设计 token 的唯一定义**(DTCG 格式:色板 / 字号 / 字重 / 圆角 / 间距 / 阴影 / 渐变)。与 `skin-report.schema.json` 并列,同样「改只改这一处、两端派生」。决策见 `../docs/adr/0007-design-tokens-ssot.md`。
+
+**两端如何取:**
+
+- **H5 / 微信小程序** → CSS 变量 / SCSS 变量(如 `--skn-color-brand-rose-deep`),注入 `uni.scss` 全局。
+- **flutter** → Dart 常量(如 `SknColors.roseDeep`)。
+
+**生成方式(待各端 scaffold 后接入):** 候选 [Style Dictionary](https://styledictionary.com)(v4 原生支持 DTCG,一份 JSON 出 SCSS + Dart),倾向采用;scaffold 前先只维护本 JSON。复合值(`gradient` / `shadow`)见文件内 `$description` —— 两端各自拼装。
+
+**规则:**
+
+- 改 token → **只改 `design-tokens.json`** → 重新生成两端产物。
+- **禁止**手改生成出来的 scss / dart token 文件。
+- 半档微调(mockup 里出现的 11.5 / 12.5 等)不进 token,靠就近档位。

@@ -7,11 +7,12 @@
   "observability": {
     "enabled": true,
     "logs": { "head_sampling_rate": 1 }
-  }
+  },
 
-  // —— 以下 binding 待 W1 后续创建资源后填(创建命令本地优先,远程需用户同意)——
-  // R2(用户图片临时存储,分析后即删,见 ../docs/adr/0003-image-ephemeral-storage.md):
-  // "r2_buckets": [{ "binding": "IMG_BUCKET", "bucket_name": "skin-checker-img" }],
-  // D1(只存结构化历史,不存原图):
-  // "d1_databases": [{ "binding": "DB", "database_name": "skin-checker", "database_id": "" }]
+  // R2:用户图片临时存储,分析后即删,见 ../docs/adr/0003-image-ephemeral-storage.md
+  "r2_buckets": [{ "binding": "IMG_BUCKET", "bucket_name": "skin-checker-img" }],
+
+  // D1:只存结构化历史,不存原图。database_id 为占位,本地 `--local` 用 database_name 定位;
+  // 远程需先 `wrangler d1 create skin-checker`(用户同意后)拿真 id 替换。
+  "d1_databases": [{ "binding": "DB", "database_name": "skin-checker", "database_id": "local" }]
 }

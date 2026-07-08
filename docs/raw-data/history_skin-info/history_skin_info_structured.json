@@ -1,0 +1,2393 @@
+{
+  "schema_version": 1,
+  "source_directory": "E:\\code\\github\\resume\\skin-checker\\docs\\raw-data\\history_skin-info",
+  "generated_at": "2026-06-20T16:08:33.804068+00:00",
+  "language": "zh-CN",
+  "subjects": [
+    {
+      "subject_id": "basic_knowledge",
+      "title": "护肤基础知识",
+      "content_type": "numbered_guidelines",
+      "items": [
+        {
+          "index": 1,
+          "topic": "精简护肤",
+          "content": "提倡精简护肤，早上不建议使用任何洁面产品(避免破坏皮肤屏障)，非功效的水可不用，不要过度敷面膜(每周不建议超过三次)，通勤不用高倍数防水型防晒产品，硬防晒(打伞、戴帽子)最佳。"
+        },
+        {
+          "index": 2,
+          "topic": "产品使用顺序",
+          "content": "产品使用顺序:2.1水(可用可不用)精华液一乳液或面霜(乳和霜二选一即可)。2.2若两种精华同时使用，先用低pH值的，比如维C、酸类产品。2.3建议前道产品充分吸收后再用后道产品，有利于后道产品吸收且不易发生搓泥现象。",
+          "subitems": [
+            {
+              "index": "2.1",
+              "content": "水(可用可不用)精华液一乳液或面霜(乳和霜二选一即可)。"
+            },
+            {
+              "index": "2.2",
+              "content": "若两种精华同时使用，先用低pH值的，比如维C、酸类产品。"
+            },
+            {
+              "index": "2.3",
+              "content": "建议前道产品充分吸收后再用后道产品，有利于后道产品吸收且不易发生搓泥现象。"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "topic": "卸妆",
+          "content": "关于卸妆，优秀的卸妆产品可以卸干净彩妆，若冲水后面部无油膜感，无需用洗面奶二次清洁，避免伤害肌肤屏障，若冲水后面部有油膜感，方需使用洗面奶二次清洁。"
+        },
+        {
+          "index": 4,
+          "topic": "卸防晒",
+          "content": "关于卸防晒，绝大多数非防水型防晒产品，用普通洁面即可清洁干净，无需使用卸妆产品卸除，避免伤害肌肤屏障。"
+        },
+        {
+          "index": 5,
+          "topic": "判断底妆/防晒是否洗净",
+          "content": "如何判断底妆和防晒霜是否清洁干净?晚上用洁面乳洁面后，若脸上水渍呈一片水痕，代表底妆和防晒霜已清洁干净，若水渍呈一颗颗水珠状，代表底妆和防晒没有清洁干净。"
+        },
+        {
+          "index": 6,
+          "topic": "痘痘严重时减少化妆",
+          "content": "痘痘严重者需减少化妆，因肌肤处于发炎与屏障受损状态，彩妆会增加肌肤细菌感染的机会，而卸妆会进一步损坏肌肤屏障，使痘痘发炎情况更加恶化。"
+        },
+        {
+          "index": 7,
+          "topic": "活性产品保存",
+          "content": "所有活性功效物添加较多的产品，夏天高温季节均不建议囤货，现用现买，买后尽快使用并尽快用完。"
+        },
+        {
+          "index": 8,
+          "topic": "首次使用测试",
+          "content": "所有产品初次使用，均需在耳后测试是否敏感，24小时后若没有出现泛红、刺痛、灼热等敏感反应，方可用于面部。"
+        },
+        {
+          "index": 9,
+          "topic": "按肌肤需求护理",
+          "content": "护肤需了解肌肤需求，按肌肤需求进行护理，肌肤需求请见护肤金字塔。"
+        }
+      ]
+    },
+    {
+      "subject_id": "skin_pyramid",
+      "title": "护肤金字塔",
+      "content_type": "concept_diagram_and_explanation",
+      "layers": [
+        {
+          "code": "C",
+          "layer": "清洁",
+          "summary": "许多人的皮肤问题是屏障受损造成的，而造成屏障受损的重要原因之一，就是过度清洁。因此要注意不要过度清洁，早上不建议使用任何洁面产品，清水洗脸即可，晚上用温和的氨基酸洁面产品洗脸，不防水的彩妆及防晒不需使用卸妆产品。",
+          "keywords": [
+            "屏障受损",
+            "过度清洁",
+            "清水洗脸",
+            "氨基酸洁面"
+          ]
+        },
+        {
+          "layer": "保湿",
+          "summary": "保湿对肌肤生理机能有着重要的作用，需要注意的是不要过度敷面膜，会造成水合过度使屏障受损。",
+          "keywords": [
+            "保湿",
+            "水合过度",
+            "屏障"
+          ]
+        },
+        {
+          "code": "P",
+          "layer": "防晒",
+          "summary": "肌肤80%以上的问题都来自于阳光照射，晒黑、过敏、炎症、衰老，长痘等肌肤问题，都受到紫外线的影响。最好的防晒方式是，避免在10:00-16:00紫外线最强的时候出门,若出门硬防晒(打伞、戴帽子)和涂抹带有PA+++防UVA指数的防晒霜是非常必要的。",
+          "keywords": [
+            "阳光照射",
+            "紫外线",
+            "硬防晒",
+            "防UVA",
+            "PA+++"
+          ]
+        },
+        {
+          "code": "Q",
+          "layer": "抗氧化",
+          "summary": "紫外线、环境污染、炎症等会让肌肤产生过量自由基，造成肌肤氧化，导致肌肤衰老、变黑等问题。因此使用含有维C、维E、绿茶多酚等抗氧化成分的护肤品，对维护肌肤健康非常重要。",
+          "keywords": [
+            "自由基",
+            "肌肤氧化",
+            "维C",
+            "维E",
+            "绿茶多酚"
+          ]
+        },
+        {
+          "code": "A",
+          "layer": "抗炎",
+          "summary": "阳光照射、熬夜、坏情绪、物理刺激、吃糖吃辣喝酒都会导致皮肤炎症因子活跃，而炎症因子不仅会诱导各种肌肤问题，甚至会直接干预保湿、抗老、美白、祛痘、修护的效果，让部分功能性产品变得无用，因此使用含有油橄榄叶提取物、积雪草提取物等抗炎成分的护肤品对肌肤健康非常重要。",
+          "keywords": [
+            "炎症因子",
+            "保湿",
+            "抗老",
+            "美白",
+            "祛痘",
+            "修护",
+            "油橄榄叶提取物",
+            "积雪草提取物"
+          ]
+        },
+        {
+          "code": "R",
+          "layer": "修复",
+          "summary": "是指使用相关产品，对外界刺激造成的肌肤损伤进行修复，比如使用维生素B5修复肌肤破损，使用维A醇修复紫外线对肌肤造成的伤害，使用神经酰胺类产品修复皮肤屏障。",
+          "keywords": [
+            "维生素B5",
+            "维A醇",
+            "神经酰胺",
+            "皮肤屏障"
+          ]
+        },
+        {
+          "code": "S",
+          "layer": "再生",
+          "summary": "通过刷酸和刷A等手段激活肌肤细胞再生机制，促进成纤维细胞增值，以及胶原蛋白和糖胺聚糖合成。",
+          "keywords": [
+            "刷酸",
+            "刷A",
+            "细胞再生",
+            "胶原蛋白",
+            "糖胺聚糖"
+          ]
+        }
+      ],
+      "product_recommendations": [
+        {
+          "layer": "再生",
+          "dry_skin": [
+            "果酸精华",
+            "乳糖酸精华"
+          ],
+          "oily_skin": [
+            "甘醇酸棉片",
+            "杏仁酸精华"
+          ]
+        },
+        {
+          "layer": "抗氧化",
+          "dry_skin": [
+            "维C精华液"
+          ],
+          "oily_skin": [
+            "绿茶多酚精华"
+          ]
+        },
+        {
+          "layer": "舒缓",
+          "dry_skin": [
+            "油橄榄精华(敏皮版)"
+          ],
+          "oily_skin": [
+            "油橄榄精华(痘皮版)"
+          ]
+        },
+        {
+          "layer": "修护",
+          "dry_skin": [
+            "油橄榄霜(丰盈版)"
+          ],
+          "oily_skin": [
+            "油橄榄霜(轻盈版)"
+          ]
+        },
+        {
+          "layer": "清洁",
+          "dry_skin": [
+            "氨基酸洁面慕斯",
+            "氨基酸洁面液"
+          ],
+          "oily_skin": [
+            "水杨酸洁面慕斯",
+            "氨基酸洁面乳"
+          ]
+        },
+        {
+          "layer": "保湿",
+          "dry_skin": [
+            "B5乳(丰盈版)",
+            "β-葡聚糖高保湿霜"
+          ],
+          "oily_skin": [
+            "B5乳(轻盈版)",
+            "B5霜"
+          ]
+        },
+        {
+          "layer": "防晒",
+          "dry_skin": [
+            "物理防晒霜"
+          ],
+          "oily_skin": [
+            "物理防晒霜"
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "index": 1,
+          "content": "上述产品推荐是护肤性辅助方案，不是指产品具有医疗作用。"
+        },
+        {
+          "index": 2,
+          "content": "上述1-2层中的6项内容是所有肤质每天必须进行的护联功课，第3层的再生是周期性护理。"
+        }
+      ],
+      "candidate_products": [
+        "果酸精华",
+        "乳糖酸精华",
+        "甘醇酸棉片",
+        "杏仁酸精华",
+        "维C精华液",
+        "绿茶多酚精华",
+        "油橄榄精华(敏皮版)",
+        "油橄榄精华(痘皮版)",
+        "油橄榄霜(丰盈版)",
+        "油橄榄霜(轻盈版)",
+        "氨基酸洁面慕斯",
+        "氨基酸洁面液",
+        "水杨酸洁面慕斯",
+        "氨基酸洁面乳",
+        "B5乳(丰盈版)",
+        "β-葡聚糖高保湿霜",
+        "B5乳(轻盈版)",
+        "B5霜",
+        "物理防晒霜"
+      ]
+    },
+    {
+      "subject_id": "skin_type_classification",
+      "title": "16型肌肤",
+      "content_type": "skin_type_matrix",
+      "dimensions": [
+        {
+          "key": "oiliness",
+          "dimension": "油脂分泌",
+          "values": [
+            {
+              "code": "O",
+              "label": "油性"
+            },
+            {
+              "code": "D",
+              "label": "干性"
+            }
+          ]
+        },
+        {
+          "key": "sensitivity",
+          "dimension": "敏感程度",
+          "values": [
+            {
+              "code": "S",
+              "label": "敏感"
+            },
+            {
+              "code": "R",
+              "label": "耐受"
+            }
+          ]
+        },
+        {
+          "key": "acne",
+          "dimension": "痘痘情况",
+          "values": [
+            {
+              "code": "A",
+              "label": "有痘"
+            },
+            {
+              "code": "F",
+              "label": "无痘"
+            }
+          ]
+        },
+        {
+          "key": "pigmentation",
+          "dimension": "色沉情况",
+          "values": [
+            {
+              "code": "P",
+              "label": "色沉"
+            },
+            {
+              "code": "N",
+              "label": "非色沉"
+            }
+          ]
+        }
+      ],
+      "skin_types": [
+        {
+          "name": "油敏",
+          "normalized_name": "油敏皮",
+          "oil": "O",
+          "sensitivity": "S",
+          "acne": "F",
+          "pigment": "N",
+          "code": "O-S-F-N",
+          "routine_subject_id": "routine_oily_sensitive"
+        },
+        {
+          "name": "油敏痘",
+          "normalized_name": "油敏痘皮",
+          "oil": "O",
+          "sensitivity": "S",
+          "acne": "A",
+          "pigment": "N",
+          "code": "O-S-A-N",
+          "routine_subject_id": "routine_oily_sensitive_acne"
+        },
+        {
+          "name": "油痘",
+          "normalized_name": "油痘皮",
+          "oil": "O",
+          "sensitivity": "R",
+          "acne": "A",
+          "pigment": "N",
+          "code": "O-R-A-N",
+          "routine_subject_id": "routine_oily_acne"
+        },
+        {
+          "name": "油",
+          "normalized_name": "油皮",
+          "oil": "O",
+          "sensitivity": "R",
+          "acne": "F",
+          "pigment": "N",
+          "code": "O-R-F-N",
+          "routine_subject_id": "routine_oily"
+        },
+        {
+          "name": "油敏色",
+          "normalized_name": "油敏色皮",
+          "oil": "O",
+          "sensitivity": "S",
+          "acne": "F",
+          "pigment": "P",
+          "code": "O-S-F-P",
+          "routine_subject_id": "routine_oily_sensitive_pigmented"
+        },
+        {
+          "name": "油敏痘色",
+          "normalized_name": "油敏痘色皮",
+          "oil": "O",
+          "sensitivity": "S",
+          "acne": "A",
+          "pigment": "P",
+          "code": "O-S-A-P",
+          "routine_subject_id": "routine_oily_sensitive_acne_pigmented"
+        },
+        {
+          "name": "油痘色",
+          "normalized_name": "油痘色皮",
+          "oil": "O",
+          "sensitivity": "R",
+          "acne": "A",
+          "pigment": "P",
+          "code": "O-R-A-P",
+          "routine_subject_id": "routine_oily_acne_pigmented"
+        },
+        {
+          "name": "油色",
+          "normalized_name": "油色皮",
+          "oil": "O",
+          "sensitivity": "R",
+          "acne": "F",
+          "pigment": "P",
+          "code": "O-R-F-P",
+          "routine_subject_id": "routine_oily_pigmented"
+        },
+        {
+          "name": "干敏色",
+          "normalized_name": "干敏色皮",
+          "oil": "D",
+          "sensitivity": "S",
+          "acne": "F",
+          "pigment": "P",
+          "code": "D-S-F-P",
+          "routine_subject_id": "routine_dry_sensitive_pigmented"
+        },
+        {
+          "name": "干敏痘色",
+          "normalized_name": "干敏痘色皮",
+          "oil": "D",
+          "sensitivity": "S",
+          "acne": "A",
+          "pigment": "P",
+          "code": "D-S-A-P",
+          "routine_subject_id": "routine_dry_sensitive_acne_pigmented"
+        },
+        {
+          "name": "干痘色",
+          "normalized_name": "干痘色皮",
+          "oil": "D",
+          "sensitivity": "R",
+          "acne": "A",
+          "pigment": "P",
+          "code": "D-R-A-P",
+          "routine_subject_id": "routine_dry_acne_pigmented"
+        },
+        {
+          "name": "干色",
+          "normalized_name": "干色皮",
+          "oil": "D",
+          "sensitivity": "R",
+          "acne": "F",
+          "pigment": "P",
+          "code": "D-R-F-P",
+          "routine_subject_id": "routine_dry_pigmented"
+        },
+        {
+          "name": "干敏",
+          "normalized_name": "干敏皮",
+          "oil": "D",
+          "sensitivity": "S",
+          "acne": "F",
+          "pigment": "N",
+          "code": "D-S-F-N",
+          "routine_subject_id": "routine_dry_sensitive"
+        },
+        {
+          "name": "干敏痘",
+          "normalized_name": "干敏痘皮",
+          "oil": "D",
+          "sensitivity": "S",
+          "acne": "A",
+          "pigment": "N",
+          "code": "D-S-A-N",
+          "routine_subject_id": "routine_dry_sensitive_acne"
+        },
+        {
+          "name": "干痘",
+          "normalized_name": "干痘皮",
+          "oil": "D",
+          "sensitivity": "R",
+          "acne": "A",
+          "pigment": "N",
+          "code": "D-R-A-N",
+          "routine_subject_id": "routine_dry_acne"
+        },
+        {
+          "name": "干",
+          "normalized_name": "干皮",
+          "oil": "D",
+          "sensitivity": "R",
+          "acne": "F",
+          "pigment": "N",
+          "code": "D-R-F-N",
+          "routine_subject_id": "routine_dry"
+        }
+      ],
+      "classification_basis": "根据皮肤油脂分泌量、耐受程度、是否长痘、是否有色素沉着四个维度，划分出16种肌肤类型。",
+      "code_order": [
+        "oil",
+        "sensitivity",
+        "acne",
+        "pigment"
+      ],
+      "field_values": {
+        "oil": {
+          "O": "油性",
+          "D": "干性"
+        },
+        "sensitivity": {
+          "S": "敏感",
+          "R": "耐受"
+        },
+        "acne": {
+          "A": "有痘",
+          "F": "无痘"
+        },
+        "pigment": {
+          "P": "色沉",
+          "N": "非色沉"
+        }
+      }
+    },
+    {
+      "subject_id": "skin_problem_solutions",
+      "title": "肌肤问题与解决对策",
+      "content_type": "problem_solution_table",
+      "solutions": [
+        {
+          "category": "痘痘",
+          "skin_problem": "丘疹/囊肿痘",
+          "recommended_products": [
+            "油橄榄精华液（痘皮版）",
+            "壬二酸点痘胶"
+          ]
+        },
+        {
+          "category": "痘痘",
+          "skin_problem": "闭口",
+          "recommended_products": [
+            "杏仁酸精华",
+            "甘醇酸棉片"
+          ],
+          "relation": "or"
+        },
+        {
+          "category": "痘痘",
+          "skin_problem": "黑头",
+          "recommended_products": [
+            "水杨酸冻膜",
+            "多酸泥膜"
+          ]
+        },
+        {
+          "category": "痘痘",
+          "skin_problem": "白头粉刺",
+          "recommended_products": [
+            "10%壬二酸乳",
+            "水杨酸精华",
+            "杏仁酸精华"
+          ],
+          "relation": "or"
+        },
+        {
+          "category": "敏感",
+          "skin_problem": "突发性泛红、肿、痒",
+          "recommended_products": [
+            "油橄榄冻膜",
+            "油橄榄精华液（敏皮版）",
+            "油橄榄霜"
+          ]
+        },
+        {
+          "category": "敏感",
+          "skin_problem": "持续泛红、红色痘印、红血丝",
+          "recommended_products": [
+            "积雪草修红精华",
+            "积雪草修护霜"
+          ]
+        },
+        {
+          "category": "敏感",
+          "skin_problem": "角质层薄/容易敏感/外油内干",
+          "recommended_products": [
+            "神经酰胺肌底液",
+            "油橄榄霜"
+          ]
+        },
+        {
+          "category": "敏感",
+          "skin_problem": "晒后、特殊美容后的泛红、灼热",
+          "recommended_products": [
+            "10%B5精华",
+            "B5霜",
+            "B5冻膜"
+          ]
+        },
+        {
+          "category": "敏感",
+          "skin_problem": "玫瑰皮",
+          "recommended_products": [
+            "油橄榄精华液（痘皮版）",
+            "壬二酸霜"
+          ]
+        },
+        {
+          "category": "敏感",
+          "skin_problem": "脂敏皮",
+          "recommended_products": [
+            "油橄榄精华液（敏皮版）",
+            "红没药醇辅助乳"
+          ]
+        },
+        {
+          "category": "油脂旺盛",
+          "skin_problem": "油敏皮控油",
+          "recommended_products": [
+            "油橄榄水（油敏皮）",
+            "姜黄凝露"
+          ]
+        },
+        {
+          "category": "油脂旺盛",
+          "skin_problem": "普通油皮控油",
+          "recommended_products": [
+            "绿茶水",
+            "绿茶乳"
+          ]
+        },
+        {
+          "category": "油脂旺盛",
+          "skin_problem": "大油皮控油",
+          "recommended_products": [
+            "绿茶精华",
+            "壬二酸霜"
+          ]
+        },
+        {
+          "category": "色素沉着",
+          "skin_problem": "健康皮肤美白提亮",
+          "recommended_products": [
+            "维C精华",
+            "377精华"
+          ]
+        },
+        {
+          "category": "色素沉着",
+          "skin_problem": "敏感皮肤祛黄提亮",
+          "recommended_products": [
+            "传明酸精华",
+            "油橄榄霜"
+          ]
+        },
+        {
+          "category": "色素沉着",
+          "skin_problem": "淡化红色痘印",
+          "recommended_products": [
+            "维C精华",
+            "积雪草精华"
+          ]
+        },
+        {
+          "category": "色素沉着",
+          "skin_problem": "淡化黑色痘印",
+          "recommended_products": [
+            "甘醇酸棉片",
+            "377精华"
+          ]
+        }
+      ],
+      "grouping_basis": "把肌肤问题归集为油脂旺盛/敏感/长痘/色素沉着四类。",
+      "problem_categories": [
+        "油脂旺盛",
+        "敏感",
+        "痘痘",
+        "色素沉着"
+      ]
+    },
+    {
+      "subject_id": "routine_oily",
+      "title": "油皮护理方案",
+      "content_type": "skin_type_routine",
+      "skin_type": "油皮",
+      "dimensions": {
+        "oiliness": "油性",
+        "sensitivity": "耐受",
+        "acne": "无痘",
+        "pigmentation": "非色沉"
+      },
+      "skin_theme": "油皮",
+      "skin_problem": "皮肤出油旺盛，不敏感，无痘，无色沉",
+      "skincare_strategy": [
+        {
+          "strategy": "控油",
+          "details": [
+            "抑制油脂分泌过剩堵塞毛孔",
+            "防止油脂氧化引起肤色暗沉"
+          ]
+        },
+        {
+          "strategy": "抗氧化",
+          "details": [
+            "减轻油脂氧化导致的暗沉",
+            "减轻氧化应激损伤"
+          ]
+        },
+        {
+          "strategy": "舒缓",
+          "details": [
+            "舒缓外界环境刺激",
+            "维持肌肤健康稳定"
+          ]
+        },
+        {
+          "strategy": "修护",
+          "details": [
+            "修护光损伤",
+            "减少光老化"
+          ]
+        },
+        {
+          "strategy": "防晒",
+          "details": [
+            "减少肌肤光损伤",
+            "减少光照刺激皮脂分泌"
+          ]
+        }
+      ],
+      "product_pairing": {
+        "daytime": [
+          {
+            "effect": "控油+抗氧",
+            "product": "绿茶多酚水",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "控油+抗氧",
+            "product": "绿茶多酚精华",
+            "usage": "1~1.5cm"
+          },
+          {
+            "effect": "控油+舒缓",
+            "product": "姜黄凝露",
+            "usage": "0.5~1cm"
+          },
+          {
+            "effect": "防晒",
+            "product": "物理防晒霜",
+            "usage": "1元硬币大小"
+          }
+        ],
+        "nighttime": [
+          {
+            "effect": "控油+抗氧",
+            "product": "绿茶多酚水",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "舒缓",
+            "product": "油橄榄精华（痘皮版）",
+            "usage": "0.5~1滴管"
+          },
+          {
+            "effect": "促进角质更新+抗皱",
+            "product": "维A醇霜",
+            "usage": "初期1泵，耐受后2~3泵"
+          }
+        ]
+      },
+      "notes": [
+        "姜黄凝露：①建议按压至吸收，不要画圈按摩；②与其它产品叠加使用时，等前道护肤品完全吸收后（等待1分钟），再使用后道护肤品。",
+        "物理防晒霜：①纯物理防晒霜，SPF36 PA+++，适合日常通勤使用；②料体为裸粉色，适合黄皮、黑皮及中性皮使用，冷白皮需跟妆使用；③建议追加一层定妆，防止花妆掉色；④若有出汗、擦拭等情况，建议2~3小时补涂1次；⑤油皮、混油皮可以用洁面清洁。",
+        "也可采用物理防晒方式来达到防晒目的，如使用遮阳伞、遮阳帽、防晒衣、防晒口罩等。",
+        "维A醇晚霜：①新手推荐0.1%入门版，耐受后使用0.3%进阶版；②白天不可使用，并白天注意做好防晒；③用后做好保湿修护；④孕妇、哺乳期禁用；⑤建议现买现用，购买后尽快使用完毕。",
+        "若已有同功效的产品，可以继续沿用，无需重新购买。",
+        "若没有使用化妆水的习惯，可以省略化妆水。",
+        "上述护理是肌肤每天都要做的功课，从不同角度管理肌肤，长期坚持护理有利于肌肤健康。"
+      ]
+    },
+    {
+      "subject_id": "routine_oily_acne",
+      "title": "油痘皮护理方案",
+      "content_type": "skin_type_routine",
+      "skin_type": "油痘皮",
+      "dimensions": {
+        "oiliness": "油性",
+        "sensitivity": "耐受",
+        "acne": "有痘",
+        "pigmentation": "非色沉"
+      },
+      "skin_theme": "油痘皮",
+      "skin_problem": "皮肤出油旺盛，频繁长痘",
+      "skincare_strategy": [
+        {
+          "strategy": "控油",
+          "details": [
+            "防止过多油脂堵塞毛孔引起长痘",
+            "减少微生物赖以生存的油脂环境"
+          ]
+        },
+        {
+          "strategy": "舒缓",
+          "details": [
+            "改善痘痘",
+            "减少红色痘印产生"
+          ]
+        },
+        {
+          "strategy": "剥脱",
+          "details": [
+            "疏通毛孔，减少毛孔堵塞，让油脂排出"
+          ]
+        },
+        {
+          "strategy": "抗氧化",
+          "details": [
+            "减轻油脂氧化导致的暗沉",
+            "减轻氧化应激损伤",
+            "减少红色痘印生成"
+          ]
+        },
+        {
+          "strategy": "防晒",
+          "details": [
+            "减少刺激痘痘生成",
+            "减少光对皮脂腺的刺激",
+            "避免红色痘印变成黑色痘印"
+          ]
+        }
+      ],
+      "product_pairing": {
+        "daytime": [
+          {
+            "effect": "疏通毛孔",
+            "product": "水杨酸水",
+            "usage": "1元硬币大小"
+          },
+          {
+            "effect": "控油+抗氧",
+            "product": "绿茶多酚精华",
+            "usage": "1~1.5cm"
+          },
+          {
+            "effect": "控油+舒缓",
+            "product": "姜黄凝露",
+            "usage": "0.5~1cm"
+          },
+          {
+            "effect": "点涂祛痘",
+            "product": "壬二酸点痘胶（局部）",
+            "usage": "覆盖痘痘及其周围1cm区域"
+          },
+          {
+            "effect": "防晒",
+            "product": "物理防晒霜",
+            "usage": "1元硬币大小"
+          }
+        ],
+        "nighttime": [
+          {
+            "effect": "疏通毛孔",
+            "product": "水杨酸水",
+            "usage": "1元硬币大小"
+          },
+          {
+            "effect": "舒缓+祛痘",
+            "product": "油橄榄精华（痘皮版）",
+            "usage": "0.5~1滴管"
+          },
+          {
+            "effect": "预防痘印+抗皱",
+            "product": "维A醇晚霜",
+            "usage": "初期1泵，耐受后2~3泵"
+          },
+          {
+            "effect": "点涂祛痘",
+            "product": "壬二酸点痘胶（局部）",
+            "usage": "覆盖痘痘及其周围1cm区域"
+          }
+        ]
+      },
+      "notes": [
+        "姜黄凝露：①建议按压至吸收，不要画圈按摩；②与其它产品叠加使用时，等前道护肤品完全吸收后（等待1分钟），再使用后道护肤品。",
+        "壬二酸点痘胶：在护肤最后一步使用，直接点涂于痘痘及周围1cm区域，并用指尖轻轻按摩5~8圈，无需洗去，停留时间越长，效果越好。",
+        "维A醇晚霜：①新手推荐0.1%入门版，耐受后使用0.3%进阶版；②白天不可使用，并白天注意做好防晒；③用后做好保湿修护；④孕妇、哺乳期禁用；⑤建议现买现用，购买后尽快使用完毕。",
+        "物理防晒霜：①纯物理防晒霜，SPF36 PA+++，适合日常通勤使用；②料体为裸粉色，适合黄皮、黑皮及中性皮使用，冷白皮需跟妆使用；③建议追加一层定妆粉，防止被蹭掉色；④若有出汗、擦拭等情况，建议2~3小时补涂1次；⑤油皮、混油皮可以用洁面清洁。",
+        "也可采用物理防晒方式来达到防晒目的，如使用遮阳伞、遮阳帽、防晒衣、防晒口罩等。",
+        "若已有同功效的产品，可以继续沿用，无需重新购买。",
+        "若没有使用化妆水的习惯，可以省略化妆水。",
+        "上述护理是肌肤每天都要做的功课，从不同角度管理肌肤，长期坚持护理有利于肌肤健康。"
+      ]
+    },
+    {
+      "subject_id": "routine_oily_pigmented",
+      "title": "油色皮护理方案",
+      "content_type": "skin_type_routine",
+      "skin_type": "油色皮",
+      "dimensions": {
+        "oiliness": "油性",
+        "sensitivity": "耐受",
+        "acne": "无痘",
+        "pigmentation": "色沉"
+      },
+      "skin_theme": "油色皮",
+      "skin_problem": "皮肤出油旺盛，有色素沉着问题（如晒黑、暗沉、有斑、痘印等）",
+      "skincare_strategy": [
+        {
+          "strategy": "控油",
+          "details": [
+            "抑制油脂分泌过剩堵塞毛孔",
+            "防止油脂氧化引起肤色暗沉"
+          ]
+        },
+        {
+          "strategy": "美白",
+          "details": [
+            "美白淡斑",
+            "减少外在刺激造成的色素沉着"
+          ]
+        },
+        {
+          "strategy": "抗氧化",
+          "details": [
+            "减轻油脂氧化导致的暗沉",
+            "减轻氧化应激引起的色素沉着"
+          ]
+        },
+        {
+          "strategy": "舒缓",
+          "details": [
+            "舒缓外界环境刺激",
+            "减少因外界刺激引起的色素沉着"
+          ]
+        },
+        {
+          "strategy": "防晒",
+          "details": [
+            "减少光照刺激皮脂分泌",
+            "减少紫外线照射引起的黑色素产生，防止色斑、痘印加重"
+          ]
+        }
+      ],
+      "product_pairing": {
+        "daytime": [
+          {
+            "effect": "控油+抗氧",
+            "product": "绿茶多酚水",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "美白",
+            "product": "377精华",
+            "usage": "至少1滴管"
+          },
+          {
+            "effect": "控油+舒缓",
+            "product": "姜黄凝露",
+            "usage": "0.5~1cm"
+          },
+          {
+            "effect": "防晒",
+            "product": "物理防晒霜",
+            "usage": "1元硬币大小"
+          }
+        ],
+        "nighttime": [
+          {
+            "effect": "控油+抗氧",
+            "product": "绿茶多酚水",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "舒缓",
+            "product": "油橄榄精华（痘皮版）",
+            "usage": "0.5~1滴管"
+          },
+          {
+            "effect": "抗皱",
+            "product": "维A醇晚霜",
+            "usage": "初期1泵，耐受后2~3泵"
+          }
+        ]
+      },
+      "notes": [
+        "377美白精华：①需足量使用，建议每次用量至少1滴管；②使用后需加强补水保湿，同时白天也要注意做好防晒；③有部分人不耐受，用前请耳后测试。",
+        "姜黄凝露：①建议按压至吸收，不要画圈按摩；②与其它产品叠加使用时，等前道护肤品完全吸收后（等待1分钟），再使用后道护肤品。",
+        "维A醇晚霜：①新手推荐0.1%入门版，耐受后使用0.3%进阶版；②白天不可使用，并白天注意做好防晒；③用后做好保湿修护；④孕妇、哺乳期禁用；⑤建议现买现用，购买后尽快使用完毕。",
+        "物理防晒霜：①纯物理防晒霜，SPF36 PA+++，适合日常通勤使用；②料体为裸粉色，适合黄皮、黑皮及中性皮使用，冷白皮需跟妆使用；③建议追加一层定妆粉，防止被蹭掉色；④若有出汗、擦拭等情况，建议2~3小时补涂1次；⑤油皮、混油皮可以用洁面清洁。",
+        "也可采用物理防晒方式来达到防晒目的，如使用遮阳伞、遮阳帽、防晒衣、防晒口罩等。",
+        "若已有同功效的产品，可以继续沿用，无需重新购买。",
+        "若没有使用化妆水的习惯，可以省略化妆水。",
+        "上述护理是肌肤每天都要做的功课，从不同角度管理肌肤，长期坚持护理有利于肌肤健康。"
+      ]
+    },
+    {
+      "subject_id": "routine_oily_acne_pigmented",
+      "title": "油痘色皮护理方案",
+      "content_type": "skin_type_routine",
+      "skin_type": "油痘色皮",
+      "dimensions": {
+        "oiliness": "油性",
+        "sensitivity": "耐受",
+        "acne": "有痘",
+        "pigmentation": "色沉"
+      },
+      "skin_theme": "油痘色皮",
+      "skin_problem": "皮肤出油旺盛，频繁长痘，有色素沉着问题（如晒黑、暗沉、有斑、痘印等）",
+      "skincare_strategy": [
+        {
+          "strategy": "控油",
+          "details": [
+            "抑制油脂分泌过剩引起长痘",
+            "防止油脂氧化引起肤色暗沉",
+            "减少微生物赖以生存的油脂环境"
+          ]
+        },
+        {
+          "strategy": "美白",
+          "details": [
+            "美白淡斑",
+            "减少外在刺激造成的色素沉着"
+          ]
+        },
+        {
+          "strategy": "抗氧化",
+          "details": [
+            "减轻油脂氧化导致的暗沉",
+            "减轻氧化应激引起的色素沉着"
+          ]
+        },
+        {
+          "strategy": "舒缓",
+          "details": [
+            "舒缓外界环境刺激，减少因外界刺激引起的色素沉着",
+            "改善痘痘"
+          ]
+        },
+        {
+          "strategy": "防晒",
+          "details": [
+            "减少刺激痘痘生成",
+            "减少光对皮脂腺的刺激",
+            "减少紫外线照射引起的黑色素产生，防止色斑、痘印加重"
+          ]
+        }
+      ],
+      "product_pairing": {
+        "daytime": [
+          {
+            "effect": "疏通毛孔",
+            "product": "水杨酸水",
+            "usage": "1元硬币大小"
+          },
+          {
+            "effect": "美白",
+            "product": "377精华",
+            "usage": "至少1滴管"
+          },
+          {
+            "effect": "控油+舒缓",
+            "product": "姜黄凝露",
+            "usage": "0.5~1cm"
+          },
+          {
+            "effect": "点涂祛痘",
+            "product": "壬二酸点痘胶（局部）",
+            "usage": "覆盖痘痘及其周围1cm区域"
+          },
+          {
+            "effect": "防晒",
+            "product": "物理防晒霜",
+            "usage": "1元硬币大小"
+          }
+        ],
+        "nighttime": [
+          {
+            "effect": "疏通毛孔",
+            "product": "水杨酸水",
+            "usage": "1元硬币大小"
+          },
+          {
+            "effect": "舒缓+祛痘",
+            "product": "油橄榄精华（痘皮版）",
+            "usage": "0.5~1滴管"
+          },
+          {
+            "effect": "提亮肤色+抗皱",
+            "product": "维A醇晚霜",
+            "usage": "初期1泵，耐受后2~3泵"
+          },
+          {
+            "effect": "点涂祛痘",
+            "product": "壬二酸点痘胶（局部）",
+            "usage": "覆盖痘痘及其周围1cm区域"
+          }
+        ]
+      },
+      "notes": [
+        "377精华：①需足量使用，建议每次用量至少1滴管；②使用后需加强补水保湿，同时白天也要注意做好防晒；③有部分人不耐受，用前请耳后测试。",
+        "姜黄凝露：①建议按压至吸收，不要画圈按摩；②与其它产品叠加使用时，等前道护肤品完全吸收后（等待1分钟），再使用后道护肤品。",
+        "壬二酸点痘胶：在护肤最后一步使用，直接点涂于痘痘及周围1cm区域，并用指尖轻轻按摩5~8圈，无需洗去，停留时间越长，效果越好。",
+        "物理防晒霜：①纯物理防晒霜，SPF36 PA+++，适合日常通勤使用；②料体为裸粉色，适合黄皮、黑皮及中性皮使用，冷白皮需跟妆使用；③建议追加一层定妆粉，防止被蹭掉色；④若有出汗、擦拭等情况，建议2~3小时补涂1次；⑤油皮、混油皮可以用洁面清洁。",
+        "也可采用物理防晒方式来达到防晒目的，如使用遮阳伞、遮阳帽、防晒衣、防晒口罩等。",
+        "维A醇晚霜：①新手推荐0.1%入门版，耐受后使用0.3%进阶版；②白天不可使用，并白天注意做好防晒；③用后做好保湿修护；④孕妇、哺乳期禁用；⑤建议现买现用，购买后尽快使用完毕。",
+        "若已有同功效的产品，可以继续沿用，无需重新购买。",
+        "若没有使用化妆水的习惯，可以省略化妆水。",
+        "上述护理是肌肤每天都要做的功课，从不同角度管理肌肤，长期坚持护理有利于肌肤健康。"
+      ]
+    },
+    {
+      "subject_id": "routine_oily_sensitive",
+      "title": "油敏皮护理方案",
+      "content_type": "skin_type_routine",
+      "skin_type": "油敏皮",
+      "dimensions": {
+        "oiliness": "油性",
+        "sensitivity": "敏感",
+        "acne": "无痘",
+        "pigmentation": "非色沉"
+      },
+      "skin_theme": "油敏皮",
+      "skin_problem": "皮肤出油旺盛，敏感（受到刺激时皮肤易出现灼热、刺痛、瘙痒，部分人伴有泛红、毛细血管扩张等症状）",
+      "skincare_strategy": [
+        {
+          "strategy": "控油",
+          "details": [
+            "抑制油脂分泌过剩堵塞毛孔"
+          ]
+        },
+        {
+          "strategy": "抗氧化",
+          "details": [
+            "减轻油脂氧化导致的暗沉",
+            "减轻氧化应激损伤"
+          ]
+        },
+        {
+          "strategy": "舒缓",
+          "details": [
+            "舒缓紫外线、高温、污染等刺激",
+            "减少对皮脂腺的刺激"
+          ]
+        },
+        {
+          "strategy": "修护",
+          "details": [
+            "提高肌肤耐受力减少敏感",
+            "提高肌肤锁水能力"
+          ]
+        },
+        {
+          "strategy": "防晒",
+          "details": [
+            "减少肌肤光损伤",
+            "减少光对皮脂腺的刺激",
+            "减少紫外线对肌肤屏障损伤"
+          ]
+        }
+      ],
+      "product_pairing": {
+        "daytime": [
+          {
+            "effect": "控油+舒缓",
+            "product": "油橄榄水（油敏皮）",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "控油+抗氧",
+            "product": "绿茶多酚精华",
+            "usage": "1~1.5cm"
+          },
+          {
+            "effect": "修护+舒缓",
+            "product": "油橄榄霜（轻盈版）",
+            "usage": "0.5~1cm"
+          },
+          {
+            "effect": "防晒",
+            "product": "物理防晒霜",
+            "usage": "1元硬币大小"
+          }
+        ],
+        "nighttime": [
+          {
+            "effect": "控油+舒缓",
+            "product": "油橄榄水（油敏皮）",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "舒缓+强韧屏障",
+            "product": "油橄榄精华（敏皮版）",
+            "usage": "0.5~1滴管"
+          },
+          {
+            "effect": "修护+舒缓",
+            "product": "油橄榄霜（轻盈版）",
+            "usage": "0.5~1cm"
+          }
+        ]
+      },
+      "notes": [
+        "肌肤敏感时应优先注重舒缓修护，不建议在肌肤敏感期使用相对刺激的VC、VA等产品进阶护理。",
+        "物理防晒霜：①纯物理防晒霜，SPF36 PA+++，适合日常通勤使用；②料体为裸粉色，适合黄皮、黑皮及中性皮使用，冷白皮需跟妆使用；③建议追加一层定妆粉，防止被蹭掉色；④若有出汗、擦拭等情况，建议2~3小时补涂1次；⑤敏皮建议使用温和的卸妆产品卸除。",
+        "也可采用物理防晒方式来达到防晒目的，如使用遮阳伞、遮阳帽、防晒衣、防晒口罩等。",
+        "若已有同功效的产品，可以继续沿用，无需重新购买。",
+        "若没有使用化妆水的习惯，可以省略化妆水。",
+        "上述护理是肌肤每天都要做的功课，从不同角度管理肌肤，长期坚持护理有利于肌肤健康。"
+      ]
+    },
+    {
+      "subject_id": "routine_oily_sensitive_acne",
+      "title": "油敏痘皮护理方案",
+      "content_type": "skin_type_routine",
+      "skin_type": "油敏痘皮",
+      "dimensions": {
+        "oiliness": "油性",
+        "sensitivity": "敏感",
+        "acne": "有痘",
+        "pigmentation": "非色沉"
+      },
+      "skin_theme": "油敏痘皮",
+      "skin_problem": "皮肤出油旺盛，频繁长痘，敏感（受到刺激时皮肤易出现灼热、刺痛、瘙痒，部分人伴有泛红、毛细血管扩张等症状）",
+      "skincare_strategy": [
+        {
+          "strategy": "控油",
+          "details": [
+            "防止过多油脂堵塞毛孔引起长痘",
+            "减少微生物赖以生存的油脂环境"
+          ]
+        },
+        {
+          "strategy": "抗氧化",
+          "details": [
+            "减轻油脂氧化导致的暗沉",
+            "减轻氧化应激损伤",
+            "减少红色痘印生成"
+          ]
+        },
+        {
+          "strategy": "舒缓",
+          "details": [
+            "舒缓紫外线、高温、污染等刺激",
+            "减少对皮脂腺的刺激",
+            "改善痘痘"
+          ]
+        },
+        {
+          "strategy": "局部剥脱",
+          "details": [
+            "疏通毛孔，减少毛孔堵塞，让油脂排出"
+          ]
+        },
+        {
+          "strategy": "修护",
+          "details": [
+            "提高肌肤耐受力减少敏感",
+            "提高肌肤锁水能力"
+          ]
+        },
+        {
+          "strategy": "防晒",
+          "details": [
+            "减少肌肤光损伤",
+            "减少光对皮脂腺的刺激",
+            "减少紫外线对肌肤屏障损伤",
+            "减少紫外线对痘痘刺激"
+          ]
+        }
+      ],
+      "product_pairing": {
+        "daytime": [
+          {
+            "effect": "控油+舒缓",
+            "product": "油橄榄水（油敏皮）",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "控油+抗氧",
+            "product": "绿茶多酚精华",
+            "usage": "1~1.5cm"
+          },
+          {
+            "effect": "修护+舒缓",
+            "product": "油橄榄霜（轻盈版）",
+            "usage": "0.5~1cm"
+          },
+          {
+            "effect": "点涂祛痘",
+            "product": "壬二酸点痘胶（局部）",
+            "usage": "覆盖痘痘及其周围1cm区域"
+          },
+          {
+            "effect": "防晒",
+            "product": "物理防晒霜",
+            "usage": "1元硬币大小"
+          }
+        ],
+        "nighttime": [
+          {
+            "effect": "控油+舒缓",
+            "product": "油橄榄水（油敏皮）",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "舒缓+强韧屏障",
+            "product": "油橄榄精华（敏皮版）",
+            "usage": "0.5~1滴管"
+          },
+          {
+            "effect": "修护+舒缓",
+            "product": "油橄榄霜（轻盈版）",
+            "usage": "0.5~1cm"
+          },
+          {
+            "effect": "点涂祛痘",
+            "product": "壬二酸点痘胶（局部）",
+            "usage": "覆盖痘痘及其周围1cm区域"
+          }
+        ]
+      },
+      "notes": [
+        "肌肤敏感时应优先注重舒缓修护，不建议在肌肤敏感期使用相对刺激的VC、VA等产品进阶护理。",
+        "壬二酸点痘胶：在护肤最后一步使用，直接点涂于痘痘及周围1cm区域，并用指尖轻轻按摩5~8圈，无需洗去，停留时间越长，效果越好。",
+        "物理防晒霜：①纯物理防晒霜，SPF36 PA+++，适合日常通勤使用；②料体为裸粉色，适合黄皮、黑皮及中性皮使用，冷白皮需跟妆使用；③建议追加一层定妆粉，防止被蹭掉色；④若有出汗、擦拭等情况，建议2~3小时补涂1次；⑤敏皮建议使用温和的卸妆产品卸除。",
+        "也可采用物理防晒方式来达到防晒目的，如使用遮阳伞、遮阳帽、防晒衣、防晒口罩等。",
+        "若已有同功效的产品，可以继续沿用，无需重新购买。",
+        "若没有使用化妆水的习惯，可以省略化妆水。",
+        "上述护理是肌肤每天都要做的功课，从不同角度管理肌肤，长期坚持护理有利于肌肤健康。"
+      ]
+    },
+    {
+      "subject_id": "routine_oily_sensitive_pigmented",
+      "title": "油敏色皮护理方案",
+      "content_type": "skin_type_routine",
+      "skin_type": "油敏色皮",
+      "dimensions": {
+        "oiliness": "油性",
+        "sensitivity": "敏感",
+        "acne": "无痘",
+        "pigmentation": "色沉"
+      },
+      "skin_theme": "油敏色皮",
+      "skin_problem": "皮肤出油旺盛，敏感（受到刺激时皮肤易出现灼热、刺痛、瘙痒，部分人伴有泛红、毛细血管扩张等症状），有色素沉着问题（如晒黑、暗沉、有斑、痘印等）",
+      "skincare_strategy": [
+        {
+          "strategy": "控油",
+          "details": [
+            "抑制油脂分泌过剩堵塞毛孔"
+          ]
+        },
+        {
+          "strategy": "抗氧化",
+          "details": [
+            "减轻油脂氧化导致的暗沉",
+            "减轻氧化应激损伤引起的色素沉着"
+          ]
+        },
+        {
+          "strategy": "舒缓",
+          "details": [
+            "舒缓紫外线、高温、污染等刺激",
+            "减少对皮脂腺的刺激",
+            "舒缓外界环境刺激，减少因外界刺激引起的色素沉着"
+          ]
+        },
+        {
+          "strategy": "修护",
+          "details": [
+            "提高肌肤耐受力减少敏感",
+            "提高肌肤锁水能力"
+          ]
+        },
+        {
+          "strategy": "防晒",
+          "details": [
+            "减少光对皮脂腺的刺激",
+            "减少紫外线对肌肤屏障损伤",
+            "减少紫外线照射引起的黑色素产生，防止色斑、痘印加重"
+          ]
+        }
+      ],
+      "product_pairing": {
+        "daytime": [
+          {
+            "effect": "控油+舒缓",
+            "product": "油橄榄水（油敏皮）",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "温和提亮+抗氧",
+            "product": "传明酸精华",
+            "usage": "1滴管"
+          },
+          {
+            "effect": "控油+舒缓",
+            "product": "姜黄凝露",
+            "usage": "0.5~1cm"
+          },
+          {
+            "effect": "防晒",
+            "product": "物理防晒霜",
+            "usage": "1元硬币大小"
+          }
+        ],
+        "nighttime": [
+          {
+            "effect": "控油+舒缓",
+            "product": "油橄榄水（油敏皮）",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "温和提亮+抗氧",
+            "product": "传明酸精华",
+            "usage": "1滴管"
+          },
+          {
+            "effect": "修护+舒缓",
+            "product": "油橄榄霜（轻盈版）",
+            "usage": "0.5~1cm"
+          }
+        ]
+      },
+      "notes": [
+        "肌肤敏感时应优先注重舒缓修护，不建议在肌肤敏感期使用相对刺激的VC、VA等产品进阶护理。",
+        "姜黄凝露：①建议按压至吸收，不要画圈按摩；②与其它产品叠加使用时，等前道护肤品完全吸收后（等待1分钟），再使用后道护肤品。",
+        "物理防晒霜：①纯物理防晒霜，SPF36 PA+++，适合日常通勤使用；②料体为裸粉色，适合黄皮、黑皮及中性皮使用，冷白皮需跟妆使用；③建议追加一层定妆粉，防止被蹭掉色；④若有出汗、擦拭等情况，建议2~3小时补涂1次；⑤敏皮建议使用温和的卸妆产品卸除。",
+        "也可采用物理防晒方式来达到防晒目的，如使用遮阳伞、遮阳帽、防晒衣、防晒口罩等。",
+        "若已有同功效的产品，可以继续沿用，无需重新购买。",
+        "若没有使用化妆水的习惯，可以省略化妆水。",
+        "上述护理是肌肤每天都要做的功课，从不同角度管理肌肤，长期坚持护理有利于肌肤健康。"
+      ]
+    },
+    {
+      "subject_id": "routine_oily_sensitive_acne_pigmented",
+      "title": "油敏痘色皮护理方案",
+      "content_type": "skin_type_routine",
+      "skin_type": "油敏痘色皮",
+      "dimensions": {
+        "oiliness": "油性",
+        "sensitivity": "敏感",
+        "acne": "有痘",
+        "pigmentation": "色沉"
+      },
+      "skin_theme": "油敏痘色皮",
+      "skin_problem": "皮肤出油旺盛，频繁长痘，敏感（受到刺激时皮肤易出现灼热、刺痛、瘙痒，部分人伴有泛红、毛细血管扩张等症状），有色素沉着问题（如晒黑、暗沉、有斑、痘印等）",
+      "skincare_strategy": [
+        {
+          "strategy": "控油",
+          "details": [
+            "抑制油脂过度分泌堵塞毛孔引起长痘",
+            "减少微生物生存的油脂环境"
+          ]
+        },
+        {
+          "strategy": "抗氧化",
+          "details": [
+            "减轻油脂氧化导致的暗沉",
+            "减轻氧化应激损伤引起的色素沉着"
+          ]
+        },
+        {
+          "strategy": "舒缓",
+          "details": [
+            "舒缓紫外线、高温、污染等刺激",
+            "减少对皮脂腺的刺激",
+            "舒缓外界环境刺激，减少因外界刺激引起的色素沉着",
+            "改善痘痘"
+          ]
+        },
+        {
+          "strategy": "修护",
+          "details": [
+            "提高肌肤耐受力减少敏感",
+            "提高肌肤锁水能力"
+          ]
+        },
+        {
+          "strategy": "防晒",
+          "details": [
+            "减少光对皮脂腺的刺激",
+            "减少紫外线对肌肤屏障损伤",
+            "减少紫外线照射引起的黑色素产生，防止色斑、痘印加重",
+            "减少紫外线对痘痘刺激"
+          ]
+        }
+      ],
+      "product_pairing": {
+        "daytime": [
+          {
+            "effect": "控油+舒缓",
+            "product": "油橄榄水（油敏皮）",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "温和提亮+抗氧",
+            "product": "传明酸精华",
+            "usage": "1滴管"
+          },
+          {
+            "effect": "控油+舒缓",
+            "product": "姜黄凝露",
+            "usage": "0.5~1cm"
+          },
+          {
+            "effect": "点涂祛痘",
+            "product": "壬二酸点痘胶（局部）",
+            "usage": "覆盖痘痘及其周围1cm区域"
+          },
+          {
+            "effect": "防晒",
+            "product": "物理防晒霜",
+            "usage": "1元硬币大小"
+          }
+        ],
+        "nighttime": [
+          {
+            "effect": "控油+舒缓",
+            "product": "油橄榄水（油敏皮）",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "温和提亮+抗氧",
+            "product": "传明酸精华",
+            "usage": "1滴管"
+          },
+          {
+            "effect": "修护+舒缓",
+            "product": "油橄榄霜（轻盈版）",
+            "usage": "0.5~1cm"
+          },
+          {
+            "effect": "点涂祛痘",
+            "product": "壬二酸点痘胶（局部）",
+            "usage": "覆盖痘痘及其周围1cm区域"
+          }
+        ]
+      },
+      "notes": [
+        "肌肤敏感时应优先注重舒缓修护，不建议在肌肤敏感期使用相对刺激的VC、VA等产品进阶护理。",
+        "姜黄凝露：①建议按压至吸收，不要画圈按摩；②与其它产品叠加使用时，等前道护肤品完全吸收后（等待1分钟），再使用后道护肤品。",
+        "壬二酸点痘胶：在护肤最后一步使用，直接点涂于痘痘及周围1cm区域，并用指尖轻轻按摩5~8圈，无需洗去，停留时间越长，效果越好。",
+        "物理防晒霜：①纯物理防晒霜，SPF36 PA+++，适合日常通勤使用；②料体为裸粉色，适合黄皮、黑皮及中性皮使用，冷白皮需跟妆使用；③建议追加一层定妆粉，防止被蹭掉色；④若有出汗、擦拭等情况，建议2~3小时补涂1次；⑤敏皮建议使用温和的卸妆产品卸除。",
+        "也可采用物理防晒方式来达到防晒目的，如使用遮阳伞、遮阳帽、防晒衣、防晒口罩等。",
+        "若已有同功效的产品，可以继续沿用，无需重新购买。",
+        "若没有使用化妆水的习惯，可以省略化妆水。",
+        "上述护理是肌肤每天都要做的功课，从不同角度管理肌肤，长期坚持护理有利于肌肤健康。"
+      ]
+    },
+    {
+      "subject_id": "routine_dry",
+      "title": "干皮护理方案",
+      "content_type": "skin_type_routine",
+      "skin_type": "干皮",
+      "dimensions": {
+        "oiliness": "干性",
+        "sensitivity": "耐受",
+        "acne": "无痘",
+        "pigmentation": "非色沉"
+      },
+      "skin_theme": "干皮",
+      "skin_problem": "皮肤干燥缺水，油脂分泌量少，不敏感，无痘，无色沉",
+      "skincare_strategy": [
+        {
+          "strategy": "保湿",
+          "details": [
+            "补充肌肤所需水分",
+            "补充油脂锁住水分"
+          ]
+        },
+        {
+          "strategy": "修护",
+          "details": [
+            "提高肌肤锁水能力"
+          ]
+        },
+        {
+          "strategy": "舒缓",
+          "details": [
+            "舒缓紫外线、高温、污染等刺激"
+          ]
+        },
+        {
+          "strategy": "抗氧化",
+          "details": [
+            "减少肌肤氧化损伤"
+          ]
+        },
+        {
+          "strategy": "防晒",
+          "details": [
+            "减少紫外线造成的晒黑、晒伤、晒老",
+            "减少肌肤水分流失"
+          ]
+        }
+      ],
+      "product_pairing": {
+        "daytime": [
+          {
+            "effect": "补水",
+            "product": "B5保湿水",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "抗氧化",
+            "product": "维C精华",
+            "usage": "初期1/3滴管或1泵，耐受后1/2滴管或2~3泵"
+          },
+          {
+            "effect": "保湿",
+            "product": "B5乳/高保湿霜",
+            "usage": "乳：2~3泵；霜：0.5~1cm"
+          },
+          {
+            "effect": "防晒",
+            "product": "物理防晒霜",
+            "usage": "1元硬币大小"
+          }
+        ],
+        "nighttime": [
+          {
+            "effect": "补水",
+            "product": "B5保湿水",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "保湿+舒缓+修护",
+            "product": "10%B5精华",
+            "usage": "0.5~1滴管"
+          },
+          {
+            "effect": "抗皱",
+            "product": "维A醇晚霜",
+            "usage": "初期1泵，耐受后2~3泵"
+          }
+        ]
+      },
+      "notes": [
+        "维C精华：①开封后尽快使用；②需建立耐受；③干手干脸使用；④新手建议从低浓度开始入手，耐受后进阶高浓度；⑤不要囤货，现用现买。",
+        "B5乳分轻盈版与丰盈版，可根据季节与肌肤保湿需求选择产品，滋润度：霜>乳；丰盈版>轻盈版。",
+        "物理防晒霜：①纯物理防晒霜，SPF36 PA+++，适合日常通勤使用；②料体为裸粉色，适合黄皮、黑皮及中性皮使用，冷白皮需跟妆使用；③建议追加一层定妆粉，防止被蹭掉色；④若有出汗、擦拭等情况，建议2~3小时补涂1次；⑤干皮建议使用温和的卸妆产品卸除。",
+        "也可采用物理防晒方式来达到防晒目的，如使用遮阳伞、遮阳帽、防晒衣、防晒口罩等。",
+        "维A醇晚霜：①新手推荐0.1%入门版，耐受后使用0.3%进阶版；②白天不可使用，并白天注意做好防晒；③用后做好保湿修护；④孕妇、哺乳期禁用；⑤建议现买现用，购买后尽快使用完毕。",
+        "若已有同功效的产品，可以继续沿用，无需重新购买。",
+        "若没有使用化妆水的习惯，可以省略化妆水。",
+        "上述护理是肌肤每天都要做的功课，从不同角度管理肌肤，长期坚持护理有利于肌肤健康。"
+      ]
+    },
+    {
+      "subject_id": "routine_dry_acne",
+      "title": "干痘皮护理方案",
+      "content_type": "skin_type_routine",
+      "skin_type": "干痘皮",
+      "dimensions": {
+        "oiliness": "干性",
+        "sensitivity": "耐受",
+        "acne": "有痘",
+        "pigmentation": "非色沉"
+      },
+      "skin_theme": "干痘皮",
+      "skin_problem": "皮肤干燥缺水，油脂分泌量少，频繁长痘",
+      "skincare_strategy": [
+        {
+          "strategy": "保湿",
+          "details": [
+            "补充肌肤所需水分",
+            "补充油脂锁住水分"
+          ]
+        },
+        {
+          "strategy": "修护",
+          "details": [
+            "提高肌肤锁水能力"
+          ]
+        },
+        {
+          "strategy": "舒缓",
+          "details": [
+            "舒缓紫外线、高温、污染等刺激",
+            "改善痘痘"
+          ]
+        },
+        {
+          "strategy": "抗氧化",
+          "details": [
+            "减少肌肤氧化损伤"
+          ]
+        },
+        {
+          "strategy": "防晒",
+          "details": [
+            "减少紫外线造成的晒黑、晒伤、晒老",
+            "减少肌肤水分流失",
+            "减少紫外线对痘痘的刺激"
+          ]
+        }
+      ],
+      "product_pairing": {
+        "daytime": [
+          {
+            "effect": "补水",
+            "product": "B5保湿水",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "抗氧化",
+            "product": "维C精华",
+            "usage": "初期1/3滴管或1泵，耐受后1/2滴管或2~3泵"
+          },
+          {
+            "effect": "保湿",
+            "product": "B5乳/高保湿霜",
+            "usage": "乳：2~3泵；霜：0.5~1cm"
+          },
+          {
+            "effect": "点涂祛痘",
+            "product": "壬二酸点痘胶（局部）",
+            "usage": "覆盖痘痘及其周围1cm区域"
+          },
+          {
+            "effect": "防晒",
+            "product": "物理防晒霜",
+            "usage": "1元硬币大小"
+          }
+        ],
+        "nighttime": [
+          {
+            "effect": "补水",
+            "product": "B5保湿水",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "保湿+舒缓+修护",
+            "product": "10%B5精华",
+            "usage": "0.5~1滴管"
+          },
+          {
+            "effect": "抗皱",
+            "product": "维A醇晚霜",
+            "usage": "初期1泵，耐受后2~3泵"
+          },
+          {
+            "effect": "点涂祛痘",
+            "product": "壬二酸点痘胶（局部）",
+            "usage": "覆盖痘痘及其周围1cm区域"
+          }
+        ]
+      },
+      "notes": [
+        "维C精华：①开封后尽快使用；②需建立耐受；③干手干脸使用；④新手建议从低浓度开始入手，耐受后进阶高浓度；⑤不要囤货，现用现买。",
+        "B5乳分轻盈版与丰盈版，可根据季节与肌肤保湿需求选择产品，滋润度：霜>乳；丰盈版>轻盈版。",
+        "壬二酸点痘胶：在护肤最后一步使用，直接点涂于痘痘及周围1cm区域，并用指尖轻轻按摩5~8圈，无需洗去，停留时间越长，效果越好。",
+        "物理防晒霜：①纯物理防晒霜，SPF36 PA+++，适合日常通勤使用；②料体为裸粉色，适合黄皮、黑皮及中性皮使用，冷白皮需跟妆使用；③建议追加一层定妆粉，防止被蹭掉色；④若有出汗、擦拭等情况，建议2~3小时补涂1次；⑤干皮建议使用温和的卸妆产品卸除。",
+        "也可采用物理防晒方式来达到防晒目的，如使用遮阳伞、遮阳帽、防晒衣、防晒口罩等。",
+        "维A醇晚霜：①新手推荐0.1%入门版，耐受后使用0.3%进阶版；②白天不可使用，并白天注意做好防晒；③用后做好保湿修护；④孕妇、哺乳期禁用；⑤建议现买现用，购买后尽快使用完毕。",
+        "若已有同功效的产品，可以继续沿用，无需重新购买。",
+        "若没有使用化妆水的习惯，可以省略化妆水。",
+        "上述护理是肌肤每天都要做的功课，从不同角度管理肌肤，长期坚持护理有利于肌肤健康。"
+      ]
+    },
+    {
+      "subject_id": "routine_dry_pigmented",
+      "title": "干色皮护理方案",
+      "content_type": "skin_type_routine",
+      "skin_type": "干色皮",
+      "dimensions": {
+        "oiliness": "干性",
+        "sensitivity": "耐受",
+        "acne": "无痘",
+        "pigmentation": "色沉"
+      },
+      "skin_theme": "干色皮",
+      "skin_problem": "皮肤干燥缺水，油脂分泌量少，有色素沉着问题（如晒黑、暗沉、有斑、痘印等）",
+      "skincare_strategy": [
+        {
+          "strategy": "保湿",
+          "details": [
+            "补充肌肤所需水分",
+            "补充油脂锁住水分"
+          ]
+        },
+        {
+          "strategy": "修护",
+          "details": [
+            "提高肌肤锁水能力"
+          ]
+        },
+        {
+          "strategy": "舒缓",
+          "details": [
+            "舒缓紫外线、高温、污染等刺激",
+            "减少外界刺激引起的色素沉着"
+          ]
+        },
+        {
+          "strategy": "抗氧化",
+          "details": [
+            "减少肌肤氧化损伤",
+            "减少肌肤氧化导致的色素沉着"
+          ]
+        },
+        {
+          "strategy": "防晒",
+          "details": [
+            "减少紫外线造成的晒黑、晒伤、晒老",
+            "减少肌肤水分流失"
+          ]
+        }
+      ],
+      "product_pairing": {
+        "daytime": [
+          {
+            "effect": "补水",
+            "product": "B5保湿水",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "抗氧化",
+            "product": "维C精华",
+            "usage": "初期1/3滴管或1泵，耐受后1/2滴管或2~3泵"
+          },
+          {
+            "effect": "保湿",
+            "product": "B5乳/高保湿霜",
+            "usage": "乳：2~3泵；霜：0.5~1cm"
+          },
+          {
+            "effect": "防晒",
+            "product": "物理防晒霜",
+            "usage": "1元硬币大小"
+          }
+        ],
+        "nighttime": [
+          {
+            "effect": "补水",
+            "product": "B5保湿水",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "美白淡斑",
+            "product": "377精华",
+            "usage": "至少1滴管"
+          },
+          {
+            "effect": "修护+舒缓",
+            "product": "油橄榄霜（丰盈版）",
+            "usage": "0.5~1cm"
+          }
+        ]
+      },
+      "notes": [
+        "维C精华：①开封后尽快使用；②需建立耐受；③干手干脸使用；④新手建议从低浓度开始入手，耐受后进阶高浓度；⑤不要囤货，现用现买。",
+        "B5乳分轻盈版与丰盈版，可根据季节与肌肤保湿需求选择产品，滋润度：霜>乳；丰盈版>轻盈版。",
+        "物理防晒霜：①纯物理防晒霜，SPF36PA+++，适合日常通勤使用；②料体为裸粉色，适合黄皮、黑皮及中性皮使用，冷白皮需跟妆使用；③建议追加一层定妆粉，防止被蹭掉色；④若有出汗、擦拭等情况，建议2~3小时补涂1次；⑤干皮建议使用温和的卸妆产品卸除。",
+        "也可采用物理防晒方式来达到防晒目的，如使用遮阳伞、遮阳帽、防晒衣、防晒口罩等。",
+        "377美白精华：①需足量使用，建议每次用量至少1滴管；②使用后需加强补水保湿，同时白天也要注意做好防晒；③有部分人不耐受，用前请耳后测试。",
+        "若已有同功效的产品，可以继续沿用，无需重新购买。",
+        "若没有使用化妆水的习惯，可以省略化妆水。",
+        "上述护理是肌肤每天都要做的功课，从不同角度管理肌肤，长期坚持护理有利于肌肤健康。"
+      ]
+    },
+    {
+      "subject_id": "routine_dry_acne_pigmented",
+      "title": "干痘色皮护理方案",
+      "content_type": "skin_type_routine",
+      "skin_type": "干痘色皮",
+      "dimensions": {
+        "oiliness": "干性",
+        "sensitivity": "耐受",
+        "acne": "有痘",
+        "pigmentation": "色沉"
+      },
+      "skin_theme": "干痘色皮",
+      "skin_problem": "皮肤干燥缺水，油脂分泌量少，频繁长痘，有色素沉着问题（如晒黑、暗沉、有斑、痘印等）",
+      "skincare_strategy": [
+        {
+          "strategy": "保湿",
+          "details": [
+            "补充肌肤所需水分",
+            "补充油脂锁住水分"
+          ]
+        },
+        {
+          "strategy": "修护",
+          "details": [
+            "提高肌肤锁水能力"
+          ]
+        },
+        {
+          "strategy": "舒缓",
+          "details": [
+            "舒缓紫外线、高温、污染等刺激",
+            "减少外界刺激引起的色素沉着",
+            "改善痘痘"
+          ]
+        },
+        {
+          "strategy": "抗氧化",
+          "details": [
+            "减少肌肤氧化损伤",
+            "减少肌肤氧化导致的色素沉着"
+          ]
+        },
+        {
+          "strategy": "防晒",
+          "details": [
+            "减少紫外线造成的晒黑、晒伤、晒老",
+            "减少肌肤水分流失",
+            "减少紫外线对痘痘的刺激"
+          ]
+        }
+      ],
+      "product_pairing": {
+        "daytime": [
+          {
+            "effect": "补水",
+            "product": "B5保湿水",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "抗氧化",
+            "product": "维C精华",
+            "usage": "初期1/3滴管或1泵，耐受后1/2滴管或2~3泵"
+          },
+          {
+            "effect": "保湿",
+            "product": "B5乳/高保湿霜",
+            "usage": "乳：2~3泵；霜：0.5~1cm"
+          },
+          {
+            "effect": "点涂祛痘",
+            "product": "壬二酸点痘胶（局部）",
+            "usage": "覆盖痘痘及其周围1cm区域"
+          },
+          {
+            "effect": "防晒",
+            "product": "物理防晒霜",
+            "usage": "1元硬币大小"
+          }
+        ],
+        "nighttime": [
+          {
+            "effect": "补水",
+            "product": "B5保湿水",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "美白淡斑",
+            "product": "377精华",
+            "usage": "至少1滴管"
+          },
+          {
+            "effect": "修护+舒缓",
+            "product": "油橄榄霜（丰盈版）",
+            "usage": "0.5~1cm"
+          },
+          {
+            "effect": "点涂祛痘",
+            "product": "壬二酸点痘胶（局部）",
+            "usage": "覆盖痘痘及其周围1cm区域"
+          }
+        ]
+      },
+      "notes": [
+        "维C精华：①开封后尽快使用；②需建立耐受；③干手干脸使用；④新手建议从低浓度开始入手，耐受后进阶高浓度；⑤不要囤货，现用现买。",
+        "B5乳分轻盈版与丰盈版，可根据季节与肌肤保湿需求选择产品，滋润度：霜>乳；丰盈版>轻盈版。",
+        "壬二酸点痘胶：在护肤最后一步使用，直接点涂于痘痘及周围1cm区域，并用指尖轻轻按摩5~8圈，无需洗去，停留时间越长，效果越好。",
+        "物理防晒霜：①纯物理防晒霜，SPF36PA+++，适合日常通勤使用；②料体为裸粉色，适合黄皮、黑皮及中性皮使用，冷白皮需跟妆使用；③建议追加一层定妆粉，防止被蹭掉色；④若有出汗、擦拭等情况，建议2~3小时补涂1次；⑤干皮建议使用温和的卸妆产品卸除。",
+        "也可采用物理防晒方式来达到防晒目的，如使用遮阳伞、遮阳帽、防晒衣、防晒口罩等。",
+        "377美白精华：①需足量使用，建议每次用量至少1滴管；②使用后需加强补水保湿，同时白天也要注意做好防晒；③有部分人不耐受，用前请耳后测试。",
+        "若已有同功效的产品，可以继续沿用，无需重新购买。",
+        "若没有使用化妆水的习惯，可以省略化妆水。",
+        "上述护理是肌肤每天都要做的功课，从不同角度管理肌肤，长期坚持护理有利于肌肤健康。"
+      ]
+    },
+    {
+      "subject_id": "routine_dry_sensitive",
+      "title": "干敏皮护理方案",
+      "content_type": "skin_type_routine",
+      "skin_type": "干敏皮",
+      "dimensions": {
+        "oiliness": "干性",
+        "sensitivity": "敏感",
+        "acne": "无痘",
+        "pigmentation": "非色沉"
+      },
+      "skin_theme": "干敏皮",
+      "skin_problem": "皮肤干燥缺水，油脂分泌量少，敏感（受到刺激时皮肤易出现灼热、刺痛、瘙痒，部分人伴有泛红、毛细血管扩张等症状）",
+      "skincare_strategy": [
+        {
+          "strategy": "保湿",
+          "details": [
+            "补充肌肤所需水分",
+            "补充油脂锁住水分"
+          ]
+        },
+        {
+          "strategy": "修护",
+          "details": [
+            "强韧屏障，提高肌肤耐受力",
+            "提高肌肤锁水能力"
+          ]
+        },
+        {
+          "strategy": "舒缓",
+          "details": [
+            "舒缓紫外线、高温、污染等刺激"
+          ]
+        },
+        {
+          "strategy": "抗氧化",
+          "details": [
+            "减少肌肤氧化损伤"
+          ]
+        },
+        {
+          "strategy": "防晒",
+          "details": [
+            "减少紫外线造成的晒黑、晒伤、晒老",
+            "减少肌肤水分流失",
+            "减少紫外线对肌肤屏障的伤害"
+          ]
+        }
+      ],
+      "product_pairing": {
+        "daytime": [
+          {
+            "effect": "补水+舒缓",
+            "product": "油橄榄水（干敏皮）",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "保湿+舒缓+修护",
+            "product": "10%B5精华",
+            "usage": "0.5~1滴管"
+          },
+          {
+            "effect": "修护+舒缓",
+            "product": "油橄榄霜（丰盈版）",
+            "usage": "0.5~1cm"
+          },
+          {
+            "effect": "防晒",
+            "product": "物理防晒霜",
+            "usage": "1元硬币大小"
+          }
+        ],
+        "nighttime": [
+          {
+            "effect": "补水+舒缓",
+            "product": "油橄榄水（干敏皮）",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "保湿+舒缓+修护",
+            "product": "10%B5精华",
+            "usage": "0.5~1滴管"
+          },
+          {
+            "effect": "修护+舒缓",
+            "product": "油橄榄霜（丰盈版）",
+            "usage": "0.5~1cm"
+          }
+        ]
+      },
+      "notes": [
+        "肌肤敏感时应优先注重舒缓修护，不建议在肌肤敏感期使用相对刺激的VC、VA等产品进阶护理。",
+        "物理防晒霜：①纯物理防晒霜，SPF36PA+++，适合日常通勤使用；②料体为裸粉色，适合黄皮、黑皮及中性皮使用，冷白皮需跟妆使用；③建议追加一层定妆粉，防止被蹭掉色；④若有出汗、擦拭等情况，建议2~3小时补涂1次；⑤干皮、敏皮建议使用温和的卸妆产品卸除。",
+        "也可采用物理防晒方式来达到防晒目的，如使用遮阳伞、遮阳帽、防晒衣、防晒口罩等。",
+        "若已有同功效的产品，可以继续沿用，无需重新购买。",
+        "若没有使用化妆水的习惯，可以省略化妆水。",
+        "上述护理是肌肤每天都要做的功课，从不同角度管理肌肤，长期坚持护理有利于肌肤健康。"
+      ]
+    },
+    {
+      "subject_id": "routine_dry_sensitive_acne",
+      "title": "干敏痘皮护理方案",
+      "content_type": "skin_type_routine",
+      "skin_type": "干敏痘皮",
+      "dimensions": {
+        "oiliness": "干性",
+        "sensitivity": "敏感",
+        "acne": "有痘",
+        "pigmentation": "非色沉"
+      },
+      "skin_theme": "干敏痘皮",
+      "skin_problem": "皮肤干燥缺水，油脂分泌量少，频繁长痘，敏感（受到刺激时皮肤易出现灼热、刺痛、瘙痒，部分人伴有泛红、毛细血管扩张等症状）",
+      "skincare_strategy": [
+        {
+          "strategy": "保湿",
+          "details": [
+            "补充肌肤所需水分",
+            "补充油脂锁住水分"
+          ]
+        },
+        {
+          "strategy": "修护",
+          "details": [
+            "强韧屏障，提高肌肤耐受力",
+            "提高肌肤锁水能力"
+          ]
+        },
+        {
+          "strategy": "舒缓",
+          "details": [
+            "舒缓紫外线、高温、污染等刺激",
+            "改善痘痘"
+          ]
+        },
+        {
+          "strategy": "抗氧化",
+          "details": [
+            "减少肌肤氧化损伤"
+          ]
+        },
+        {
+          "strategy": "防晒",
+          "details": [
+            "减少紫外线造成的晒黑、晒伤、晒老",
+            "减少肌肤水分流失",
+            "减少紫外线对肌肤屏障的伤害",
+            "减少紫外线对痘痘的刺激",
+            "预防红色痘印变成黑色痘印"
+          ]
+        }
+      ],
+      "product_pairing": {
+        "daytime": [
+          {
+            "effect": "补水+舒缓",
+            "product": "油橄榄水（干敏皮）",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "保湿+舒缓+修护",
+            "product": "10%B5精华",
+            "usage": "0.5~1滴管"
+          },
+          {
+            "effect": "修护+舒缓",
+            "product": "油橄榄霜（丰盈版）",
+            "usage": "0.5~1cm"
+          },
+          {
+            "effect": "点涂祛痘",
+            "product": "壬二酸点痘胶（局部）",
+            "usage": "覆盖痘痘及其周围1cm区域"
+          },
+          {
+            "effect": "防晒",
+            "product": "物理防晒霜",
+            "usage": "1元硬币大小"
+          }
+        ],
+        "nighttime": [
+          {
+            "effect": "补水+舒缓",
+            "product": "油橄榄水（干敏皮）",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "保湿+舒缓+修护",
+            "product": "10%B5精华",
+            "usage": "0.5~1滴管"
+          },
+          {
+            "effect": "修护+舒缓",
+            "product": "油橄榄霜（丰盈版）",
+            "usage": "0.5~1cm"
+          },
+          {
+            "effect": "点涂祛痘",
+            "product": "壬二酸点痘胶（局部）",
+            "usage": "覆盖痘痘及其周围1cm区域"
+          }
+        ]
+      },
+      "notes": [
+        "肌肤敏感时应优先注重舒缓修护，不建议在肌肤敏感期使用相对刺激的VC、VA等产品进阶护理。",
+        "壬二酸点痘胶：在护肤最后一步使用，直接点涂于痘痘及周围1cm区域，并用指尖轻轻按摩5~8圈，无需洗去，停留时间越长，效果越好。",
+        "物理防晒霜：①纯物理防晒霜，SPF36PA+++，适合日常通勤使用；②料体为裸粉色，适合黄皮、黑皮及中性皮使用，冷白皮需跟妆使用；③建议追加一层定妆粉，防止被蹭掉色；④若有出汗、擦拭等情况，建议2~3小时补涂1次；⑤干皮、敏皮建议使用温和的卸妆产品卸除。",
+        "也可采用物理防晒方式来达到防晒目的，如使用遮阳伞、遮阳帽、防晒衣、防晒口罩等。",
+        "若已有同功效的产品，可以继续沿用，无需重新购买。",
+        "若没有使用化妆水的习惯，可以省略化妆水。",
+        "上述护理是肌肤每天都要做的功课，从不同角度管理肌肤，长期坚持护理有利于肌肤健康。"
+      ]
+    },
+    {
+      "subject_id": "routine_dry_sensitive_pigmented",
+      "title": "干敏色皮护理方案",
+      "content_type": "skin_type_routine",
+      "skin_type": "干敏色皮",
+      "dimensions": {
+        "oiliness": "干性",
+        "sensitivity": "敏感",
+        "acne": "无痘",
+        "pigmentation": "色沉"
+      },
+      "skin_theme": "干敏色皮",
+      "skin_problem": "皮肤干燥缺水，油脂分泌量少，敏感（受到刺激时皮肤易出现灼热、刺痛、瘙痒，部分人伴有泛红、毛细血管扩张等症状），有色素沉着问题（如晒黑、暗沉、有斑、痘印等）",
+      "skincare_strategy": [
+        {
+          "strategy": "保湿",
+          "details": [
+            "补充肌肤所需水分",
+            "补充油脂锁住水分"
+          ]
+        },
+        {
+          "strategy": "修护",
+          "details": [
+            "强韧屏障，提高肌肤耐受力",
+            "提高肌肤锁水能力"
+          ]
+        },
+        {
+          "strategy": "舒缓",
+          "details": [
+            "舒缓紫外线、高温、污染等刺激",
+            "减少外界刺激引起的色素沉着"
+          ]
+        },
+        {
+          "strategy": "抗氧化",
+          "details": [
+            "减少肌肤氧化损伤",
+            "减少肌肤氧化导致的色素沉着"
+          ]
+        },
+        {
+          "strategy": "防晒",
+          "details": [
+            "减少紫外线造成的晒黑、晒伤、晒老",
+            "减少肌肤水分流失",
+            "减少紫外线对肌肤的刺激"
+          ]
+        }
+      ],
+      "product_pairing": {
+        "daytime": [
+          {
+            "effect": "补水+舒缓",
+            "product": "油橄榄水（干敏皮）",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "抗氧提亮",
+            "product": "传明酸精华",
+            "usage": "1滴管"
+          },
+          {
+            "effect": "保湿+舒缓+修护",
+            "product": "10%B5精华",
+            "usage": "0.5~1滴管"
+          },
+          {
+            "effect": "防晒",
+            "product": "物理防晒霜",
+            "usage": "1元硬币大小"
+          }
+        ],
+        "nighttime": [
+          {
+            "effect": "补水+舒缓",
+            "product": "油橄榄水（干敏皮）",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "抗氧提亮",
+            "product": "传明酸精华",
+            "usage": "1滴管"
+          },
+          {
+            "effect": "修护+舒缓",
+            "product": "油橄榄霜（丰盈版）",
+            "usage": "0.5~1cm"
+          }
+        ]
+      },
+      "notes": [
+        "肌肤敏感时应优先注重舒缓修护，不建议在肌肤敏感期使用相对刺激的VC、VA等产品进阶护理。",
+        "物理防晒霜：①纯物理防晒霜，SPF36PA+++，适合日常通勤使用；②料体为裸粉色，适合黄皮、黑皮及中性皮使用，冷白皮需跟妆使用；③建议追加一层定妆粉，防止被蹭掉色；④若有出汗、擦拭等情况，建议2~3小时补涂1次；⑤干皮建议使用温和的卸妆产品卸除。",
+        "也可采用物理防晒方式来达到防晒目的，如使用遮阳伞、遮阳帽、防晒衣、防晒口罩等。",
+        "若已有同功效的产品，可以继续沿用，无需重新购买。",
+        "若没有使用化妆水的习惯，可以省略化妆水。",
+        "上述护理是肌肤每天都要做的功课，从不同角度管理肌肤，长期坚持护理有利于肌肤健康。"
+      ]
+    },
+    {
+      "subject_id": "routine_dry_sensitive_acne_pigmented",
+      "title": "干敏痘色皮护理方案",
+      "content_type": "skin_type_routine",
+      "skin_type": "干敏痘色皮",
+      "dimensions": {
+        "oiliness": "干性",
+        "sensitivity": "敏感",
+        "acne": "有痘",
+        "pigmentation": "色沉"
+      },
+      "skin_theme": "干敏痘色皮",
+      "skin_problem": "皮肤干燥缺水，油脂分泌量少，频繁长痘，敏感（受到刺激时皮肤易出现灼热、刺痛、瘙痒，部分人伴有泛红、毛细血管扩张等症状），有色素沉着问题（如晒黑、暗沉、有斑、痘印等）",
+      "skincare_strategy": [
+        {
+          "strategy": "保湿",
+          "details": [
+            "补充肌肤所需水分",
+            "补充油脂锁住水分"
+          ]
+        },
+        {
+          "strategy": "修护",
+          "details": [
+            "强韧屏障，提高肌肤耐受力",
+            "提高肌肤锁水能力"
+          ]
+        },
+        {
+          "strategy": "舒缓",
+          "details": [
+            "舒缓紫外线、高温、污染等刺激",
+            "减少外界刺激引起的色素沉着",
+            "改善痘痘"
+          ]
+        },
+        {
+          "strategy": "抗氧化",
+          "details": [
+            "减少肌肤氧化损伤",
+            "减少肌肤氧化导致的色素沉着"
+          ]
+        },
+        {
+          "strategy": "防晒",
+          "details": [
+            "减少紫外线造成的晒黑、晒伤、晒老",
+            "减少肌肤水分流失",
+            "减少紫外线对肌肤及痘痘的刺激",
+            "预防红色痘印变成黑色痘印"
+          ]
+        }
+      ],
+      "product_pairing": {
+        "daytime": [
+          {
+            "effect": "补水+舒缓",
+            "product": "油橄榄水（干敏皮）",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "抗氧提亮",
+            "product": "传明酸精华",
+            "usage": "1滴管"
+          },
+          {
+            "effect": "保湿+舒缓+修护",
+            "product": "10%B5精华",
+            "usage": "0.5~1滴管"
+          },
+          {
+            "effect": "点涂祛痘",
+            "product": "壬二酸点痘胶（局部）",
+            "usage": "覆盖痘痘及其周围1cm区域"
+          },
+          {
+            "effect": "防晒",
+            "product": "物理防晒霜",
+            "usage": "1元硬币大小"
+          }
+        ],
+        "nighttime": [
+          {
+            "effect": "补水+舒缓",
+            "product": "油橄榄水（干敏皮）",
+            "usage": "3~4泵"
+          },
+          {
+            "effect": "抗氧提亮",
+            "product": "传明酸精华",
+            "usage": "1滴管"
+          },
+          {
+            "effect": "修护+舒缓",
+            "product": "油橄榄霜（丰盈版）",
+            "usage": "0.5~1cm"
+          },
+          {
+            "effect": "点涂祛痘",
+            "product": "壬二酸点痘胶（局部）",
+            "usage": "覆盖痘痘及其周围1cm区域"
+          }
+        ]
+      },
+      "notes": [
+        "肌肤敏感时应优先注重舒缓修护，不建议在肌肤敏感期使用相对刺激的VC、VA等产品进阶护理。",
+        "壬二酸点痘胶：在护肤最后一步使用，直接点涂于痘痘及周围1cm区域，并用指尖轻轻按摩5~8圈，无需洗去，停留时间越长，效果越好。",
+        "物理防晒霜：①纯物理防晒霜，SPF36PA+++，适合日常通勤使用；②料体为裸粉色，适合黄皮、黑皮及中性皮使用，冷白皮需跟妆使用；③建议追加一层定妆粉，防止被蹭掉色；④若有出汗、擦拭等情况，建议2~3小时补涂1次；⑤干皮、敏皮建议使用温和的卸妆产品卸除。",
+        "也可采用物理防晒方式来达到防晒目的，如使用遮阳伞、遮阳帽、防晒衣、防晒口罩等。",
+        "若已有同功效的产品，可以继续沿用，无需重新购买。",
+        "若没有使用化妆水的习惯，可以省略化妆水。",
+        "上述护理是肌肤每天都要做的功课，从不同角度管理肌肤，长期坚持护理有利于肌肤健康。"
+      ]
+    }
+  ]
+}

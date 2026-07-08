@@ -2,25 +2,71 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://skin-checker/shared/skin-report.schema.json",
   "title": "SkinReport",
-  "description": "皮肤分析结果契约 —— 三端共用 + 千问VL 结构化输出约束的单一真相源",
+  "description": "皮肤分析结果契约 —— 三端共用 + 千问VL 结构化输出约束的单一真相源。分类体系(16型四维度)见 docs/adr/0006。",
   "type": "object",
   "additionalProperties": false,
-  "required": ["skinType", "confidence", "zones", "suggestions", "disclaimer"],
+  "required": ["skinAxes", "skinTypeCode", "skinTypeName", "zones", "suggestions", "disclaimer"],
   "properties": {
-    "skinType": {
-      "type": "string",
-      "enum": ["干性", "油性", "混合性", "敏感性"],
-      "description": "综合判断的肤质类型"
+    "skinAxes": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "16型肌肤四维度,每维度自带判定值 + 独立置信度(详见 docs/adr/0006)",
+      "required": ["oilDry", "sensitivity", "acne", "pigment"],
+      "properties": {
+        "oilDry": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "油脂分泌",
+          "required": ["value", "confidence"],
+          "properties": {
+            "value": { "type": "string", "enum": ["O", "D"], "description": "O 油 / D 干" },
+            "confidence": { "type": "number", "minimum": 0, "maximum": 1, "description": "该维度置信度 0-1;偏低时前端标「参考」" }
+          }
+        },
+        "sensitivity": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "敏感程度(单张照片判定较不稳,通常低置信,前端以「参考」呈现)",
+          "required": ["value", "confidence"],
+          "properties": {
+            "value": { "type": "string", "enum": ["S", "R"], "description": "S 敏感 / R 耐受" },
+            "confidence": { "type": "number", "minimum": 0, "maximum": 1, "description": "该维度置信度 0-1;偏低时前端标「参考」" }
+          }
+        },
+        "acne": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "痘痘情况",
+          "required": ["value", "confidence"],
+          "properties": {
+            "value": { "type": "string", "enum": ["A", "F"], "description": "A 有痘 / F 无痘" },
+            "confidence": { "type": "number", "minimum": 0, "maximum": 1, "description": "该维度置信度 0-1;偏低时前端标「参考」" }
+          }
+        },
+        "pigment": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "色沉情况",
+          "required": ["value", "confidence"],
+          "properties": {
+            "value": { "type": "string", "enum": ["P", "N"], "description": "P 有色沉 / N 无色沉" },
+            "confidence": { "type": "number", "minimum": 0, "maximum": 1, "description": "该维度置信度 0-1;偏低时前端标「参考」" }
+          }
+        }
+      }
     },
-    "confidence": {
-      "type": "number",
-      "minimum": 0,
-      "maximum": 1,
-      "description": "置信度 0-1"
+    "skinTypeCode": {
+      "type": "string",
+      "pattern": "^[OD]-[SR]-[AF]-[PN]$",
+      "description": "四维派生码,如 O-S-F-P(后端按 skinAxes 拼出,两端直接渲染,不各自查表)"
+    },
+    "skinTypeName": {
+      "type": "string",
+      "description": "四维派生中文名,如 油敏色皮(后端按 16 型映射派生)"
     },
     "zones": {
       "type": "array",
-      "description": "分区评估",
+      "description": "分区评估(部位问题点,与 16 型整脸分型正交互补)",
       "items": {
         "type": "object",
         "additionalProperties": false,
@@ -47,11 +93,11 @@
     "suggestions": {
       "type": "array",
       "items": { "type": "string" },
-      "description": "护肤建议"
+      "description": "护肤建议(按判定型号取该型护理思路,仅到成分/品类层,不含具体品牌/品名)"
     },
     "disclaimer": {
       "type": "string",
-      "description": "免责声明标准文案(三端结果页/启动页统一展示):本结果由 AI 生成,仅供护肤参考,不构成医疗建议,严重皮肤问题请就医。"
+      "description": "免责声明标准文案(收敛到结果页一处展示,详见 docs/adr/0008):本结果由 AI 生成,仅供护肤参考,不构成医疗建议,严重皮肤问题请就医。"
     }
   }
 }
