@@ -1,12 +1,13 @@
 // server 联调(W2 切片 E):uni.uploadFile 传图到 /analyze,返回报告 envelope { id, createdAt, report }。
-// API_BASE 为本地 wrangler dev 地址(pnpm dev --port 8890);部署后换线上域名
-// —— 小程序 / App 真机还需 https + 各端后台配请求合法域名,H5 跨域由 server 端 CORS 放行。
+// API_BASE:dev = 本地 wrangler dev(pnpm dev --port 8890),build = 线上 skin.9shi.cc;
+// server 挂 basePath('/api'),两处都带 /api 后缀。生产 H5 与 API 同域故无 CORS 依赖;
+// 小程序真机需在后台配 uploadFile 合法域名 skin.9shi.cc,App(APK)原生请求不受限。
 // 「分析 → 结果卡」的 envelope 用模块级暂存单次取用传递(redirectTo 不便携带大对象;
 // 不自动写历史,保存仍由用户在结果卡点「保存报告」)。
 
 import type { SkinReport } from '@/types/skin-report'
 
-const API_BASE = 'http://127.0.0.1:8890'
+const API_BASE = import.meta.env.DEV ? 'http://127.0.0.1:8890/api' : 'https://skin.9shi.cc/api'
 
 export interface AnalysisEnvelope {
   id: string

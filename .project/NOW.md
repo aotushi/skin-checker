@@ -1,6 +1,14 @@
 # NOW · skin-checker 当前状态
 
-**最后更新:** 2026-07-09(切片 D 完成,真实 VL 调用通)
+**最后更新:** 2026-07-09(切片 D 完成 + 部署上线:worker 远程全套 + Pages H5)
+
+## 部署(2026-07-09,用户同意远程操作后执行)
+
+- **架构**:H5 与 API 同域 `skin.9shi.cc` —— Pages 服务页面,worker 只接 `/api/*` 路由(`index.ts` 挂 `basePath('/api')`,本地 dev 同为 `/api/*`);生产 H5 同域免 CORS。
+- **worker**:`wrangler deploy` 已上(版本 6a897396),路由 `skin.9shi.cc/api/*`;`QWEN_API_KEY` 已 `wrangler secret put`;远程 D1 已建(id 见 wrangler.jsonc)+ 迁移 0001 已应用;R2 `skin-checker-img` 已建 + 1 天生命周期兜底删图。
+- **Pages**:项目 `skin-checker`(production branch master),H5 产物直传部署,`skin-checker.pages.dev` 已 200。
+- **待用户(dashboard)**:Pages → skin-checker → Custom domains 添加 `skin.9shi.cc`(自动建 DNS + 证书);生效后 `https://skin.9shi.cc` = H5、`/api/health` = worker(同 zone 下 worker 路由优先于 Pages 自定义域)。之后如需 git 自动部署,可在 dashboard 把仓库连到既有 worker/Pages 项目(`[Skip CI]` 前缀会跳过自动构建,注意)。
+- **APK(HBuilderX,留用户)**:manifest appid 已填(`__UNI__8A0107B`);云打包勾相机/相册模块,首次装机自测拍照全流程。小程序真机延后(届时后台配 uploadFile 合法域名 `skin.9shi.cc`)。
 
 ## 阶段
 

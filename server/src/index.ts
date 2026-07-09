@@ -6,7 +6,9 @@ import { assembleReport } from './derive'
 import { validateReport } from './validate'
 import { insertReport, listHistory } from './db'
 
-const app = new Hono<{ Bindings: Env }>()
+// basePath('/api'):生产路由 skin.9shi.cc/api/* 会把完整路径(含 /api)转给 worker,
+// 本地 dev 同样走 /api/*,前端 API_BASE 统一带 /api 后缀。
+const app = new Hono<{ Bindings: Env }>().basePath('/api')
 
 // CORS:H5 端(浏览器)跨域 fetch 必需;微信小程序 / APP 走原生请求不受 CORS(但需各端后台配合法域名)。
 // MVP 先放开所有源(接口无 cookie / 无凭证);部署时收紧到实际前端域名。

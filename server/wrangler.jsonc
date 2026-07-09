@@ -9,10 +9,16 @@
     "logs": { "head_sampling_rate": 1 }
   },
 
+  // 生产路由:H5(Pages)与 API 同域 skin.9shi.cc,worker 只接 /api/*(index.ts basePath 对齐,
+  // 路由会把含 /api 前缀的完整路径转给 worker);同域后生产 H5 不再依赖 CORS。
+  "routes": [{ "pattern": "skin.9shi.cc/api/*", "zone_name": "9shi.cc" }],
+
   // R2:用户图片临时存储,分析后即删,见 ../docs/adr/0003-image-ephemeral-storage.md
+  // (远程 bucket 已配 1 天生命周期兜底删图)
   "r2_buckets": [{ "binding": "IMG_BUCKET", "bucket_name": "skin-checker-img" }],
 
-  // D1:只存结构化历史,不存原图。database_id 为占位,本地 `--local` 用 database_name 定位;
-  // 远程需先 `wrangler d1 create skin-checker`(用户同意后)拿真 id 替换。
-  "d1_databases": [{ "binding": "DB", "database_name": "skin-checker", "database_id": "local" }]
+  // D1:只存结构化历史,不存原图(远程库 2026-07-09 建,迁移已应用)。
+  "d1_databases": [
+    { "binding": "DB", "database_name": "skin-checker", "database_id": "c49668b0-94af-4328-baad-fc0311a5a89c" }
+  ]
 }

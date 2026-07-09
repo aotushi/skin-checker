@@ -45,6 +45,6 @@
 
 ## 当前状态
 
-🟢 **W1 后端主链路全通(含真实千问 VL 调用):** `/analyze`(R2 临时图 → VL 真调 → 四维派生 code/名 → 契约校验 → D1 落库 → 用后删图)+ `/history`,16 型手册映射已接入、CORS 已挂(H5 跨域),本地真图实测通过(不碰远程)。OpenAI 兼容端点 + `qwen3-vl-plus`,空 key 自动走 mock(不计费)。
+🟢 **W1 后端主链路全通并已上线:** `/analyze`(R2 临时图 → VL 真调 → 四维派生 code/名 → 契约校验 → D1 落库 → 用后删图)+ `/history`,16 型手册映射已接入。OpenAI 兼容端点 + `qwen3-vl-plus`,空 key 自动走 mock(不计费)。生产:worker 路由 `skin.9shi.cc/api/*`(basePath `/api`),远程 D1/R2 + secret 已配,H5 同域免 CORS。
 
-🟡 **W2 前端起步(app-uni):** uniapp Vue3 骨架 + 设计 token/类型两条生成脚本(`pnpm gen:tokens` / `gen:types`);**首页 / 拍照页 / 结果卡 / 我的四页 + 自绘暖调底部 tab 已建成、H5 dev 验证通过**,底部 tab(检测 / 我的)切根级、拍照/结果全屏二级页。四维双极光谱含敏感「参考」态 + 逐维度科普展开(「?」手风琴,复用「科普四维卡」tint)、结果卡「保存报告」写本地历史 +「我的」历史列表点击回看(uni Storage,契合「仅存设备本地」承诺)、暖调美妆 token 生效、`vue-tsc` 通过。app-uni 静态页已全,微信小程序端已过编译层(`loadFontFace` / 变量落 `page` / `build:mp-weixin` 通过 + 产物双证);**已与本地 server 联调通**(拍照真传图 → `/analyze` → 结果卡渲染 server envelope,保存沿用 server id,`utils/api.ts`)。下一步:小程序真机验证(微信开发者工具,含 appid / 字体域名),见 `.project/NOW.md`。
+🟡 **W2 前端起步(app-uni):** uniapp Vue3 骨架 + 设计 token/类型两条生成脚本(`pnpm gen:tokens` / `gen:types`);**首页 / 拍照页 / 结果卡 / 我的四页 + 自绘暖调底部 tab 已建成、H5 dev 验证通过**,底部 tab(检测 / 我的)切根级、拍照/结果全屏二级页。四维双极光谱含敏感「参考」态 + 逐维度科普展开(「?」手风琴,复用「科普四维卡」tint)、结果卡「保存报告」写本地历史 +「我的」历史列表点击回看(uni Storage,契合「仅存设备本地」承诺)、暖调美妆 token 生效、`vue-tsc` 通过。app-uni 静态页已全,微信小程序端已过编译层(`loadFontFace` / 变量落 `page` / `build:mp-weixin` 通过 + 产物双证);**已与本地 server 联调通**(拍照真传图 → `/analyze` → 结果卡渲染 server envelope,保存沿用 server id,`utils/api.ts`)。**H5 已部署 Cloudflare Pages**(项目 `skin-checker`,生产域名 `skin.9shi.cc` 待 dashboard 绑定;API_BASE 按 dev/build 自动切换)。小程序真机验证延后;APK 走 HBuilderX 云打包(App appid 已填)。详见 `.project/NOW.md`。

@@ -2,7 +2,7 @@
 
 # W2 · 前端 app-uni(uniapp → H5 / 微信小程序 / App(APK))
 
-**最后更新**: 2026-07-08
+**最后更新**: 2026-07-09
 
 > 目标:uniapp 端把已验证的 mock 后端契约落成可见成品,H5 优先、微信小程序随后。求职展示核心是「能跑的 demo」,故先做前端两端可见成品,后端正式回归测试后置(见 `W1-backend-pipeline.md` 注)。
 
@@ -26,6 +26,7 @@
 | 2026-07-08 | 审计「结果页分享」想法并记为切片 G(**未排期,仅文档**):方向成立(16 型四维是人格测试式标签内容,自带传播属性),但兑现前提 = 切片 E 联调完成 + 有公开可达端;切法 P1 小程序转发卡片 + H5 兜底(~半天,排切片 E 后)→ P2 canvas 海报(贵,缓)→ V2 链接式分享(需后端公开 report 端点,不做现在);合规免责须延伸到分享物、海报不含人脸 | Claude |
 | 2026-07-08 | 切片 E 联调通:新增 `utils/api.ts`(`uni.uploadFile` → `POST /analyze`,envelope 模块级暂存单次取用传结果页),拍照页 `analyze()` 去 mock 定时器改真传图(失败 toast 留本页可重试、`finally` 收蒙层),结果页 `?from=analysis` 取暂存渲染、「保存报告」沿用 server id/时间(`saveHistory` 加可选 meta)。Playwright 真文件上传 E2E 全链路:选图 → 分析(CORS 预检 204 + POST 200,空 key mock 不计费)→ 结果卡渲染 server 报告(O-S-F-P ≠ 示例 O-S-A-N,敏感 41%「参考」态)→ 保存(本地 envelope = server uuid)→「我的」列表 → 回看;断服失败路径 toast + 蒙层收 + 留本页(仅 ERR_CONNECTION_REFUSED,无未捕获异常);`vue-tsc` 过。server 本地起 8890(8787/8788 被他项目 workerd 占) | Claude |
 | 2026-07-08 | 拍照页取景引导框放大:定死 150×196(手机取景区面积仅占 ~17%,平板 600 壳内占比更低)→ 宽 58% + `aspect-ratio: 150/196` 保脸形比例,`max-width: 240`(恰兜进 min-height 360 取景区)+ `min-height: 196` 兜底旧 WebView 不识 aspect-ratio;`.viewer__empty` 补 `width:100%` 供百分比基准。H5 量测:375 手机 192×251(宽占 58%)、平板 240 封顶、600×650 短窗内容 350.9 无溢出,零控制台错误 | Claude |
+| 2026-07-09 | **H5 上线**:`utils/api.ts` 的 `API_BASE` 条件化(`import.meta.env.DEV` ? 本地 8890 : `https://skin.9shi.cc`,均带 `/api` 后缀对齐 server basePath);`vue-tsc` + `build:h5` 过,产物验证烘进线上地址、无 127.0.0.1 残留;Pages 项目 `skin-checker` 直传部署,`skin-checker.pages.dev` 200。用户已填 manifest App appid(`__UNI__8A0107B`);待用户:dashboard 绑 `skin.9shi.cc` + HBuilderX 云打包 APK | Claude |
 
 ## 工具链(见 ADR 0004 的 2026-07-06 修订)
 
