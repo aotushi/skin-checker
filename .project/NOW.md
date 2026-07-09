@@ -1,6 +1,6 @@
 # NOW · skin-checker 当前状态
 
-**最后更新:** 2026-07-08
+**最后更新:** 2026-07-09
 
 ## 阶段
 
@@ -36,3 +36,5 @@
 ## 备注
 
 项目3 为**非冲刺项**(当前优先级为 P0 就业冲刺包)。可随时暂停;前端两端可见成品优先于后端补测(经确认 MVP 靠已验证手动 E2E 兜底)。
+
+**代码托管:** 公开仓库 <https://github.com/aotushi/skin-checker>(2026-07-09 建仓并推送 master;提交信息沿用 `[Skip CI]` 前缀惯例,推前本地测试 + 征得同意)。本地 dev server 配置在父目录 `E:\code\github\.claude\launch.json`(`skin-server`,`pnpm dev --port 8890`)。
