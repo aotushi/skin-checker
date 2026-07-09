@@ -2,8 +2,8 @@
 
 # W1 · CF 后端核心链路
 
-**最后更新:** 2026-07-08
-**状态:** 🟡 进行中(切片推进)
+**最后更新:** 2026-07-09
+**状态:** 🟢 主链路完成(含真实 VL 调用;切片 E 输入质检未排期)
 
 ## 目标
 
@@ -13,7 +13,7 @@
 
 - [x] `server/` scaffold:Cloudflare Workers + Hono(`wrangler.jsonc`、`.dev.vars`)
 - [x] 图片上传接口 → R2 临时对象(用后即删,见 ADR 0003)—— `src/storage.ts` put/get/deleteTempImage;删除落在 `/analyze` 的 finally 确保执行;端到端 put/get 实证通
-- [ ] 调通义千问 VL 多模态分析,传入 `shared/skin-report.schema.json` 约束结构化输出 —— 接口 + mock 已通链路(`src/qwen.ts`,空 key 自动走 mock);**真实调用待切片 D**(需 QWEN_API_KEY,真调计费=自然暂停点)
+- [x] 调通义千问 VL 多模态分析 —— **真实调用通**(2026-07-09,`src/qwen.ts`:用户 MaaS 专属端点 `/compatible-mode/v1` + `qwen3-vl-plus`,base64 data URL 传图,prompt 文字约束形状 + 宽松解析[剥围栏/截花括号]+ 既有 validateReport 后校验,不走 strict json_schema[min/max 兼容存疑,见下注]);空 key 仍走 mock(回归验证过)。真图实测:`/analyze` 200(~3.7s)返回真实判定(D-R-F-N 干皮,敏感维置信 0.3 如约偏低),落库 + 删临时图无错、`/history` 读回
 - [x] 用 schema 校验 LLM 返回值 —— `@cfworker/json-schema`(非 ajv:Workers 禁 eval),`src/validate.ts`;自检确认 enum / pattern / min-max 后校验均生效
 - [x] D1 建表 + 写入历史(只存结构化结果,不存原图)—— `migrations/0001_init.sql`(reports 表 + created_at 索引);`src/db.ts` insertReport/listHistory;`wrangler.jsonc` 补 DB/IMG_BUCKET binding;`--local` apply + execute 读写(含中文)验证过
 - [x] 本地全链路验证(unstable_dev/miniflare,纯本地,不碰远程)—— `POST /analyze`(存R2→读回→mock分析→派生 O-S-F-P/油敏色皮→校验→落D1→finally 删图)+ `GET /history` 读回,均通;真实 `wrangler dev` + 真 qwen 待切片 D
@@ -53,4 +53,7 @@
 | 2026-07-06 | 切片 C 主链路编排:storage.ts(R2 临时图 put/get/del)、qwen.ts(analyzeImage 接口+mock)、derive.ts(四维派生 code/name + 注入 disclaimer)、index.ts(/analyze·/health·/history + onError);.dev.vars 空 key 占位→typegen 纳入 Env;unstable_dev 端到端 /analyze→/history 全通(mock),tsc 过 | Claude |
 | 2026-07-06 | 手册映射切片:scripts/gen-skin-type-map.mjs 从 16 型手册生成 src/skin-type-map.ts(code→名+按型建议,仅取 skincare_strategy 排除品牌,内置产品名护栏);derive.ts 的 name/suggestions 改从映射取,qwen 收窄到四维+分区不再产 suggestions;pnpm gen:skinmap 固化;tsc + 本地 E2E(O-S-F-P→油敏色皮+手册 5 条)过 | Claude |
 | 2026-07-06 | 补 CORS:index.ts 挂 hono/cors 中间件(H5 跨域联调必需),MVP 放开所有源、部署时收紧;tsc + 本地预检(OPTIONS /analyze→204 带 allow-origin/methods)验证 | Claude |
+| 2026-07-09 | 切片 D 代码落地:`qwen.ts` 真实调用(DashScope OpenAI 兼容,默认 `qwen-vl-max-latest`,base64 传图,prompt 约束「四维+分区」裸 JSON + 合规描述性用语,不上 strict json_schema 改宽松解析 + validateReport 后校验);`tsc` 过、空 key mock 路径回归通(curl /analyze 全链路)。**真 key 实测待用户填 `.dev.vars`** | Claude |
+| 2026-07-09 | 真 key 联调排障:用户 MaaS 专属端点兼容路径实测为 `/compatible-mode/v1`(`/api/v1`、`/v1` 均 404);`qwen3.7-max` 为**纯文本**不吃 `image_url`(400),默认模型改 `qwen3-vl-plus`;该 key 有**模型级限制**,所有 VL/omni 模型均 403 `access_denied`。代码侧已就绪(`/analyze` 日志确认打到正确端点+模型,卡 403)。**待用户在控制台给 key 放行 VL 模型** | Claude |
+| 2026-07-09 | **切片 D 完成**:用户放行 `qwen3-vl-plus` 后真图实测通 —— `/analyze` 200(~3.7s)返回真实 VL 判定(lenna 测试图 → D-R-F-N 干皮,四维置信为真实值、敏感维 0.3 偏低符合 prompt 约定,3 分区描述性 issues),契约校验过、D1 落库、finally 删临时图无错、`/history` 读回。W1 两条验收达成;注意:放行后授权生效有约 1 分钟延迟(期间仍 403) | Claude |
 | 2026-07-08 | 立项切片 E 输入质检(**未排期,仅文档**,依赖切片 D):VL 同一次调用前置判定"翻拍/印刷脸/非人脸/范围不合理"→ 4xx + `{error}` 指引重拍;定性输入质量非安全(相册路径绕过、无对抗动机),公共契约不动、前端近零改;活体·核身 SDK / EXIF / 端侧摩尔纹明确不做,小程序 VisionKit 拍摄时引导列 P2 缓 | Claude |
