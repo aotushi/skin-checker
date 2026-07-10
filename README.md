@@ -29,9 +29,9 @@
 
 | 目录 | 用途 | 状态 |
 | --- | --- | --- |
-| `server/` | Cloudflare Workers + Hono,三端共享后端 | 🟡 W1 主链路本地通(mock),待真实 qwen |
+| `server/` | Cloudflare Workers + Hono,三端共享后端 | 🟢 W1 完成并上线(真实 VL + 输入质检 422) |
 | `app-uni/` | uniapp → H5 + 微信小程序 + App(APK) | 🟡 W2:四页 + 自绘底部 tab + 科普 + 本地历史,H5 已通、导航闭环、**与 server 联调通(真传图 → 结果卡)**;小程序端编译层已过,待真机;App(APK)+ 平板限宽为新目标待实现(ADR 0009) |
-| `app-flutter/` | flutter → APK | ⬜ 待 W3 |
+| `app-flutter/` | flutter → APK | 🟡 W3 起步(脚手架,见 `.project/tasks/W3-frontend-app-flutter.md`) |
 | `shared/` | **契约单一真相源**(`skin-report.schema.json`) | ✅ 已建 |
 | `docs/adr/` | 架构决策记录 | ✅ 已建 |
 | `.project/` | 当前状态(`NOW.md`)+ 任务(`tasks/`) | ✅ 已建 |
@@ -46,5 +46,7 @@
 ## 当前状态
 
 🟢 **W1 后端主链路全通并已上线:** `/analyze`(R2 临时图 → VL 真调 → 四维派生 code/名 → 契约校验 → D1 落库 → 用后删图)+ `/history`,16 型手册映射已接入。OpenAI 兼容端点 + `qwen3-vl-plus`,空 key 自动走 mock(不计费)。生产:worker 路由 `skin.9shi.cc/api/*`(basePath `/api`),远程 D1/R2 + secret 已配,H5 同域免 CORS。
+
+🟡 **W3 前端起步(app-flutter):** 本机 Flutter 3.44.6 就绪(`E:\dev\flutter`),`app-flutter` 脚手架建成(`skin_checker` / `com.aotushi.skin_checker`,只锁 Android),`flutter analyze` 零告警 + `dart format` 无 diff。下一步:契约 + 设计 token 两条生成线。详见 `.project/tasks/W3-frontend-app-flutter.md`。
 
 🟡 **W2 前端起步(app-uni):** uniapp Vue3 骨架 + 设计 token/类型两条生成脚本(`pnpm gen:tokens` / `gen:types`);**首页 / 拍照页 / 结果卡 / 我的四页 + 自绘暖调底部 tab 已建成、H5 dev 验证通过**,底部 tab(检测 / 我的)切根级、拍照/结果全屏二级页。四维双极光谱含敏感「参考」态 + 逐维度科普展开(「?」手风琴,复用「科普四维卡」tint)、结果卡「保存报告」写本地历史 +「我的」历史列表点击回看(uni Storage,契合「仅存设备本地」承诺)、暖调美妆 token 生效、`vue-tsc` 通过。app-uni 静态页已全,微信小程序端已过编译层(`loadFontFace` / 变量落 `page` / `build:mp-weixin` 通过 + 产物双证);**已与本地 server 联调通**(拍照真传图 → `/analyze` → 结果卡渲染 server envelope,保存沿用 server id,`utils/api.ts`)。**H5 已部署 Cloudflare Pages**(项目 `skin-checker`,生产域名 `skin.9shi.cc` 待 dashboard 绑定;API_BASE 按 dev/build 自动切换)。小程序真机验证延后;APK 走 HBuilderX 云打包(App appid 已填)。详见 `.project/NOW.md`。

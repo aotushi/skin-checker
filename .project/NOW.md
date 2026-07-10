@@ -1,6 +1,6 @@
 # NOW · skin-checker 当前状态
 
-**最后更新:** 2026-07-10(`skin.9shi.cc` 绑定生效;H5 线上 3 项 UI 问题同日修复并本地验证;**切片 E 输入质检完成并本地全链路验证**——起因线上非人脸照仍出报告,现不合格 422 + 重拍指引,待提交推送[仓库已连 git,推送即自动部署])
+**最后更新:** 2026-07-10(切片 E 输入质检已提交推送并自动部署;H5 3 项 UI 修复本地验证完[线上生效待重 build + Pages 部署];**W3 flutter 端启动**:立任务文档 + 本机装 Flutter 3.44.6 + `app-flutter` 脚手架建成,analyze/format 双过)
 
 ## 部署(2026-07-09,用户同意远程操作后执行)
 
@@ -13,11 +13,17 @@
 
 ## 阶段
 
+🟡 **W3 前端起步(app-flutter,2026-07-10 启动):** 本机装 Flutter **3.44.6 stable / Dart 3.12.2**(`E:\dev\flutter`;PUB_CACHE 迁 `E:\dev\pub-cache` 绕 Claude 桌面 MSIX 容器重定向坑 + flutter-io.cn 双镜像,详见 W3 文档切片 A);`flutter create` 建成 `app-flutter`(项目名 `skin_checker`,applicationId `com.aotushi.skin_checker`,**只锁 Android**),`flutter analyze` 零告警 + `dart format` 无 diff。下一步切片 B:契约 + 设计 token 两条生成线。详见 `tasks/W3-frontend-app-flutter.md`。
+
 🟡 **W2 前端起步(app-uni,H5 优先):** uniapp(Vue3 vite-ts)骨架 + 设计 token/类型两条生成脚本(`pnpm gen:tokens` / `gen:types`,产物禁手改)。**已建成四页 + 底部 tab 并 H5 验证通过**:首页(品牌 + 人脸拓扑网格取景意象[MediaPipe canonical 468 点投影程序生成 + 扫描光带]+ 双 CTA)、拍照页(深色相机 + 取景/拍摄要求 + `uni.chooseImage` + 分析中蒙层)、结果卡(四维双极光谱含敏感「参考」态 + 逐维度科普展开 + 分区评估 + 护理建议 + 免责声明 + 「保存报告」写本地历史)、我的(游客态 + 我的检测本地历史列表 + 免责/隐私/关于底部弹层完整声明入口)。自绘暖调底部 tab(检测 / 我的,CSS 图标走 token,`components/tab-bar`)统领导航:首页 ↔ 我的为 tab 根级(`reLaunch` 切换),拍照 / 结果为全屏二级页(navigateTo/redirectTo,不挂 tab);Fraunces 数字体 + 暖调美妆 token 全生效;`vue-tsc` 类型检查过。微信小程序端已过编译层(补 `loadFontFace`、变量本就落 `page`、`build:mp-weixin` 通过 + 产物双证),真机视觉待微信开发者工具确认(本环境无)。**已与本地 server 联调通(切片 E)**:拍照页真传图 → `/analyze` → 结果卡渲染 server envelope、「保存报告」沿用 server id(Playwright 真传图 E2E + 断服失败路径均验证)。
 
 🟢 **W1 后端主链路全通(含真实 VL 调用,2026-07-09 切片 D 完成):** `/analyze`(R2 临时图 → 千问 VL 真调 → 四维派生 code/名 → 契约校验 → D1 落库 → 用后删图)+ `/history` 端到端验证过(纯本地不碰远程);16 型手册映射已接入、CORS 已挂。真调配置:用户 MaaS 专属端点 `/compatible-mode/v1` + `qwen3-vl-plus`(key 有模型级限制,需控制台放行;`qwen3.7-max` 纯文本不吃图),真图实测 200(~3.7s,D-R-F-N 干皮、敏感维置信 0.3 如约偏低);空 key 仍走 mock。W1 两条验收达成。**切片 E 输入质检完成(2026-07-10)**:同一次 VL 调用前置 gate(非人脸/翻拍/太远/低质),不合格 `/analyze` 返 422 + `{error: 重拍指引}`(fail-open、拒绝不落库、前端零改动);名人/著名图片会被模型自我审查拒为 not_face(接受,真实用户拍自己不受影响),详见 `tasks/W1` 切片 E 落地小节。
 
 ## 下一步
+
+**前端(W3 flutter,进行中):**
+- ✅ 切片 A 脚手架(2026-07-10):SDK 3.44.6 装 `E:\dev\flutter` + `app-flutter` 建成,analyze/format 双过;环境坑(PUB_CACHE / 镜像 / bat 路径)已记 W3 文档。
+- ⬜ 下一动作:切片 B 契约 + 设计 token 两条生成线(quicktype → `skin_report.dart`;tokens → `tokens.dart`;Fraunces woff2→ttf),再切片 C 四页 UI。
 
 **前端(W2 续):**
 - 🐛 **H5 线上 3 项 UI 问题已修(2026-07-10,本地已验证)**:预览 0 高改绝对定位、100vh 滚动条改 dvh 双声明(B1–B3 详见 `tasks/W2` 已知问题 ✅ 小节)。**下一动作:重新 `build:h5` + Pages 部署(需用户同意)+ 用户真机复验**;我的页小屏空态残余滚动如真机仍见再压余量。
@@ -29,7 +35,7 @@
 
 **后端(W1 收尾,自然暂停点):**
 - ✅ 切片 D 完成(2026-07-09):真实千问 VL 调用通(`src/qwen.ts`,用户 MaaS 专属端点 `/compatible-mode/v1` + `qwen3-vl-plus`,base64 传图 + prompt 约束 + 宽松解析 + validateReport 后校验;空 key 仍 mock)。真图实测 `/analyze` 200 → 落库 → 删图 → `/history` 读回。远程部署时 key 用 `wrangler secret` 配。详见 `tasks/W1-backend-pipeline.md`。
-- ✅ 切片 E 输入质检完成(2026-07-10,起因:线上非人脸照仍出报告):`qwen.ts` gate 前置判定 + `extractGate` fail-open,`index.ts` 不合格返 422 + `{error: 指引}`,拒绝不落库、前端零改、契约未动;本地验证 mock 回归 / 非人脸 422 / too_far 422 / 特写 200 / H5 端到端全通(详见 `tasks/W1` 切片 E)。**待提交推送(推送即自动部署 worker,需用户同意)**。
+- ✅ 切片 E 输入质检完成(2026-07-10,起因:线上非人脸照仍出报告):`qwen.ts` gate 前置判定 + `extractGate` fail-open,`index.ts` 不合格返 422 + `{error: 指引}`,拒绝不落库、前端零改、契约未动;本地验证 mock 回归 / 非人脸 422 / too_far 422 / 特写 200 / H5 端到端全通(详见 `tasks/W1` 切片 E)。**已提交推送(2026-07-10,commit 9f23446,git 连仓自动部署 worker)**。
 
 ## 关键决策(指针)
 
