@@ -1,14 +1,17 @@
 // 拍照检测(全屏二级页,深色底):顶栏 + 取景/预览 + 拍摄要求 + 操作双钮 + 分析蒙层。
-// 对齐 app-uni pages/capture/capture.vue;取图(image_picker)与 /analyze 联调在切片 D,当前按钮为 UI 占位。
-import 'dart:io';
+// 对齐 app-uni pages/capture/capture.vue;取图 image_picker,真传图 /analyze 见 utils/api.dart。
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../theme/tokens.dart';
+import '../utils/api.dart';
 import '../widgets/dashed_outline.dart';
 import '../widgets/press.dart';
 import '../widgets/skn_shell.dart';
+import 'result_page.dart';
 
 enum _Source { album, camera }
 
@@ -20,22 +23,59 @@ class CapturePage extends StatefulWidget {
 }
 
 class _CapturePageState extends State<CapturePage> {
-  String? _picked; // 取到的本地图片路径
+  final _picker = ImagePicker();
+  XFile? _picked;
+  Uint8List? _pickedBytes; // 预览 + 上传共用(web 无 dart:io File,统一走内存字节)
   var _analyzing = false;
 
-  // 相册 / 相机取图:切片 D 接 image_picker,当前仅 UI 占位
-  void _choose(_Source source) {}
+  // 相册 / 相机取图:限宽 + 压质对齐 uni sizeType compressed,足够 VL 分析
+  Future<void> _choose(_Source source) async {
+    final file = await _picker.pickImage(
+      source: source == _Source.camera
+          ? ImageSource.camera
+          : ImageSource.gallery,
+      maxWidth: 1600,
+      imageQuality: 85,
+    );
+    if (file == null) return; // 用户取消选图
+    final bytes = await file.readAsBytes();
+    if (!mounted) return;
+    setState(() {
+      _picked = file;
+      _pickedBytes = bytes;
+    });
+  }
 
-  void _reset() => setState(() => _picked = null);
+  void _reset() => setState(() {
+    _picked = null;
+    _pickedBytes = null;
+  });
 
-  // 真传图到 server /analyze(切片 D):成功进结果页;失败 SnackBar 留本页可重试
+  // 真传图到 server /analyze:成功进结果页(replace,对齐 uni redirectTo);失败 SnackBar 留本页可重试
   Future<void> _analyze() async {
-    if (_picked == null || _analyzing) return;
+    final picked = _picked;
+    final bytes = _pickedBytes;
+    if (picked == null || bytes == null || _analyzing) return;
     setState(() => _analyzing = true);
     try {
-      // 切片 D:上传图片到 POST /analyze,成功后 pushReplacement 结果页
+      final envelope = await requestAnalyze(
+        bytes,
+        picked.name,
+        picked.mimeType,
+      );
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute<void>(
+          builder: (_) => ResultPage(report: envelope.report),
+        ),
+      );
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.message)));
     } finally {
-      setState(() => _analyzing = false);
+      if (mounted) setState(() => _analyzing = false);
     }
   }
 
@@ -56,7 +96,7 @@ class _CapturePageState extends State<CapturePage> {
                   children: [
                     const _Bar(),
                     const SizedBox(height: 22),
-                    Expanded(child: _Viewer(picked: _picked)),
+                    Expanded(child: _Viewer(bytes: _pickedBytes)),
                     const SizedBox(height: 22),
                     const _Requirements(),
                     const SizedBox(height: 14),
@@ -167,9 +207,9 @@ class _Bar extends StatelessWidget {
 
 /// 取景 / 预览:有图铺满(cover),空态画脸形虚线引导框。
 class _Viewer extends StatelessWidget {
-  const _Viewer({required this.picked});
+  const _Viewer({required this.bytes});
 
-  final String? picked;
+  final Uint8List? bytes;
 
   @override
   Widget build(BuildContext context) {
@@ -179,8 +219,14 @@ class _Viewer extends StatelessWidget {
         borderRadius: BorderRadius.circular(SknRadius.phone),
         color: const Color(0xFF1A1512),
       ),
-      child: picked != null
-          ? SizedBox.expand(child: Image.file(File(picked!), fit: BoxFit.cover))
+      child: bytes != null
+          ? SizedBox.expand(
+              child: Image.memory(
+                bytes!,
+                fit: BoxFit.cover,
+                gaplessPlayback: true,
+              ),
+            )
           : OverflowBox(
               // 空态引导框装饰性:矮取景区(小屏)允许溢出,由外层 clip 上下对称裁切
               // (对齐 uni .viewer overflow:hidden + .viewer__empty 绝对定位)

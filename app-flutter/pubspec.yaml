@@ -10,6 +10,10 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_svg: ^2.3.0
+  http: ^1.2.0
+  # multipart part 的 contentType(MediaType)——server 按 image/* 校验,octet-stream 会被拒
+  http_parser: ^4.0.0
+  image_picker: ^1.2.0
 
 dev_dependencies:
   flutter_test:

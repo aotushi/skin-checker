@@ -3,7 +3,7 @@
 # W3 · 前端 app-flutter(flutter → Android APK)
 
 **最后更新**: 2026-07-10
-**状态:** 🟡 进行中(切片 A/B/C ✅;下一步切片 D image_picker + `/analyze` 联调)
+**状态:** 🟡 进行中(切片 A/B/C/D ✅;下一步切片 E 本地历史闭环)
 
 > 目标:flutter 端复刻 app-uni 已验证的四页闭环(首页/拍照/结果卡/我的),消费同一 CF 后端与契约,产出 Android APK —— 兑现「uniapp + flutter 双端」定位。**不重新设计**:产品形态、文案、16 型语义、合规规则全部沿用 app-uni 定稿,flutter 只做技术栈平移。
 
@@ -39,10 +39,16 @@
 - **web 冒烟法(本机无 Android SDK 的验证路径)**:`flutter create --platforms web .` 补 web 目录(**不入库**,`.gitignore` 已加 `/web/`;⚠️ 它会把 `.metadata` 的 android 迁移记录**替换**成 web,需还原;⚠️ 还会重建模板 `test/widget_test.dart` 引用不存在的 MyApp 挂 analyze,需删)→ `flutter run -d web-server --web-port=8895` → chrome-devtools MCP 驱动。**canvas 页面语义树激活**:初始 snapshot 只有占位钮且 click/合成 PointerEvent 均无效,正解 = `evaluate_script` 执行 `document.querySelector('flt-semantics-placeholder').click()`,之后 snapshot/click 全通。
 - 冒烟结果:四页 + 弹层 + 科普展开 + 保存已保存态 + 重新分析 pushReplacement(返回栈正确)全部像素/行为对齐,console 零报错;a11y 双重朗读(「开始检测 开始检测」)已修(Press/SknTabBar `excludeSemantics`);`dart format` 零 diff + `flutter analyze` 零告警。
 
-### ⬜ D. 拍照/相册 + `/analyze` 联调 + 结果渲染
-- `image_picker`(相机/相册)→ multipart 传 `POST /analyze`(生产 `https://skin.9shi.cc/api`,本地 dev `127.0.0.1:8890/api`,双环境切换对齐 app-uni 的 `API_BASE` 条件化)。
-- 422(输入质检,W1 切片 E)→ SnackBar/toast 显示 `error` 指引 + 留在拍照页可重拍;200 → envelope 进结果卡。
-- 分析中蒙层、断服失败路径(toast + 留本页)对齐 app-uni 行为。
+### ✅ D. 拍照/相册 + `/analyze` 联调 + 结果渲染(2026-07-10 完成,web 冒烟三用例全通)
+- `lib/utils/api.dart`:`requestAnalyze(bytes, filename, mimeType)` → multipart `POST $_apiBase/analyze`,`_apiBase` 用 `kDebugMode` 切换(debug = `127.0.0.1:8890/api`,release = `skin.9shi.cc/api`,对齐 app-uni `API_BASE`);envelope `{id, createdAt, report}` 解析,`report` 走生成的 `SkinReport.fromJson`;失败统一抛 `ApiException(message)`(422/非 200 取 `error` 字段,网络异常固定文案),message 可直接进 SnackBar。
+- `capture_page.dart` 接入:`image_picker`(`pickImage` maxWidth 1600 + imageQuality 85,对齐 uni sizeType compressed;web 实测生效,输出 `scaled_*.jpg` 344KB)→ `XFile.readAsBytes` 存 `Uint8List` 预览+上传共用(web 无 `dart:io File`,`Image.memory` 渲染)→ 成功 `pushReplacement` 结果页(对齐 uni redirectTo);失败 SnackBar 留本页可重试;`_analyzing` 蒙层全程。Android 无需 manifest 改动(系统 photo picker / 相机 intent),真机验证留切片 G。
+- **⚠️ contentType 坑(联调抓到的唯一 bug)**:dart `http.MultipartFile.fromBytes` 默认 part `content-type: application/octet-stream`,server 校验 MIME 必须 `image/*` → 400「仅支持图片」。修法:pubspec 显式加 `http_parser`(避免 depend_on_referenced_packages lint),`contentType: MediaType.parse(mimeType ?? 'image/jpeg')`,mimeType 取 `XFile.mimeType`。
+- **分层验证法(仓库无可用真人正脸图:raw-data 全手册翻拍,名人图会被 VL 自我审查拒)**:
+  - **mock 200 链路**:server `pnpm dev --port 8890 --var "QWEN_API_KEY:"`(空值覆盖 `.dev.vars` 走 mock)→ 传手册翻拍 1.jpg → 200 envelope → 结果页完整渲染(O-S-F-P、敏感 41%「参考」虚线态、分区、建议),请求 part 实测 `content-type: image/jpeg`,console 零报错。
+  - **真 key 422 链路**:`.dev.vars` 真 key → 同图 → server 日志 `analyze rejected by input gate reason:not_face` + 422(~2s),响应 `{"error":"未检测到人脸,请正对镜头拍摄面部照片"}` → SnackBar 显示指引 + 留拍照页(语义树 MutationObserver 实录 SnackBar 文本节点;蒙层「AI 正在分区分析…」→ SnackBar 时序正确)。
+  - **断服网络异常**:杀掉 server → 分析 → SnackBar「网络异常,请检查连接后重试」+ 留页。
+- **⚠️ Windows 后台 wrangler 残留坑**:TaskStop/杀 pnpm 后 **workerd 子进程仍监听端口**,新旧 server 可同时 LISTEN 8890,请求被旧进程接走(新 server 日志空白、mock 幽灵复活)。切换 server 配置后必须 `netstat -ano | grep :8890` 核对并 `taskkill //F //PID` 清干净再验。
+- ResultPage 仍只吃 `envelope.report`;`id`/`createdAt` 留切片 E 存历史时接。
 
 ### ⬜ E. 本地历史闭环
 - `shared_preferences`(或 `hive`,倾向前者够用)存 report envelope,MAX 20 淘汰最旧 —— 语义对齐 app-uni `utils/history.ts`(「仅存设备本地」承诺)。
@@ -77,3 +83,4 @@
 | 2026-07-10 | 切片 A ✅:`app-flutter` 脚手架建成(skin_checker / com.aotushi,Android only),analyze 零告警 + format 无 diff;记录 PUB_CACHE MSIX 重定向坑(迁 `E:\dev\pub-cache`)与 flutter-io.cn 镜像要求 | Claude |
 | 2026-07-10 | 切片 B ✅:`tool/gen.mjs` 固化两条生成线(quicktype → `skin_report.dart`;DTCG 展平 → `tokens.dart` 65 token 6 类,shadow 转 BoxShadow),产物自动 format 幂等;Fraunces variable ttf(google/fonts 原件经 jsdelivr gh 镜像)进 assets + pubspec 声明;analyze 零告警 | Claude |
 | 2026-07-10 | 切片 C ✅:四页 UI + 双 tab 导航全落地(文案逐字平移 app-uni);共用件 Press/SknShell/SknCard/DashedOutline/SknTabBar;flutter_svg 直用同源 face-scan.svg;flutter web 冒烟全页通过(web/ 不入库,记录 flt-semantics-placeholder 激活法、flutter create 重建 test 与改 .metadata 两坑);修 Press/SknTabBar 双重朗读(excludeSemantics);format+analyze 双绿 | Claude |
+| 2026-07-10 | 切片 D ✅:`utils/api.dart`(kDebugMode 双环境 + envelope 解析 + ApiException)+ capture_page 接入 image_picker 真传图;修 multipart contentType 坑(octet-stream 被 server 400,http_parser MediaType 显式指定);web 冒烟三用例全通(mock 200 → 结果页 / 真 key 422 not_face → SnackBar 指引留页 / 断服 → 网络异常 SnackBar);记录 workerd 端口残留坑;format+analyze 双绿 | Claude |
