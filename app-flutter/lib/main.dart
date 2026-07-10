@@ -7,6 +7,9 @@ import 'pages/mine_page.dart';
 import 'theme/tokens.dart';
 import 'widgets/skn_tab_bar.dart';
 
+/// 全局路由观察:MinePage 靠 didPopNext 在二级页返回后刷新本地历史(≈ uni onShow)
+final routeObserver = RouteObserver<ModalRoute<void>>();
+
 void main() {
   runApp(const SkinCheckerApp());
 }
@@ -19,6 +22,7 @@ class SkinCheckerApp extends StatelessWidget {
     return MaterialApp(
       title: '肤镜',
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [routeObserver],
       theme: ThemeData(
         useMaterial3: true,
         // 正文走系统字栈(对齐 token typography.family.sans),不指定 fontFamily 即系统默认;

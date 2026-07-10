@@ -1,12 +1,15 @@
 // 我的(tab 根页):游客态用户卡 + 我的检测(本地历史)+ 免责/隐私/关于底部弹层。
-// 对齐 app-uni pages/mine/mine.vue;文案全部平移。本地历史读写在切片 E 接 shared_preferences,当前为空态。
+// 对齐 app-uni pages/mine/mine.vue;文案全部平移。本地历史 shared_preferences:有记录出列表点击回看,空态去检测。
 import 'package:flutter/material.dart';
 
+import '../main.dart';
 import '../theme/tokens.dart';
+import '../utils/history.dart';
 import '../widgets/press.dart';
 import '../widgets/skn_card.dart';
 import '../widgets/skn_shell.dart';
 import 'capture_page.dart';
+import 'result_page.dart';
 
 /// 完整声明文案:合规定位「参考/建议」,不含诊断/疗效宣称(结果页 inline note 之外的可点完整入口,ADR 0008)。
 const _sheets = {
@@ -33,8 +36,53 @@ const _sheets = {
   ),
 };
 
-class MinePage extends StatelessWidget {
+class MinePage extends StatefulWidget {
   const MinePage({super.key});
+
+  @override
+  State<MinePage> createState() => _MinePageState();
+}
+
+class _MinePageState extends State<MinePage> with RouteAware {
+  var _history = <HistoryItem>[];
+
+  // 进页读一次 + 每次二级页返回再刷(didPopNext ≈ uni onShow:结果页保存后返回即更新)。
+  // IndexedStack 里本页常驻,订阅的是根 route,保存时不管停在哪个 tab 都能收到。
+  Future<void> _load() async {
+    final list = await listHistory();
+    if (!mounted) return;
+    setState(() => _history = list);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() => _load();
+
+  // 历史回看:直传本地那条的 report,fromHistory 隐藏「保存报告」(已在历史中)
+  void _openReport(HistoryItem item) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => ResultPage(report: item.report, fromHistory: true),
+      ),
+    );
+  }
 
   void _openSheet(BuildContext context, String key) {
     final (title, paras) = _sheets[key]!;
@@ -87,7 +135,11 @@ class MinePage extends StatelessWidget {
                       const SizedBox(height: 14),
                       const _UserCard(),
                       const SizedBox(height: 14),
-                      _HistoryCard(onGoCapture: () => _goCapture(context)),
+                      _HistoryCard(
+                        items: _history,
+                        onGoCapture: () => _goCapture(context),
+                        onOpen: _openReport,
+                      ),
                       const SizedBox(height: 14),
                       _InfoList(onOpen: (k) => _openSheet(context, k)),
                       const Spacer(),
@@ -175,11 +227,24 @@ class _UserCard extends StatelessWidget {
   }
 }
 
-/// 我的检测:本地历史;暂为空态(切片 E 接 shared_preferences 后出列表)。
+/// 我的检测:本地历史。有记录出列表(型号码 + 名/时间,点击回看),无记录空态(去检测 CTA)。
 class _HistoryCard extends StatelessWidget {
-  const _HistoryCard({required this.onGoCapture});
+  const _HistoryCard({
+    required this.items,
+    required this.onGoCapture,
+    required this.onOpen,
+  });
 
+  final List<HistoryItem> items;
   final VoidCallback onGoCapture;
+  final ValueChanged<HistoryItem> onOpen;
+
+  // yyyy-MM-dd HH:mm(平移 uni fmt,不为此引 intl)
+  String _fmt(int ts) {
+    final d = DateTime.fromMillisecondsSinceEpoch(ts);
+    String p(int n) => n < 10 ? '0$n' : '$n';
+    return '${d.year}-${p(d.month)}-${p(d.day)} ${p(d.hour)}:${p(d.minute)}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -210,59 +275,147 @@ class _HistoryCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 14),
-          Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 6),
-            child: Column(
-              children: [
-                const Text(
-                  '还没有检测记录',
-                  style: TextStyle(
-                    fontSize: SknTypography.sizeMd,
-                    fontWeight: FontWeight.w500,
-                    color: SknColors.textBrown,
-                  ),
+          if (items.isNotEmpty)
+            for (var i = 0; i < items.length; i++) ...[
+              if (i > 0)
+                const Divider(
+                  height: 1,
+                  thickness: 1,
+                  color: SknColors.lineDivider,
                 ),
-                const SizedBox(height: 7),
-                const Text(
-                  '完成一次拍照分析后,报告会显示在这里',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: SknTypography.sizeXs,
-                    height: 1.6,
-                    color: SknColors.textMuted,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Press(
-                  semanticLabel: '去检测',
-                  pressedScale: 0.98,
-                  pressedOpacity: 0.92,
-                  onTap: onGoCapture,
-                  child: Container(
-                    padding: const EdgeInsetsDirectional.fromSTEB(24, 9, 24, 9),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(SknRadius.lg),
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [SknGradients.ctaFrom, SknGradients.ctaTo],
-                      ),
-                      boxShadow: const [SknShadows.cta],
-                    ),
-                    child: const Text(
-                      '去检测',
-                      style: TextStyle(
-                        fontSize: SknTypography.sizeMd,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
+              _HistoryRow(
+                item: items[i],
+                time: _fmt(items[i].createdAt),
+                onOpen: onOpen,
+              ),
+            ]
+          else
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 6),
+              child: Column(
+                children: [
+                  const Text(
+                    '还没有检测记录',
+                    style: TextStyle(
+                      fontSize: SknTypography.sizeMd,
+                      fontWeight: FontWeight.w500,
+                      color: SknColors.textBrown,
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 7),
+                  const Text(
+                    '完成一次拍照分析后,报告会显示在这里',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: SknTypography.sizeXs,
+                      height: 1.6,
+                      color: SknColors.textMuted,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Press(
+                    semanticLabel: '去检测',
+                    pressedScale: 0.98,
+                    pressedOpacity: 0.92,
+                    onTap: onGoCapture,
+                    child: Container(
+                      padding: const EdgeInsetsDirectional.fromSTEB(
+                        24,
+                        9,
+                        24,
+                        9,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(SknRadius.lg),
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [SknGradients.ctaFrom, SknGradients.ctaTo],
+                        ),
+                        boxShadow: const [SknShadows.cta],
+                      ),
+                      child: const Text(
+                        '去检测',
+                        style: TextStyle(
+                          fontSize: SknTypography.sizeMd,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
         ],
+      ),
+    );
+  }
+}
+
+/// 历史行:型号码(Fraunces)+ 型号名/时间 + › 箭头,对齐 uni .hist__row。
+class _HistoryRow extends StatelessWidget {
+  const _HistoryRow({
+    required this.item,
+    required this.time,
+    required this.onOpen,
+  });
+
+  final HistoryItem item;
+  final String time;
+  final ValueChanged<HistoryItem> onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    return Press(
+      semanticLabel: '查看报告:${item.report.skinTypeName} $time',
+      pressedScale: 1,
+      pressedOpacity: 0.55,
+      onTap: () => onOpen(item),
+      child: Padding(
+        padding: const EdgeInsetsDirectional.fromSTEB(2, 13, 2, 13),
+        child: Row(
+          children: [
+            Text(
+              item.report.skinTypeCode,
+              style: const TextStyle(
+                fontFamily: 'Fraunces',
+                fontSize: SknTypography.sizeMd,
+                letterSpacing: SknTypography.sizeMd * 0.06,
+                color: SknColors.brandRoseWood,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.report.skinTypeName,
+                    style: const TextStyle(
+                      fontSize: SknTypography.sizeMd,
+                      fontWeight: FontWeight.w500,
+                      color: SknColors.textInk,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    time,
+                    style: const TextStyle(
+                      fontSize: SknTypography.sizeXs,
+                      color: SknColors.textFaint,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            const Text(
+              '›',
+              style: TextStyle(fontSize: 18, color: SknColors.textFaint),
+            ),
+          ],
+        ),
       ),
     );
   }

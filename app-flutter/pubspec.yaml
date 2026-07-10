@@ -14,6 +14,8 @@ dependencies:
   # multipart part 的 contentType(MediaType)——server 按 image/* 校验,octet-stream 会被拒
   http_parser: ^4.0.0
   image_picker: ^1.2.0
+  # 本地检测历史(utils/history.dart,JSON 整存整取)——对齐 app-uni 的 uni Storage
+  shared_preferences: ^2.5.0
 
 dev_dependencies:
   flutter_test:

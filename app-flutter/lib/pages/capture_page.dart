@@ -66,7 +66,12 @@ class _CapturePageState extends State<CapturePage> {
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
         MaterialPageRoute<void>(
-          builder: (_) => ResultPage(report: envelope.report),
+          // id/createdAt 一并带给结果页:「保存报告」沿用 server 侧生成的这份 meta
+          builder: (_) => ResultPage(
+            report: envelope.report,
+            analysisId: envelope.id,
+            analysisCreatedAt: envelope.createdAt,
+          ),
         ),
       );
     } on ApiException catch (e) {

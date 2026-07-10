@@ -3,7 +3,7 @@
 # W3 · 前端 app-flutter(flutter → Android APK)
 
 **最后更新**: 2026-07-10
-**状态:** 🟡 进行中(切片 A/B/C/D ✅;下一步切片 E 本地历史闭环)
+**状态:** 🟡 进行中(切片 A/B/C/D/E ✅;下一步切片 F 合规文案核对)
 
 > 目标:flutter 端复刻 app-uni 已验证的四页闭环(首页/拍照/结果卡/我的),消费同一 CF 后端与契约,产出 Android APK —— 兑现「uniapp + flutter 双端」定位。**不重新设计**:产品形态、文案、16 型语义、合规规则全部沿用 app-uni 定稿,flutter 只做技术栈平移。
 
@@ -50,9 +50,12 @@
 - **⚠️ Windows 后台 wrangler 残留坑**:TaskStop/杀 pnpm 后 **workerd 子进程仍监听端口**,新旧 server 可同时 LISTEN 8890,请求被旧进程接走(新 server 日志空白、mock 幽灵复活)。切换 server 配置后必须 `netstat -ano | grep :8890` 核对并 `taskkill //F //PID` 清干净再验。
 - ResultPage 仍只吃 `envelope.report`;`id`/`createdAt` 留切片 E 存历史时接。
 
-### ⬜ E. 本地历史闭环
-- `shared_preferences`(或 `hive`,倾向前者够用)存 report envelope,MAX 20 淘汰最旧 —— 语义对齐 app-uni `utils/history.ts`(「仅存设备本地」承诺)。
-- 结果卡「保存报告」防重、「我的」列表回看、回看态隐藏保存按钮。
+### ✅ E. 本地历史闭环(2026-07-10 完成,web 冒烟全链路通)
+- `lib/utils/history.dart`:`shared_preferences` 存 JSON 字符串整存整取(web 落 localStorage `flutter.skn_history`),`HistoryItem{id, createdAt 毫秒, report}`,KEY `skn_history` / MAX 20 淘汰最旧 / 新→旧存序 —— 语义平移 app-uni `utils/history.ts`;损坏/缺失按无历史处理;与 uni 版差异:flutter 回看直传 `HistoryItem` 对象(不走路由 query),故不需要 `getHistoryItem(id)`。
+- `result_page.dart`:构造器加 `analysisId`/`analysisCreatedAt`(对齐 uni `analysisMeta`,capture 从 envelope 带入),`_save()` 真写 `saveHistory`(沿用 server id/时间;先翻 `_saved` 态防异步间隙重入)→ SnackBar「已保存到本地」。
+- `mine_page.dart`:历史列表(型号码 Fraunces + 型号名/`yyyy-MM-dd HH:mm` 时间 + › 箭头,行间 divider,对齐 mine.vue `.hist__row`),点击 `push ResultPage(report, fromHistory: true)` 回看(隐藏保存钮);空态原样保留。
+- **uni `onShow` 的 flutter 对等**:全局 `RouteObserver`(main.dart 挂 `navigatorObservers`)+ MinePage `with RouteAware`,`didPopNext` 刷新列表 —— 保存只可能发生在二级页,pop 回根必触发;IndexedStack 常驻页订阅的是根 route,保存时停在哪个 tab 都能收到。`initState` 读首屏。
+- web 冒烟(mock server)全链路:分析 → 保存(SnackBar + 按钮翻「已保存」,localStorage 实录 **server UUID id + server createdAt**,证明 meta 沿用非本地生成)→ 重复点击防重(仍 1 条)→ 我的列表出现 → 点击回看无保存钮 → 整页刷新后列表仍在(持久化);console 零报错;format+analyze 双绿。
 
 ### ⬜ F. 合规与文案核对
 - 免责声明收敛结果页一处(ADR 0008);「我的」保留完整声明入口。
@@ -84,3 +87,4 @@
 | 2026-07-10 | 切片 B ✅:`tool/gen.mjs` 固化两条生成线(quicktype → `skin_report.dart`;DTCG 展平 → `tokens.dart` 65 token 6 类,shadow 转 BoxShadow),产物自动 format 幂等;Fraunces variable ttf(google/fonts 原件经 jsdelivr gh 镜像)进 assets + pubspec 声明;analyze 零告警 | Claude |
 | 2026-07-10 | 切片 C ✅:四页 UI + 双 tab 导航全落地(文案逐字平移 app-uni);共用件 Press/SknShell/SknCard/DashedOutline/SknTabBar;flutter_svg 直用同源 face-scan.svg;flutter web 冒烟全页通过(web/ 不入库,记录 flt-semantics-placeholder 激活法、flutter create 重建 test 与改 .metadata 两坑);修 Press/SknTabBar 双重朗读(excludeSemantics);format+analyze 双绿 | Claude |
 | 2026-07-10 | 切片 D ✅:`utils/api.dart`(kDebugMode 双环境 + envelope 解析 + ApiException)+ capture_page 接入 image_picker 真传图;修 multipart contentType 坑(octet-stream 被 server 400,http_parser MediaType 显式指定);web 冒烟三用例全通(mock 200 → 结果页 / 真 key 422 not_face → SnackBar 指引留页 / 断服 → 网络异常 SnackBar);记录 workerd 端口残留坑;format+analyze 双绿 | Claude |
+| 2026-07-10 | 切片 E ✅:`utils/history.dart`(shared_preferences,KEY/MAX/存序平移 uni history.ts)+ ResultPage 真保存(沿用 server id/createdAt,防重)+ MinePage 历史列表回看(RouteObserver.didPopNext ≈ uni onShow);web 冒烟保存→列表→回看→刷新持久化全通;format+analyze 双绿 | Claude |

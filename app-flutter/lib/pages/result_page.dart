@@ -1,5 +1,5 @@
 // 结果报告(全屏二级页):hero 型号 + 四维双极光谱(逐维科普手风琴)+ 分区评估 + 护理建议 + 免责 note + 操作。
-// 对齐 app-uni pages/result/result.vue;report 缺省渲染示例数据,切片 D 接真实分析、切片 E 接历史回看与保存。
+// 对齐 app-uni pages/result/result.vue;report 缺省渲染示例数据;「保存报告」写 shared_preferences 本地历史。
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../mock/sample_report.dart';
 import '../models/skin_report.dart';
 import '../theme/tokens.dart';
+import '../utils/history.dart';
 import '../widgets/dashed_outline.dart';
 import '../widgets/press.dart';
 import '../widgets/skn_card.dart';
@@ -96,13 +97,23 @@ final _axes = [
 const _lowConf = 0.6; // 低于此判为「参考」
 
 class ResultPage extends StatefulWidget {
-  const ResultPage({super.key, this.report, this.fromHistory = false});
+  const ResultPage({
+    super.key,
+    this.report,
+    this.fromHistory = false,
+    this.analysisId,
+    this.analysisCreatedAt,
+  });
 
   /// 为空时渲染示例报告(首页「先看一份示例报告」入口)
   final SkinReport? report;
 
   /// 历史回看态:隐藏「保存报告」(已在历史中)
   final bool fromHistory;
+
+  /// 新分析的 server id / 毫秒时间:保存历史时沿用(对齐 uni analysisMeta);回看/示例无此值
+  final String? analysisId;
+  final int? analysisCreatedAt;
 
   @override
   State<ResultPage> createState() => _ResultPageState();
@@ -124,10 +135,16 @@ class _ResultPageState extends State<ResultPage> {
     ).pushReplacement(MaterialPageRoute(builder: (_) => const CapturePage()));
   }
 
-  // 保存报告到本地历史:切片 E 接 shared_preferences 真实写入,当前先翻 UI 态
-  void _save() {
+  // 保存报告到本地历史(游客态仅存设备本地);先翻态防异步间隙重入;新分析沿用 server 的 id/时间
+  Future<void> _save() async {
     if (_saved) return;
     setState(() => _saved = true);
+    await saveHistory(
+      _report,
+      id: widget.analysisId,
+      createdAt: widget.analysisCreatedAt,
+    );
+    if (!mounted) return;
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(const SnackBar(content: Text('已保存到本地')));
