@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { putTempImage, getTempImageBytes, deleteTempImage } from './storage'
-import { analyzeImage } from './qwen'
+import { analyzeImage, extractGate } from './qwen'
 import { assembleReport } from './derive'
 import { validateReport } from './validate'
 import { insertReport, listHistory } from './db'
@@ -18,8 +18,9 @@ const MAX_IMAGE_BYTES = 10 * 1024 * 1024 // 10MB 上限
 
 app.get('/health', (c) => c.json({ ok: true, service: 'skin-checker-server' }))
 
-// 分析:上传正脸照 → 存 R2 临时对象 → 千问VL 分析 → 后端派生 code/name + 注入 disclaimer
-// → 契约校验 → 落库(只存结构化结果)→ 删临时图(ADR 0003,finally 确保执行)。
+// 分析:上传正脸照 → 存 R2 临时对象 → 千问VL 分析(同调用内含输入质检,不合格 422)
+// → 后端派生 code/name + 注入 disclaimer → 契约校验 → 落库(只存结构化结果)
+// → 删临时图(ADR 0003,finally 确保执行,质检拒绝路径同样覆盖)。
 app.post('/analyze', async (c) => {
   const body = await c.req.parseBody()
   const file = body['image']
@@ -33,6 +34,15 @@ app.post('/analyze', async (c) => {
     if (!bytes) return c.json({ error: '临时图片读取失败' }, 500)
 
     const raw = await analyzeImage({ apiKey: c.env.QWEN_API_KEY }, bytes, file.type)
+
+    // 输入质检(W1 切片 E):非人脸/翻拍/距离/质量不合格 → 422 + 具体重拍指引。
+    // 公共契约不动(拒绝走既有 {error} 形态),前端 catch 直接 toast 并留在拍照页可重拍。
+    const gate = extractGate(raw)
+    if (!gate.pass) {
+      console.log(JSON.stringify({ level: 'info', msg: 'analyze rejected by input gate', reason: gate.reason }))
+      return c.json({ error: gate.message }, 422)
+    }
+
     const report = assembleReport(raw)
 
     const check = validateReport(report)
