@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_svg: ^2.3.0
 
 dev_dependencies:
   flutter_test:
@@ -17,6 +18,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    # 首页取景意象(MediaPipe 468 点拓扑),源 = app-uni/scripts/gen-face-mesh.py 产物,与 app-uni/src/static/face-scan.svg 同源同份;改视觉重跑该脚本后两端各自复制。
+    - assets/face-scan.svg
 
   # Fraunces variable ttf(google/fonts 原件,经 jsdelivr gh 镜像获取)——仅用于数字/型号码,正文系统字体,对齐 app-uni。
   fonts:

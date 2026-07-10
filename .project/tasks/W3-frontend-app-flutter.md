@@ -3,7 +3,7 @@
 # W3 · 前端 app-flutter(flutter → Android APK)
 
 **最后更新**: 2026-07-10
-**状态:** 🟡 进行中(切片 A/B ✅;下一步切片 C 四页 UI + 导航)
+**状态:** 🟡 进行中(切片 A/B/C ✅;下一步切片 D image_picker + `/analyze` 联调)
 
 > 目标:flutter 端复刻 app-uni 已验证的四页闭环(首页/拍照/结果卡/我的),消费同一 CF 后端与契约,产出 Android APK —— 兑现「uniapp + flutter 双端」定位。**不重新设计**:产品形态、文案、16 型语义、合规规则全部沿用 app-uni 定稿,flutter 只做技术栈平移。
 
@@ -26,12 +26,18 @@
 - Fraunces 数字体:app-uni 走 jsdelivr 网络加载无本地文件,flutter 侧直接取 **google/fonts 原件 variable ttf**(经 `cdn.jsdelivr.net/gh/google/fonts` 镜像,360KB,免 woff2 转换)→ `assets/fonts/Fraunces-Variable.ttf`,`pubspec.yaml` 已声明 `family: Fraunces`(仅数字/型号码,正文系统字体,对齐 app-uni);variable 轴(wght 等)若需非默认字重,使用侧用 `FontVariation` 指定(切片 C 落地时留意)。
 - 验证:`flutter analyze` 零告警、`flutter pub get` 过、重跑 gen 后 `dart format --set-exit-if-changed` 零 diff。
 
-### ⬜ C. 四页 UI + 导航
-- 页面:首页(品牌 + 取景意象 + 双 CTA)/ 拍照页(深色 + 取景引导 + 拍摄要求)/ 结果卡(四维双极光谱 + 敏感「参考」态 + 逐维科普展开 + 分区评估 + 护理建议 + 免责声明单处)/ 我的(游客态 + 本地历史 + 免责/隐私/关于弹层)。
-- 导航:底部双 tab(检测/我的)为根级;拍照/结果为全屏二级页(Navigator push,不挂 tab)—— 对齐 app-uni 结构。
-- 取景意象:复用 `scripts/gen-face-mesh.py` 产物思路,SVG → flutter 用 `flutter_svg` 或转 PNG(定型时决策,倾向少一个依赖)。
-- 平板限宽:内容区 `Center + ConstrainedBox(maxWidth: 600)` 对齐 ADR 0009 的 600px 决策;方向性边距用 `EdgeInsetsDirectional`(ADR 0005)。
-- a11y:关键交互(拍照/保存/免责入口)套 `Semantics`(ADR 0005,flutter 侧非 ARIA)。
+### ✅ C. 四页 UI + 导航(2026-07-10 完成,flutter web 冒烟全页通过)
+- 四页全部落地,文案/布局逐字段平移 app-uni 对应 vue(不新造):
+  - `lib/pages/home_page.dart`:品牌 + face-scan.svg 取景意象(光带扫描 + 亮点)+ 三步说明 + 双 CTA + 底部合规一句。
+  - `lib/pages/capture_page.dart`:深色全屏二级页(`Scaffold(backgroundColor: cameraBg)` 自带底,不透 RootShell 渐变),脸形虚线引导框(`DashedOutline` 四角不对称椭圆角)、拍摄要求三点、隐私一句、双操作钮、分析蒙层;取图/上传留切片 D 接入点(`_choose`/`_analyze` 占位)。
+  - `lib/pages/result_page.dart`:hero(Fraunces 型号码 + AI 分析 pill)、四维双极光谱(`_AxisMeta.pick` 取值函数替代 TS keyof;enum `.name` 即判定码)、置信 <0.6 →「参考」虚线 pill + 虚线 thumb、? 科普手风琴(至多一维展开,TweenAnimationBuilder 入场)、分区评估(Fraunces 分数 + 渐变条 + chips)、护理建议、免责声明单处 note、重新分析(pushReplacement)/保存报告(暂翻本地状态 + SnackBar,真存储切片 E)。
+  - `lib/pages/mine_page.dart`:游客卡、检测历史空态(去检测 CTA)、免责/隐私/关于三弹层(`showModalBottomSheet` + `constraints maxWidth 600` 对齐平板限宽,文案与 mine.vue 逐字一致)。
+- 导航:`RootShell` 底部双 tab(自绘 `SknTabBar`,镜头/人形 glyph 免图标资源)为根级;拍照/结果 `Navigator.push` 全屏二级页。
+- 共用件:`Press`(hover-class 平移:AnimatedScale/Opacity 90ms + Semantics label,label 非空时 `excludeSemantics` 防双重朗读)、`SknShell`(600 限宽,ADR 0009)、`SknCard`、`DashedOutline`(CustomPainter,`rrectOf` 参数化,取景框/「参考」pill/低置信 thumb 三处共用——flutter 无原生 dashed border)。
+- 取景意象定案:`flutter_svg ^2.3.0` 直用 app-uni 同源 `assets/face-scan.svg`(SSOT,转 PNG 反而多一道生成)。
+- 样式平移惯例:letter-spacing = fontSize × em 值;uni 页顶 60/28 留白含 H5 无状态栏假设,SafeArea 承担状态栏后减半(capture 24 / result 12);矮视口空态用 `OverflowBox` + 外层 clip 对齐 uni `overflow:hidden`。
+- **web 冒烟法(本机无 Android SDK 的验证路径)**:`flutter create --platforms web .` 补 web 目录(**不入库**,`.gitignore` 已加 `/web/`;⚠️ 它会把 `.metadata` 的 android 迁移记录**替换**成 web,需还原;⚠️ 还会重建模板 `test/widget_test.dart` 引用不存在的 MyApp 挂 analyze,需删)→ `flutter run -d web-server --web-port=8895` → chrome-devtools MCP 驱动。**canvas 页面语义树激活**:初始 snapshot 只有占位钮且 click/合成 PointerEvent 均无效,正解 = `evaluate_script` 执行 `document.querySelector('flt-semantics-placeholder').click()`,之后 snapshot/click 全通。
+- 冒烟结果:四页 + 弹层 + 科普展开 + 保存已保存态 + 重新分析 pushReplacement(返回栈正确)全部像素/行为对齐,console 零报错;a11y 双重朗读(「开始检测 开始检测」)已修(Press/SknTabBar `excludeSemantics`);`dart format` 零 diff + `flutter analyze` 零告警。
 
 ### ⬜ D. 拍照/相册 + `/analyze` 联调 + 结果渲染
 - `image_picker`(相机/相册)→ multipart 传 `POST /analyze`(生产 `https://skin.9shi.cc/api`,本地 dev `127.0.0.1:8890/api`,双环境切换对齐 app-uni 的 `API_BASE` 条件化)。
@@ -70,3 +76,4 @@
 | 2026-07-10 | 建 W3 文档(切片 A–G 规划);本机安装 Flutter 3.44.6 stable(`E:\dev\flutter`,此前无 SDK);切片 A 脚手架进行中 | Claude |
 | 2026-07-10 | 切片 A ✅:`app-flutter` 脚手架建成(skin_checker / com.aotushi,Android only),analyze 零告警 + format 无 diff;记录 PUB_CACHE MSIX 重定向坑(迁 `E:\dev\pub-cache`)与 flutter-io.cn 镜像要求 | Claude |
 | 2026-07-10 | 切片 B ✅:`tool/gen.mjs` 固化两条生成线(quicktype → `skin_report.dart`;DTCG 展平 → `tokens.dart` 65 token 6 类,shadow 转 BoxShadow),产物自动 format 幂等;Fraunces variable ttf(google/fonts 原件经 jsdelivr gh 镜像)进 assets + pubspec 声明;analyze 零告警 | Claude |
+| 2026-07-10 | 切片 C ✅:四页 UI + 双 tab 导航全落地(文案逐字平移 app-uni);共用件 Press/SknShell/SknCard/DashedOutline/SknTabBar;flutter_svg 直用同源 face-scan.svg;flutter web 冒烟全页通过(web/ 不入库,记录 flt-semantics-placeholder 激活法、flutter create 重建 test 与改 .metadata 两坑);修 Press/SknTabBar 双重朗读(excludeSemantics);format+analyze 双绿 | Claude |
