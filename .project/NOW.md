@@ -1,13 +1,14 @@
 # NOW · skin-checker 当前状态
 
-**最后更新:** 2026-07-09(切片 D 完成 + 部署上线:worker 远程全套 + Pages H5)
+**最后更新:** 2026-07-10(`skin.9shi.cc` 绑定生效;H5 线上实测报的 3 项 UI 问题**同日修复完毕并本地验证**,待重新构建部署上线,见 `tasks/W2` 已知问题区块)
 
 ## 部署(2026-07-09,用户同意远程操作后执行)
 
 - **架构**:H5 与 API 同域 `skin.9shi.cc` —— Pages 服务页面,worker 只接 `/api/*` 路由(`index.ts` 挂 `basePath('/api')`,本地 dev 同为 `/api/*`);生产 H5 同域免 CORS。
 - **worker**:`wrangler deploy` 已上(版本 6a897396),路由 `skin.9shi.cc/api/*`;`QWEN_API_KEY` 已 `wrangler secret put`;远程 D1 已建(id 见 wrangler.jsonc)+ 迁移 0001 已应用;R2 `skin-checker-img` 已建 + 1 天生命周期兜底删图。
 - **Pages**:项目 `skin-checker`(production branch master),H5 产物直传部署,`skin-checker.pages.dev` 已 200。
-- **待用户(dashboard)**:Pages → skin-checker → Custom domains 添加 `skin.9shi.cc`(自动建 DNS + 证书);生效后 `https://skin.9shi.cc` = H5、`/api/health` = worker(同 zone 下 worker 路由优先于 Pages 自定义域)。之后如需 git 自动部署,可在 dashboard 把仓库连到既有 worker/Pages 项目(`[Skip CI]` 前缀会跳过自动构建,注意)。
+- **域名已生效(2026-07-10)**:用户已在 dashboard 绑 `skin.9shi.cc` → `https://skin.9shi.cc` = H5、`/api/*` = worker,线上可用。如需 git 自动部署,可在 dashboard 把仓库连到既有 worker/Pages 项目(`[Skip CI]` 前缀会跳过自动构建,注意)。
+- **🐛 H5 线上 3 项 UI 问题(2026-07-10 实测,同日已修,本地已验证)**:① 预览不显示(`height:100%` 在不定高 flex 链塌 0 高 → 改绝对定位铺满);②③ 拍照页 / 我的页矮视口滚动条(`100vh→100dvh` 双声明 + 取景区/空态可收缩)。仅动 3 文件 CSS;**线上生效需重新 `build:h5` + Pages 部署(待用户同意)**;我的页小屏(<696 可见高)空态残余滚动已记录。详见 `tasks/W2` 「🐛 已知问题」各 ✅ 小节。
 - **APK(HBuilderX,留用户)**:manifest appid 已填(`__UNI__8A0107B`);云打包勾相机/相册模块,首次装机自测拍照全流程。小程序真机延后(届时后台配 uploadFile 合法域名 `skin.9shi.cc`)。
 
 ## 阶段
@@ -19,6 +20,7 @@
 ## 下一步
 
 **前端(W2 续):**
+- 🐛 **H5 线上 3 项 UI 问题已修(2026-07-10,本地已验证)**:预览 0 高改绝对定位、100vh 滚动条改 dvh 双声明(B1–B3 详见 `tasks/W2` 已知问题 ✅ 小节)。**下一动作:重新 `build:h5` + Pages 部署(需用户同意)+ 用户真机复验**;我的页小屏空态残余滚动如真机仍见再压余量。
 - ✅ app-uni 四页静态端 + 底部 tab 完成(首页/拍照/结果卡/我的),H5 导航闭环通、免责声明双入口可达、结果卡→本地历史(uni Storage)→「我的」回看闭环通。
 - 🟡 微信小程序端代码 + 编译层已过一遍(审计无逻辑属性 / CSS 变量本就落 `page` / 补 `uni.loadFontFace` 静默降级 / `build:mp-weixin` 编译通过 + 产物双证);**待真机**:`mp-weixin.appid` 空(测试号可预览,发布填自有)+ woff2 字体配 `downloadFile` 合法域名,渲染 / Fraunces 效果需微信开发者工具确认(本环境无)。
 - ✅ 与 server `/analyze` 联调通(2026-07-08,切片 E):`utils/api.ts` 传图 → envelope 暂存直达结果卡,保存沿用 server id;本地 server 起 8890(`pnpm dev --port 8890`,8787/8788 被他项目占)。

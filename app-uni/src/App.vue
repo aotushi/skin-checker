@@ -26,7 +26,8 @@ onHide(() => {
 
 page {
   background: linear-gradient(180deg, var(--skn-color-surface-bg-top), var(--skn-color-surface-bg-bottom));
-  min-height: 100vh;
+  min-height: 100vh; /* dvh 不支持端(小程序/旧 WebView)的兜底 */
+  min-height: 100dvh; /* 手机地址栏在场 100vh > 可见高会撑出滚动条(tasks/W2 已知问题 B2/B3);页面根容器同此双声明 */
   font-family: var(--skn-typography-family-sans);
   font-size: var(--skn-typography-size-base);
   line-height: var(--skn-typography-leading-body);

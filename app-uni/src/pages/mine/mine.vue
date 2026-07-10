@@ -145,7 +145,8 @@ function fmt(ts: number) {
 
 <style lang="scss" scoped>
 .mine {
-  min-height: 100vh;
+  min-height: 100vh; /* dvh 不支持端(小程序/旧 WebView)的兜底 */
+  min-height: 100dvh; /* 手机地址栏在场 100vh > 可见高会撑出滚动条(W2 已知问题 B3) */
   padding: 60px 16px calc(76px + env(safe-area-inset-bottom, 0px));
   display: flex;
   flex-direction: column;

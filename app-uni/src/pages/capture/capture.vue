@@ -104,7 +104,8 @@ async function analyze() {
 
 <style lang="scss" scoped>
 .cap {
-  min-height: 100vh;
+  min-height: 100vh; /* dvh 不支持端(小程序/旧 WebView)的兜底 */
+  min-height: 100dvh; /* 手机浏览器地址栏在场时 100vh > 可见高,恒撑出一条地址栏的滚动(W2 已知问题 B2) */
   background: var(--skn-color-camera-bg); /* 深色底全屏铺满,不随内容限宽(避免平板两侧露出浅色底,ADR 0009) */
   display: flex;
   flex-direction: column;
@@ -157,7 +158,10 @@ async function analyze() {
 /* ── 取景 / 预览 ── */
 .viewer {
   flex: 1;
-  min-height: 360px;
+  /* min-height 0(原 360):矮视口(小屏手机/地址栏在场)让取景区收缩吃掉全部高度缺口,
+     页面不出滚动条(W2 已知问题 B2);空态引导框装饰性,超出部分由 overflow:hidden 裁切。 */
+  min-height: 0;
+  position: relative; /* .viewer__img 绝对定位的包含块 */
   border-radius: var(--skn-radius-phone);
   overflow: hidden;
   background: #1a1512;
@@ -166,14 +170,28 @@ async function analyze() {
   justify-content: center;
 }
 .viewer__img {
+  /* 绝对定位铺满:祖先链(.cap auto 高 → .cap__inner flex:1 → .viewer flex:1)无 definite height,
+     普通流的 height:100% 解析为 auto、uni-image(背景图实现)无内在高 → 塌 0 图不可见(W2 已知问题 B1);
+     绝对定位的百分比对已布局的包含块必然可解。 */
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 100%;
   height: 100%;
 }
 .viewer__empty {
+  /* 绝对定位:空态引导框(375 宽下高约 287)不参与 .viewer 内在尺寸,
+     否则矮视口下仍会把页面撑出滚动条(min-height:0 只放开自身下限,拦不住内容向上传导);
+     放不下时由 .viewer 的 overflow:hidden 上下对称裁切(装饰性,可裁)。 */
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 100%; /* 撑满取景区,.guide 的百分比宽以此为基准 */
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 16px;
 }
 .guide {
