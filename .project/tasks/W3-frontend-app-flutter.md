@@ -3,7 +3,7 @@
 # W3 · 前端 app-flutter(flutter → Android APK)
 
 **最后更新**: 2026-07-10
-**状态:** 🟡 进行中(切片 A ✅;下一步切片 B 契约/token 生成线)
+**状态:** 🟡 进行中(切片 A/B ✅;下一步切片 C 四页 UI + 导航)
 
 > 目标:flutter 端复刻 app-uni 已验证的四页闭环(首页/拍照/结果卡/我的),消费同一 CF 后端与契约,产出 Android APK —— 兑现「uniapp + flutter 双端」定位。**不重新设计**:产品形态、文案、16 型语义、合规规则全部沿用 app-uni 定稿,flutter 只做技术栈平移。
 
@@ -19,10 +19,12 @@
   - 解压:Git Bash 的 GNU tar 不识 zip,用 `/c/windows/system32/tar.exe -xf`。
 - ⚠️ 本机**无 Android SDK / JDK**:`create/analyze/test` 不依赖;`flutter build apk` 之前需装(建议 Android Studio 一站式,顺带模拟器;或 cmdline-tools + 接受 licenses)。留切片 G 前置。
 
-### ⬜ B. 契约 + 设计 token 两条生成线(SSOT 派生,产物禁手改)
-- `shared/skin-report.schema.json` → `lib/models/skin_report.dart`:quicktype(命令见 `shared/README.md`),固化成脚本(repo 根或 app-flutter 内 `tool/`)。
-- `shared/design-tokens.json` → `lib/theme/tokens.dart`(`SknColors` / 字号 / 圆角 / 间距常量):自写 Dart 生成脚本对齐 app-uni 的 `gen-design-tokens.mjs` 展平逻辑(Style Dictionary 备选,见 shared/README;若引入需两端统一,勿只换 flutter 一端)。
-- Fraunces 数字体:woff2 → ttf 进 `assets/fonts`(flutter 不吃 woff2),`pubspec.yaml` 声明 `fontFamily: Fraunces` 仅用于数字/型号码,正文系统字体 —— 对齐 app-uni。
+### ✅ B. 契约 + 设计 token 两条生成线(SSOT 派生,产物禁手改;2026-07-10 完成)
+- **固化入口 `tool/gen.mjs`**(`node tool/gen.mjs`,两条线一次跑,末尾自动 `dart format` 产物保证「生成 → format 无 diff」幂等,已验证):
+  - `shared/skin-report.schema.json` → `lib/models/skin_report.dart`:npx quicktype(命令与 `shared/README.md` 一致)。
+  - `shared/design-tokens.json` → `lib/theme/tokens.dart`:DTCG 展平 → 6 个 namespace 类(`SknColors`/`SknGradients`/`SknTypography`/`SknRadius`/`SknSpace`/`SknShadows`),65 token;`$description` 落 doc comment;shadow CSS 串按分量转 `BoxShadow`,rgba → `Color.fromRGBO`;命名特判:纯数字段 `1`→`s1`、数字开头段 `2xl`→`xl2`。Style Dictionary 仍为备选(若引入需两端统一)。
+- Fraunces 数字体:app-uni 走 jsdelivr 网络加载无本地文件,flutter 侧直接取 **google/fonts 原件 variable ttf**(经 `cdn.jsdelivr.net/gh/google/fonts` 镜像,360KB,免 woff2 转换)→ `assets/fonts/Fraunces-Variable.ttf`,`pubspec.yaml` 已声明 `family: Fraunces`(仅数字/型号码,正文系统字体,对齐 app-uni);variable 轴(wght 等)若需非默认字重,使用侧用 `FontVariation` 指定(切片 C 落地时留意)。
+- 验证:`flutter analyze` 零告警、`flutter pub get` 过、重跑 gen 后 `dart format --set-exit-if-changed` 零 diff。
 
 ### ⬜ C. 四页 UI + 导航
 - 页面:首页(品牌 + 取景意象 + 双 CTA)/ 拍照页(深色 + 取景引导 + 拍摄要求)/ 结果卡(四维双极光谱 + 敏感「参考」态 + 逐维科普展开 + 分区评估 + 护理建议 + 免责声明单处)/ 我的(游客态 + 本地历史 + 免责/隐私/关于弹层)。
@@ -67,3 +69,4 @@
 |------|---------|--------|
 | 2026-07-10 | 建 W3 文档(切片 A–G 规划);本机安装 Flutter 3.44.6 stable(`E:\dev\flutter`,此前无 SDK);切片 A 脚手架进行中 | Claude |
 | 2026-07-10 | 切片 A ✅:`app-flutter` 脚手架建成(skin_checker / com.aotushi,Android only),analyze 零告警 + format 无 diff;记录 PUB_CACHE MSIX 重定向坑(迁 `E:\dev\pub-cache`)与 flutter-io.cn 镜像要求 | Claude |
+| 2026-07-10 | 切片 B ✅:`tool/gen.mjs` 固化两条生成线(quicktype → `skin_report.dart`;DTCG 展平 → `tokens.dart` 65 token 6 类,shadow 转 BoxShadow),产物自动 format 幂等;Fraunces variable ttf(google/fonts 原件经 jsdelivr gh 镜像)进 assets + pubspec 声明;analyze 零告警 | Claude |

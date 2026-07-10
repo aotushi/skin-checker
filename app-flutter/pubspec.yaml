@@ -1,5 +1,5 @@
 name: skin_checker
-description: "A new Flutter project."
+description: "AI 肤质参考助手 flutter 端(Android APK)。契约/设计 token 单一真相源见 ../shared,生成线 tool/gen.mjs。"
 publish_to: 'none'
 version: 0.1.0+1
 
@@ -17,3 +17,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  # Fraunces variable ttf(google/fonts 原件,经 jsdelivr gh 镜像获取)——仅用于数字/型号码,正文系统字体,对齐 app-uni。
+  fonts:
+    - family: Fraunces
+      fonts:
+        - asset: assets/fonts/Fraunces-Variable.ttf
