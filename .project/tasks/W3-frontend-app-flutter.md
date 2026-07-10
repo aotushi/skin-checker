@@ -3,7 +3,7 @@
 # W3 · 前端 app-flutter(flutter → Android APK)
 
 **最后更新**: 2026-07-10
-**状态:** 🟡 进行中(切片 A/B/C/D/E ✅;下一步切片 F 合规文案核对)
+**状态:** 🟡 进行中(切片 A/B/C/D/E/F ✅;下一步切片 G APK 出包,依赖 Android SDK)
 
 > 目标:flutter 端复刻 app-uni 已验证的四页闭环(首页/拍照/结果卡/我的),消费同一 CF 后端与契约,产出 Android APK —— 兑现「uniapp + flutter 双端」定位。**不重新设计**:产品形态、文案、16 型语义、合规规则全部沿用 app-uni 定稿,flutter 只做技术栈平移。
 
@@ -57,9 +57,11 @@
 - **uni `onShow` 的 flutter 对等**:全局 `RouteObserver`(main.dart 挂 `navigatorObservers`)+ MinePage `with RouteAware`,`didPopNext` 刷新列表 —— 保存只可能发生在二级页,pop 回根必触发;IndexedStack 常驻页订阅的是根 route,保存时停在哪个 tab 都能收到。`initState` 读首屏。
 - web 冒烟(mock server)全链路:分析 → 保存(SnackBar + 按钮翻「已保存」,localStorage 实录 **server UUID id + server createdAt**,证明 meta 沿用非本地生成)→ 重复点击防重(仍 1 条)→ 我的列表出现 → 点击回看无保存钮 → 整页刷新后列表仍在(持久化);console 零报错;format+analyze 双绿。
 
-### ⬜ F. 合规与文案核对
-- 免责声明收敛结果页一处(ADR 0008);「我的」保留完整声明入口。
-- 全部文案从 app-uni 平移,禁疾病/诊断/治疗措辞;flutter 端不新造文案。
+### ✅ F. 合规与文案核对(2026-07-10 完成,app 代码零改动)
+- **免责落点(ADR 0008)**:inline 完整声明(`report.disclaimer`)两端均只在结果页渲染一处(`result_page.dart` 免责 note ↔ result.vue `.note`);「我的 → 免责声明」完整声明弹层入口两端保留。首页底部短句「结果由 AI 生成,仅供护肤参考,不构成医疗建议。」是 uni 定稿的轻量提示(非那条完整声明;ADR 0008 对首页是「不再强制」非禁止),flutter 逐字平移一致。
+- **全量文案对照(无新造)**:正则抽取 flutter `lib/` 全部中文字符串(四页 + tab + api 错误文案 + sample mock + 三弹层),逐条与 app-uni 对应 vue/ts 对照零出入;sample_report 两端逐字一致(含 disclaimer 全句);flutter 独有字符串仅 Semantics a11y 标签(「返回」「查看报告:…」「××维度说明」,ADR 0005 要求,非用户可见新造文案)。
+- **违禁词扫描**(诊断/治疗/疗效/疾病/治愈/处方/医):flutter 命中全部为免责声明自身的否定式表述(「不构成医疗建议」「不是医疗诊断工具」「请及时就医」)与代码注释,与 uni 侧命中一一对应;科普 blurb「不对成因或病症下判断」为否定式且逐字平移。
+- **修一处文档出入**:根 README 合规段仍写 ADR 0008 已取代的旧规则「每个结果页 + 启动页显著标注」(与 skin-checker CLAUDE.md 已同步的「收敛结果页一处」矛盾)→ 本切片改为收敛表述。
 
 ### ⬜ G. APK 出包 + 装机自测(依赖 Android SDK,部分留用户)
 - `flutter build apk --release`(签名先 debug key,上架再议);手机 + 平板装机跑通拍照全流程。
@@ -88,3 +90,4 @@
 | 2026-07-10 | 切片 C ✅:四页 UI + 双 tab 导航全落地(文案逐字平移 app-uni);共用件 Press/SknShell/SknCard/DashedOutline/SknTabBar;flutter_svg 直用同源 face-scan.svg;flutter web 冒烟全页通过(web/ 不入库,记录 flt-semantics-placeholder 激活法、flutter create 重建 test 与改 .metadata 两坑);修 Press/SknTabBar 双重朗读(excludeSemantics);format+analyze 双绿 | Claude |
 | 2026-07-10 | 切片 D ✅:`utils/api.dart`(kDebugMode 双环境 + envelope 解析 + ApiException)+ capture_page 接入 image_picker 真传图;修 multipart contentType 坑(octet-stream 被 server 400,http_parser MediaType 显式指定);web 冒烟三用例全通(mock 200 → 结果页 / 真 key 422 not_face → SnackBar 指引留页 / 断服 → 网络异常 SnackBar);记录 workerd 端口残留坑;format+analyze 双绿 | Claude |
 | 2026-07-10 | 切片 E ✅:`utils/history.dart`(shared_preferences,KEY/MAX/存序平移 uni history.ts)+ ResultPage 真保存(沿用 server id/createdAt,防重)+ MinePage 历史列表回看(RouteObserver.didPopNext ≈ uni onShow);web 冒烟保存→列表→回看→刷新持久化全通;format+analyze 双绿 | Claude |
+| 2026-07-10 | 切片 F ✅:合规文案核对(免责落点符合 ADR 0008、flutter 全量中文文案抽取对照 app-uni 零出入无新造、违禁词扫描全为否定式声明文案);修根 README 合规段旧规则「结果页+启动页」→「收敛结果页一处」;app 代码零改动 | Claude |
