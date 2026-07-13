@@ -2,8 +2,8 @@
 
 # W3 · 前端 app-flutter(flutter → Android APK)
 
-**最后更新**: 2026-07-10
-**状态:** 🟡 进行中(切片 A/B/C/D/E/F ✅;下一步切片 G APK 出包,依赖 Android SDK)
+**最后更新**: 2026-07-13
+**状态:** 🟡 进行中(切片 A–F ✅ + G 出包 ✅;剩装机自测,真机在用户侧)
 
 > 目标:flutter 端复刻 app-uni 已验证的四页闭环(首页/拍照/结果卡/我的),消费同一 CF 后端与契约,产出 Android APK —— 兑现「uniapp + flutter 双端」定位。**不重新设计**:产品形态、文案、16 型语义、合规规则全部沿用 app-uni 定稿,flutter 只做技术栈平移。
 
@@ -63,8 +63,11 @@
 - **违禁词扫描**(诊断/治疗/疗效/疾病/治愈/处方/医):flutter 命中全部为免责声明自身的否定式表述(「不构成医疗建议」「不是医疗诊断工具」「请及时就医」)与代码注释,与 uni 侧命中一一对应;科普 blurb「不对成因或病症下判断」为否定式且逐字平移。
 - **修一处文档出入**:根 README 合规段仍写 ADR 0008 已取代的旧规则「每个结果页 + 启动页显著标注」(与 skin-checker CLAUDE.md 已同步的「收敛结果页一处」矛盾)→ 本切片改为收敛表述。
 
-### ⬜ G. APK 出包 + 装机自测(依赖 Android SDK,部分留用户)
-- `flutter build apk --release`(签名先 debug key,上架再议);手机 + 平板装机跑通拍照全流程。
+### 🟡 G. APK 出包 ✅(2026-07-13)+ 装机自测(留用户)
+- `flutter build apk --release` ✅:`build/app/outputs/flutter-apk/app-release.apk`(46.0MB,fat APK 含全 ABI),debug key 签名(`build.gradle.kts` release 沿用 signingConfig debug,上架再议)。
+- Android 环境(本机记录):Android Studio 装 **D 盘** `D:\Program Files\Android\Android Studio`(flutter doctor 不自动识别,注册表 `HKLM\SOFTWARE\Android Studio` 定位);JDK 用其 JBR 21,已 `flutter config --jdk-dir` 持久指向;SDK `%LOCALAPPDATA%\Android\Sdk`(cmdline-tools 缺失不挡 build,AGP 构建中还自动装了 CMake 3.22.1)。
+- **⚠️ gradle loopback 坑(本机 build 必读)**:`flutter build apk` 一律报 `Unable to establish loopback connection` —— 根因是本机 **AF_UNIX `connect` 系统性 EINVAL**(afunix 驱动 RUNNING、Claude 沙箱内外一致,疑 WFP/winsock 层拦截),JDK 21 NIO Selector 的 wakeup pipe 优先走 Unix domain socket,UDS listener bind 成功后**不再回退 TCP**,gradle client 与 daemon 两侧全死在 `Selector.open()`。**修法:build 前 `export JAVA_TOOL_OPTIONS="-Djdk.net.unixdomain.tmpdir=C:/nonexistent-force-tcp-fallback"`**(指不存在目录 → UDS bind 失败 → 回退 TCP loopback pipe;env 覆盖 client/daemon/一切子 JVM)。⚠️ 写进 `org.gradle.jvmargs` 无效:gradle 把自定义 `-D` 当运行时可变属性延迟 setProperty,赶不上 JDK 静态初始化,daemon 照样死。根因未修,用户自己 Android Studio 构建预计同样中招(`netsh winsock reset` / 排查代理组件属用户决策)。
+- ⬜ 手机 + 平板装机跑通拍照全流程 —— 真机在用户侧,留用户自测(image_picker 相机/相册首次真机验证;release 包 API 走线上 `skin.9shi.cc/api`)。
 - 与 uniapp APK(HBuilderX 云打包,ADR 0009 双栈)各自出包,互不依赖。
 
 ## ⚠️ 注意
@@ -72,7 +75,7 @@
 - **工具链(ADR 0004)**:`dart format` + `flutter analyze` + `flutter test`;Vite+/oxc 不适用 Dart,**不引** ESLint 系。正式测试后置策略与 W1/W2 一致(MVP 手动 E2E 兜底),`flutter test` 起步只挂冒烟级。
 - **契约/token 单一真相源**:改契约只改 `shared/*.json` 后重跑生成;**禁手改** `skin_report.dart` / `tokens.dart`(CLAUDE.md 项目铁律)。
 - **后端零改动**:flutter 是纯消费端;若联调发现后端问题,记 W1 不在此改。
-- **本机环境**:Flutter SDK `E:\dev\flutter`(bash 里用 `E:/dev/flutter/bin/flutter.bat` / `dart.bat`;PATH 未全局注入,勿假设 `flutter` 直接可用);`PUB_CACHE=E:\dev\pub-cache` 已 setx(新 shell 生效,当前会话需显式 export);flutter/dart 命令一律带 flutter-io.cn 双镜像 env(见切片 A 坑);无 Android SDK/JDK(见切片 A ⚠️)。
+- **本机环境**:Flutter SDK `E:\dev\flutter`(bash 里用 `E:/dev/flutter/bin/flutter.bat` / `dart.bat`;PATH 未全局注入,勿假设 `flutter` 直接可用);`PUB_CACHE=E:\dev\pub-cache` 已 setx(新 shell 生效,当前会话需显式 export);flutter/dart 命令一律带 flutter-io.cn 双镜像 env(见切片 A 坑);Android SDK/JDK 已就绪,**build 必带 `JAVA_TOOL_OPTIONS` loopback workaround**(见切片 G ⚠️)。
 
 ## 验收
 
@@ -91,3 +94,4 @@
 | 2026-07-10 | 切片 D ✅:`utils/api.dart`(kDebugMode 双环境 + envelope 解析 + ApiException)+ capture_page 接入 image_picker 真传图;修 multipart contentType 坑(octet-stream 被 server 400,http_parser MediaType 显式指定);web 冒烟三用例全通(mock 200 → 结果页 / 真 key 422 not_face → SnackBar 指引留页 / 断服 → 网络异常 SnackBar);记录 workerd 端口残留坑;format+analyze 双绿 | Claude |
 | 2026-07-10 | 切片 E ✅:`utils/history.dart`(shared_preferences,KEY/MAX/存序平移 uni history.ts)+ ResultPage 真保存(沿用 server id/createdAt,防重)+ MinePage 历史列表回看(RouteObserver.didPopNext ≈ uni onShow);web 冒烟保存→列表→回看→刷新持久化全通;format+analyze 双绿 | Claude |
 | 2026-07-10 | 切片 F ✅:合规文案核对(免责落点符合 ADR 0008、flutter 全量中文文案抽取对照 app-uni 零出入无新造、违禁词扫描全为否定式声明文案);修根 README 合规段旧规则「结果页+启动页」→「收敛结果页一处」;app 代码零改动 | Claude |
+| 2026-07-13 | 切片 G 出包 ✅:`app-release.apk` 46.0MB(debug 签名);排障本机 AF_UNIX connect EINVAL 致 gradle loopback 全挂 → `JAVA_TOOL_OPTIONS` 强制 UDS 回退 TCP workaround 入档;Android Studio(D 盘)/JBR 21/SDK 环境入档;装机自测留用户 | Claude |

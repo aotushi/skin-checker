@@ -1,6 +1,6 @@
 # NOW · skin-checker 当前状态
 
-**最后更新:** 2026-07-10(**W3 切片 F 完成**:flutter 端合规文案核对零出入[免责落点符合 ADR 0008、全量中文文案对照 app-uni 无新造、违禁词扫描通过],顺带修根 README 合规段旧规则;H5 3 项 UI 修复本地验证完[线上生效待重 build + Pages 部署])
+**最后更新:** 2026-07-13(**W3 切片 G 出包完成**:`flutter build apk --release` → `app-release.apk` 46.0MB debug 签名;排障本机 AF_UNIX EINVAL 致 gradle loopback 全挂 → `JAVA_TOOL_OPTIONS` 强制 TCP 回退,workaround 已入档 W3 文档切片 G;装机自测留用户)
 
 ## 部署(2026-07-09,用户同意远程操作后执行)
 
@@ -8,12 +8,12 @@
 - **worker**:`wrangler deploy` 已上(版本 6a897396),路由 `skin.9shi.cc/api/*`;`QWEN_API_KEY` 已 `wrangler secret put`;远程 D1 已建(id 见 wrangler.jsonc)+ 迁移 0001 已应用;R2 `skin-checker-img` 已建 + 1 天生命周期兜底删图。
 - **Pages**:项目 `skin-checker`(production branch master),H5 产物直传部署,`skin-checker.pages.dev` 已 200。
 - **域名已生效(2026-07-10)**:用户已在 dashboard 绑 `skin.9shi.cc` → `https://skin.9shi.cc` = H5、`/api/*` = worker,线上可用。如需 git 自动部署,可在 dashboard 把仓库连到既有 worker/Pages 项目(`[Skip CI]` 前缀会跳过自动构建,注意)。
-- **🐛 H5 线上 3 项 UI 问题(2026-07-10 实测,同日已修,本地已验证)**:① 预览不显示(`height:100%` 在不定高 flex 链塌 0 高 → 改绝对定位铺满);②③ 拍照页 / 我的页矮视口滚动条(`100vh→100dvh` 双声明 + 取景区/空态可收缩)。仅动 3 文件 CSS;**线上生效需重新 `build:h5` + Pages 部署(待用户同意)**;我的页小屏(<696 可见高)空态残余滚动已记录。详见 `tasks/W2` 「🐛 已知问题」各 ✅ 小节。
+- **🐛 H5 线上 3 项 UI 问题(2026-07-10 实测,同日已修,本地已验证)**:① 预览不显示(`height:100%` 在不定高 flex 链塌 0 高 → 改绝对定位铺满);②③ 拍照页 / 我的页矮视口滚动条(`100vh→100dvh` 双声明 + 取景区/空态可收缩)。仅动 3 文件 CSS;**已部署并线上验证生效(2026-07-13,用户 push 触发 CF 构建)**:线上样式命中三项修复特征(`.viewer__img` absolute / `.cap` 与 `uni-page-body` 100dvh),实测拍照页 375×550 无滚动、我的页 812 高无滚动、相册选图预览 331×508 正常渲染;我的页小屏(<696 可见高)空态残余滚动为已知项维持。详见 `tasks/W2` 「🐛 已知问题」各 ✅ 小节。
 - **APK(HBuilderX,留用户)**:manifest appid 已填(`__UNI__8A0107B`);云打包勾相机/相册模块,首次装机自测拍照全流程。小程序真机延后(届时后台配 uploadFile 合法域名 `skin.9shi.cc`)。
 
 ## 阶段
 
-🟡 **W3 前端推进中(app-flutter,切片 A/B/C/D/E/F ✅):** 环境 = Flutter **3.44.6 stable / Dart 3.12.2**(`E:\dev\flutter`;PUB_CACHE 迁 `E:\dev\pub-cache` + flutter-io.cn 双镜像,详见 W3 文档切片 A);`app-flutter` 只锁 Android(`com.aotushi.skin_checker`)。**切片 B 生成线**:`tool/gen.mjs` 一键出契约模型 + 65 token 常量(产物 format 幂等);Fraunces variable ttf 进 assets。**切片 C 四页 UI + 导航(2026-07-10)**:首页/拍照/结果卡/我的全落地(文案逐字平移 app-uni),自绘双 tab 根级 + 拍照/结果全屏二级页;四维双极光谱 + 敏感「参考」虚线态 + 科普手风琴 + 三弹层齐;共用件 Press/SknShell(600 限宽)/SknCard/DashedOutline;**flutter web 冒烟全页通过**(web/ 目录不入库;canvas 语义树用 `flt-semantics-placeholder` 激活,坑已记 W3 文档),format/analyze 双绿。**切片 D `/analyze` 真联调(2026-07-10)**:`utils/api.dart`(kDebugMode 双环境 + envelope 解析 + ApiException)+ capture_page 接 image_picker 真传图,web 冒烟三用例全通(mock 200 → 结果页渲染 / 真 key 422 not_face → SnackBar 指引留页 / 断服 → 网络异常 SnackBar);修 multipart contentType 坑(octet-stream 被 400,http_parser 显式 `image/*`),workerd 端口残留坑已记 W3 文档。**切片 E 本地历史(2026-07-10)**:`utils/history.dart`(shared_preferences,KEY `skn_history`/MAX 20/新→旧序平移 uni history.ts)+ ResultPage 真保存(沿用 server id/createdAt + 防重)+ MinePage 历史列表回看(RouteObserver.didPopNext ≈ uni onShow,回看态隐藏保存钮),web 冒烟保存→列表→回看→刷新持久化全通。**切片 F 合规文案核对(2026-07-10)**:免责落点符合 ADR 0008(inline 完整声明两端均只在结果页一处,「我的」完整声明入口保留,首页短句为 uni 定稿轻量提示逐字平移),flutter 全量中文文案抽取对照 app-uni 零出入无新造,违禁词扫描全为否定式声明文案;顺带修根 README 合规段旧规则(「结果页+启动页」→「收敛结果页一处」),app 代码零改动。下一步切片 G APK 出包。详见 `tasks/W3-frontend-app-flutter.md`。
+🟡 **W3 前端推进中(app-flutter,切片 A–F ✅ + G 出包 ✅):** 环境 = Flutter **3.44.6 stable / Dart 3.12.2**(`E:\dev\flutter`;PUB_CACHE 迁 `E:\dev\pub-cache` + flutter-io.cn 双镜像,详见 W3 文档切片 A);`app-flutter` 只锁 Android(`com.aotushi.skin_checker`)。**切片 B 生成线**:`tool/gen.mjs` 一键出契约模型 + 65 token 常量(产物 format 幂等);Fraunces variable ttf 进 assets。**切片 C 四页 UI + 导航(2026-07-10)**:首页/拍照/结果卡/我的全落地(文案逐字平移 app-uni),自绘双 tab 根级 + 拍照/结果全屏二级页;四维双极光谱 + 敏感「参考」虚线态 + 科普手风琴 + 三弹层齐;共用件 Press/SknShell(600 限宽)/SknCard/DashedOutline;**flutter web 冒烟全页通过**(web/ 目录不入库;canvas 语义树用 `flt-semantics-placeholder` 激活,坑已记 W3 文档),format/analyze 双绿。**切片 D `/analyze` 真联调(2026-07-10)**:`utils/api.dart`(kDebugMode 双环境 + envelope 解析 + ApiException)+ capture_page 接 image_picker 真传图,web 冒烟三用例全通(mock 200 → 结果页渲染 / 真 key 422 not_face → SnackBar 指引留页 / 断服 → 网络异常 SnackBar);修 multipart contentType 坑(octet-stream 被 400,http_parser 显式 `image/*`),workerd 端口残留坑已记 W3 文档。**切片 E 本地历史(2026-07-10)**:`utils/history.dart`(shared_preferences,KEY `skn_history`/MAX 20/新→旧序平移 uni history.ts)+ ResultPage 真保存(沿用 server id/createdAt + 防重)+ MinePage 历史列表回看(RouteObserver.didPopNext ≈ uni onShow,回看态隐藏保存钮),web 冒烟保存→列表→回看→刷新持久化全通。**切片 F 合规文案核对(2026-07-10)**:免责落点符合 ADR 0008(inline 完整声明两端均只在结果页一处,「我的」完整声明入口保留,首页短句为 uni 定稿轻量提示逐字平移),flutter 全量中文文案抽取对照 app-uni 零出入无新造,违禁词扫描全为否定式声明文案;顺带修根 README 合规段旧规则(「结果页+启动页」→「收敛结果页一处」),app 代码零改动。**切片 G 出包(2026-07-13)**:`app-release.apk` 46.0MB(debug 签名,release API 指线上);本机 gradle loopback 坑(AF_UNIX connect 系统性 EINVAL → `JAVA_TOOL_OPTIONS=-Djdk.net.unixdomain.tmpdir=<不存在目录>` 强制回退 TCP)已入档;剩装机自测(真机在用户侧)。详见 `tasks/W3-frontend-app-flutter.md`。
 
 🟡 **W2 前端起步(app-uni,H5 优先):** uniapp(Vue3 vite-ts)骨架 + 设计 token/类型两条生成脚本(`pnpm gen:tokens` / `gen:types`,产物禁手改)。**已建成四页 + 底部 tab 并 H5 验证通过**:首页(品牌 + 人脸拓扑网格取景意象[MediaPipe canonical 468 点投影程序生成 + 扫描光带]+ 双 CTA)、拍照页(深色相机 + 取景/拍摄要求 + `uni.chooseImage` + 分析中蒙层)、结果卡(四维双极光谱含敏感「参考」态 + 逐维度科普展开 + 分区评估 + 护理建议 + 免责声明 + 「保存报告」写本地历史)、我的(游客态 + 我的检测本地历史列表 + 免责/隐私/关于底部弹层完整声明入口)。自绘暖调底部 tab(检测 / 我的,CSS 图标走 token,`components/tab-bar`)统领导航:首页 ↔ 我的为 tab 根级(`reLaunch` 切换),拍照 / 结果为全屏二级页(navigateTo/redirectTo,不挂 tab);Fraunces 数字体 + 暖调美妆 token 全生效;`vue-tsc` 类型检查过。微信小程序端已过编译层(补 `loadFontFace`、变量本就落 `page`、`build:mp-weixin` 通过 + 产物双证),真机视觉待微信开发者工具确认(本环境无)。**已与本地 server 联调通(切片 E)**:拍照页真传图 → `/analyze` → 结果卡渲染 server envelope、「保存报告」沿用 server id(Playwright 真传图 E2E + 断服失败路径均验证)。
 
@@ -28,10 +28,11 @@
 - ✅ 切片 D `/analyze` 联调(2026-07-10):image_picker 真传图 + envelope 进结果页,mock 200 / 真 key 422 指引 / 断服三用例 web 冒烟全通;contentType(http_parser)与 workerd 端口残留两坑已记 W3 文档切片 D。
 - ✅ 切片 E 本地历史(2026-07-10):`utils/history.dart`(shared_preferences,KEY/MAX 20/新→旧序平移 uni history.ts)+「保存报告」真写(沿用 server id/createdAt + 防重)+「我的」列表回看(RouteObserver.didPopNext ≈ uni onShow,回看隐藏保存钮);web 冒烟保存→列表→回看→刷新持久化全通;详见 W3 文档切片 E。
 - ✅ 切片 F 合规文案核对(2026-07-10):免责落点符合 ADR 0008、全量中文文案对照 app-uni 零出入无新造、违禁词扫描通过;修根 README 合规段旧规则;app 代码零改动;详见 W3 文档切片 F。
-- ⬜ 下一动作:切片 G APK 出包 + 装机自测(`flutter build apk --release` 先 debug key 签名;**依赖 Android SDK/JDK,本机未装,需用户装**;image_picker 相机/相册真机验证也在此)。
+- ✅ 切片 G 出包(2026-07-13):`app-flutter/build/app/outputs/flutter-apk/app-release.apk`(46.0MB,debug 签名,上架再议);Android Studio(D 盘)+ JBR 21 环境与 gradle loopback 坑(AF_UNIX EINVAL → JAVA_TOOL_OPTIONS 回退 TCP)已入档 W3 文档切片 G。
+- ⬜ 下一动作:手机 + 平板装机自测拍照全流程(真机在用户侧;image_picker 相机/相册首次真机验证,release 包 API 走线上)。
 
 **前端(W2 续):**
-- 🐛 **H5 线上 3 项 UI 问题已修(2026-07-10,本地已验证)**:预览 0 高改绝对定位、100vh 滚动条改 dvh 双声明(B1–B3 详见 `tasks/W2` 已知问题 ✅ 小节)。**下一动作:重新 `build:h5` + Pages 部署(需用户同意)+ 用户真机复验**;我的页小屏空态残余滚动如真机仍见再压余量。
+- ✅ **H5 线上 3 项 UI 修复已部署 + 线上验证生效(2026-07-13)**:预览 0 高改绝对定位、100vh 滚动条改 dvh 双声明(B1–B3 详见 `tasks/W2` 已知问题 ✅ 小节);线上实测三项全过(CSS 特征 + 矮视口行为 + 相册选图预览渲染)。用户真机复验可选;我的页小屏(<696)空态残余滚动为已知项,真机仍碍眼再压余量。
 - ✅ app-uni 四页静态端 + 底部 tab 完成(首页/拍照/结果卡/我的),H5 导航闭环通、免责声明双入口可达、结果卡→本地历史(uni Storage)→「我的」回看闭环通。
 - 🟡 微信小程序端代码 + 编译层已过一遍(审计无逻辑属性 / CSS 变量本就落 `page` / 补 `uni.loadFontFace` 静默降级 / `build:mp-weixin` 编译通过 + 产物双证);**待真机**:`mp-weixin.appid` 空(测试号可预览,发布填自有)+ woff2 字体配 `downloadFile` 合法域名,渲染 / Fraunces 效果需微信开发者工具确认(本环境无)。
 - ✅ 与 server `/analyze` 联调通(2026-07-08,切片 E):`utils/api.ts` 传图 → envelope 暂存直达结果卡,保存沿用 server id;本地 server 起 8890(`pnpm dev --port 8890`,8787/8788 被他项目占)。
