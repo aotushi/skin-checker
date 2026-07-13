@@ -1,0 +1,143 @@
+---
+import type { Strings } from '../i18n/zh';
+
+interface Props {
+  t: Strings;
+}
+const { t } = Astro.props;
+---
+
+<section class="hero" id="top">
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <p class="hero__overline">{t.hero.overline}</p>
+      <h1 class="hero__title">{t.hero.title}</h1>
+      <p class="hero__sub">{t.hero.sub}</p>
+      <div class="hero__ctas">
+        <a class="btn btn-primary" href={t.hero.ctaPrimaryHref}>{t.hero.ctaPrimary}</a>
+        <a class="btn btn-ghost" href={t.hero.ctaSecondaryHref}>{t.hero.ctaSecondary}</a>
+      </div>
+      <p class="hero__note">{t.hero.note}</p>
+    </div>
+
+    <!-- 视觉:双机位错落(前:报告页,后:首页),face-scan 网格垫底呼应应用首页意象 -->
+    <div class="hero__visual">
+      <img class="hero__mesh" src="/face-scan.svg" alt="" aria-hidden="true" loading="lazy" />
+      <div class="hero__phone hero__phone--back" aria-hidden="true">
+        <img src="/shots/home.png" alt="" width="390" height="844" loading="eager" />
+      </div>
+      <div class="hero__phone hero__phone--front">
+        <img src="/shots/report.png" alt={t.hero.shotAlt} width="390" height="844" loading="eager" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding: 84px 0 76px;
+    /* mesh 网格故意出血(inset 负值),clip 掉避免撑出水平滚动 */
+    overflow-x: clip;
+  }
+  .hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    align-items: center;
+    gap: 40px;
+  }
+  .hero__overline {
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .hero__title {
+    font-size: 40px;
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--rose-wood);
+    margin-bottom: 16px;
+  }
+  .hero__sub {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--brown);
+    max-width: 480px;
+    margin-bottom: 28px;
+  }
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .hero__note {
+    font-size: 12px;
+    color: var(--muted-soft);
+  }
+
+  .hero__visual {
+    position: relative;
+    height: 480px;
+  }
+  .hero__mesh {
+    position: absolute;
+    inset: -6% -10%;
+    width: 120%;
+    max-width: none;
+    height: 112%;
+    object-fit: contain;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .hero__phone {
+    position: absolute;
+    width: 210px;
+    border-radius: 30px;
+    padding: 9px;
+    background: var(--camera-bg);
+    box-shadow: var(--shadow-phone);
+  }
+  .hero__phone img {
+    width: 100%;
+    height: auto;
+    border-radius: 22px;
+  }
+  .hero__phone--back {
+    left: 8%;
+    top: 0;
+    transform: rotate(-4deg);
+    opacity: 0.92;
+  }
+  .hero__phone--front {
+    right: 4%;
+    top: 44px;
+    transform: rotate(3deg);
+  }
+
+  @media (max-width: 820px) {
+    .hero {
+      padding: 56px 0 52px;
+    }
+    .hero__grid {
+      grid-template-columns: 1fr;
+      gap: 44px;
+    }
+    .hero__title {
+      font-size: 30px;
+    }
+    .hero__visual {
+      height: 460px;
+      max-width: 420px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .hero__phone--back {
+      left: 2%;
+    }
+    .hero__phone--front {
+      right: 2%;
+    }
+  }
+</style>

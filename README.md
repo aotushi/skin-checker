@@ -32,6 +32,7 @@
 | `server/` | Cloudflare Workers + Hono,三端共享后端 | 🟢 W1 完成并上线(真实 VL + 输入质检 422) |
 | `app-uni/` | uniapp → H5 + 微信小程序 + App(APK) | 🟡 W2:四页 + 自绘底部 tab + 科普 + 本地历史,H5 已通、导航闭环、**与 server 联调通(真传图 → 结果卡)**;小程序端编译层已过,待真机;App(APK)云打包配置就绪(Camera 模块 + 应用名「肤镜」),出包走 HBuilderX 留用户(ADR 0009) |
 | `app-flutter/` | flutter → APK | 🟢 W3 完成:四页闭环 + `/analyze` 真联调 + 本地历史 + 合规核对 + **页面内实时取景直拍**(camera 插件,flutter 独有扩展)+ APK 出包(47.7MB debug 签名),**用户真机装机复测通过(2026-07-13)**(见 `.project/tasks/W3-frontend-app-flutter.md`) |
+| `landing/` | Astro 双语落地页 → Pages `skin-checker-doc`(`doc.skin.9shi.cc`) | 🟢 W4 完成:线上 pages.dev 已 200,绑域留用户(见 `.project/tasks/W4-landing-page.md`) |
 | `shared/` | **契约单一真相源**(`skin-report.schema.json`) | ✅ 已建 |
 | `docs/adr/` | 架构决策记录 | ✅ 已建 |
 | `.project/` | 当前状态(`NOW.md`)+ 任务(`tasks/`) | ✅ 已建 |
@@ -44,6 +45,8 @@
 - **前端 A:** uniapp(Vue 技栈)　**前端 B:** flutter
 
 ## 当前状态
+
+🟢 **W4 落地页上线(2026-07-13):** `landing/` Astro 5 双语静态站(/zh/ + /en/,SEO 全套),部署 Cloudflare Pages `skin-checker-doc`(产物直传,根 301→/zh/);下载区三入口 = H5(skin.9shi.cc)+ flutter APK(**GitHub Release v0.1.0**,`releases/latest` 固定链)+ uniapp APK(出包后启用)。自定义域 `doc.skin.9shi.cc` 绑定留用户 dashboard。详见 `.project/tasks/W4-landing-page.md` 与 `landing/README.md`。
 
 🟢 **W1 后端主链路全通并已上线:** `/analyze`(R2 临时图 → VL 真调 → 四维派生 code/名 → 契约校验 → D1 落库 → 用后删图)+ `/history`,16 型手册映射已接入。OpenAI 兼容端点 + `qwen3-vl-plus`,空 key 自动走 mock(不计费)。生产:worker 路由 `skin.9shi.cc/api/*`(basePath `/api`),远程 D1/R2 + secret 已配,H5 同域免 CORS。
 

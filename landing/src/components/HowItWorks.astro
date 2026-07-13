@@ -1,0 +1,73 @@
+---
+import type { Strings } from '../i18n/zh';
+
+interface Props {
+  t: Strings;
+}
+const { t } = Astro.props;
+---
+
+<section id="how">
+  <div class="container">
+    <p class="sec-label">{t.how.label}</p>
+    <h2 class="sec-title">{t.how.title}</h2>
+
+    <ol class="steps">
+      {
+        t.how.steps.map((s, i) => (
+          <li class="step">
+            <span class="step__num">{i + 1}</span>
+            <div>
+              <h3 class="step__t">{s.t}</h3>
+              <p class="step__d">{s.d}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .steps {
+    margin-top: 36px;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+  }
+  .step {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .step__num {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--cta-from), var(--cta-to));
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+  .step__t {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 5px 0 6px;
+  }
+  .step__d {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  @media (max-width: 760px) {
+    .steps {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

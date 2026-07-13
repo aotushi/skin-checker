@@ -1,0 +1,58 @@
+---
+import type { Strings } from '../i18n/zh';
+
+interface Props {
+  t: Strings;
+}
+const { t } = Astro.props;
+---
+
+<section id="compliance">
+  <div class="container">
+    <p class="sec-label">{t.compliance.label}</p>
+    <h2 class="sec-title">{t.compliance.title}</h2>
+
+    <div class="comp">
+      <article class="comp__item">
+        <h3>{t.compliance.disclaimerTitle}</h3>
+        <p>{t.compliance.disclaimer}</p>
+      </article>
+      <article class="comp__item">
+        <h3>{t.compliance.privacyTitle}</h3>
+        <p>{t.compliance.privacy}</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .comp {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .comp__item {
+    background: var(--note);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-xl);
+    padding: 22px 24px;
+  }
+  .comp__item h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--rose-deep);
+    margin-bottom: 8px;
+  }
+  .comp__item p {
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--brown);
+  }
+
+  @media (max-width: 640px) {
+    .comp {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,240 @@
+---
+import type { Strings } from '../i18n/zh';
+
+interface Props {
+  t: Strings;
+  canonicalUrl: string;
+  hreflangEn: string;
+  hreflangZh: string;
+}
+
+const { t, canonicalUrl, hreflangEn, hreflangZh } = Astro.props;
+const { seo, ogLocale, lang } = t;
+
+const ogImage = `${Astro.site}og-image.png`;
+
+// SoftwareApplication 结构化数据;描述保持「参考非诊断」合规口径
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'SKINLENS 肤镜',
+  applicationCategory: 'LifestyleApplication',
+  operatingSystem: 'Android, Web',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
+  description:
+    'AI skin reference assistant: one front-facing photo, a 16-type skin profile with a four-dimension spectrum report and care suggestions. Reference only, not medical advice.',
+  url: canonicalUrl,
+  softwareVersion: '0.1.0',
+};
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary SEO -->
+    <title>{seo.title}</title>
+    <meta name="description" content={seo.description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- hreflang:中文为默认语言(应用本身纯中文) -->
+    <link rel="alternate" hreflang="zh" href={hreflangZh} />
+    <link rel="alternate" hreflang="en" href={hreflangEn} />
+    <link rel="alternate" hreflang="x-default" href={hreflangZh} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={seo.ogTitle} />
+    <meta property="og:description" content={seo.ogDesc} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={seo.ogImageAlt} />
+    <meta property="og:locale" content={ogLocale} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={seo.ogTitle} />
+    <meta name="twitter:description" content={seo.ogDesc} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Theme -->
+    <meta name="theme-color" content="#A85A48" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    <style is:global>
+      /* ── 设计 token:取自 shared/design-tokens.json(DTCG SSOT),与应用端同源同色 ── */
+      :root {
+        --rose-deep: #a85a48;
+        --rose-wood: #8c4a3a;
+        --clay: #c77a5e;
+        --gold: #c9913f;
+        --ink: #5a4a42;
+        --brown: #8c6a54;
+        --muted: #9a8278;
+        --muted-soft: #b0917f;
+        --card: #fffdfb;
+        --bg-top: #fdf4ec;
+        --bg-bottom: #f9e7d9;
+        --pill: #f7e3d7;
+        --note: #f5eae0;
+        --tint-gold: #fbf1e4;
+        --tint-clay: #fbede6;
+        --tint-rose: #f8e7df;
+        --tint-brown: #f5ece3;
+        --hairline: rgba(160, 90, 72, 0.1);
+        --divider: rgba(160, 90, 72, 0.08);
+        --on-dark: #f5e9e0;
+        --camera-bg: #241e1b;
+        --cta-from: #e3a381;
+        --cta-to: #d2795c;
+        --shadow-card: 0 4px 14px rgba(160, 90, 72, 0.06);
+        --shadow-cta: 0 6px 16px rgba(200, 110, 80, 0.34);
+        --shadow-phone: 0 16px 44px rgba(160, 90, 72, 0.2);
+        --font:
+          -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei',
+          'Segoe UI', sans-serif;
+        --font-display: Georgia, 'Times New Roman', serif;
+        --radius-lg: 14px;
+        --radius-xl: 16px;
+        --radius-2xl: 18px;
+      }
+
+      /* ── Reset ── */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: var(--font);
+        color: var(--ink);
+        background: linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      img {
+        display: block;
+        max-width: 100%;
+      }
+      a {
+        color: inherit;
+      }
+
+      /* ── Layout ── */
+      .container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      section {
+        padding: 72px 0;
+      }
+      section + section {
+        border-top: 1px solid var(--hairline);
+      }
+
+      /* ── Section 头部三件套 ── */
+      .sec-label {
+        font-size: 12px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: var(--rose-deep);
+        margin-bottom: 10px;
+      }
+      .sec-title {
+        font-size: 30px;
+        font-weight: 800;
+        line-height: 1.25;
+        margin-bottom: 12px;
+        color: var(--rose-wood);
+      }
+      .sec-sub {
+        font-size: 15px;
+        color: var(--brown);
+        line-height: 1.7;
+        max-width: 620px;
+      }
+
+      /* ── 按钮 ── */
+      .btn {
+        display: inline-block;
+        font-weight: 700;
+        font-size: 15px;
+        padding: 12px 26px;
+        border-radius: 999px;
+        text-decoration: none;
+        transition: opacity 0.15s, transform 0.15s;
+        cursor: pointer;
+        border: none;
+      }
+      .btn:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, var(--cta-from), var(--cta-to));
+        color: #fff;
+        box-shadow: var(--shadow-cta);
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--rose-deep);
+        border: 1.5px solid var(--rose-deep);
+      }
+      .btn[aria-disabled='true'] {
+        background: var(--pill);
+        color: var(--muted-soft);
+        box-shadow: none;
+        cursor: default;
+        pointer-events: none;
+      }
+
+      /* ── 卡片 ── */
+      .card {
+        background: var(--card);
+        border: 1px solid var(--hairline);
+        border-radius: var(--radius-2xl);
+        box-shadow: var(--shadow-card);
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 640px) {
+        section {
+          padding: 48px 0;
+        }
+        .sec-title {
+          font-size: 24px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

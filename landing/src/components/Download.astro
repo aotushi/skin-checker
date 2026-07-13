@@ -1,0 +1,79 @@
+---
+import type { Strings } from '../i18n/zh';
+
+interface Props {
+  t: Strings;
+}
+const { t } = Astro.props;
+---
+
+<section id="download">
+  <div class="container">
+    <p class="sec-label">{t.download.label}</p>
+    <h2 class="sec-title">{t.download.title}</h2>
+    <p class="sec-sub">{t.download.sub}</p>
+
+    <div class="dl">
+      {
+        t.download.items.map((item) => (
+          <article class="card dl__item">
+            <h3 class="dl__t">{item.t}</h3>
+            <p class="dl__d">{item.d}</p>
+            <p class="dl__meta">{item.meta}</p>
+            {item.disabled ? (
+              <span class="btn" aria-disabled="true">
+                {item.cta}
+              </span>
+            ) : (
+              <a class="btn btn-primary" href={item.href} rel="noopener">
+                {item.cta}
+              </a>
+            )}
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .dl {
+    margin-top: 36px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .dl__item {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+  }
+  .dl__t {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .dl__d {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--muted);
+    flex: 1;
+  }
+  .dl__meta {
+    font-size: 12px;
+    color: var(--muted-soft);
+    margin: 12px 0 16px;
+  }
+  .dl .btn {
+    align-self: flex-start;
+    font-size: 14px;
+    padding: 10px 22px;
+  }
+
+  @media (max-width: 760px) {
+    .dl {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

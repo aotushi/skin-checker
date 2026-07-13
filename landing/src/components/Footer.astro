@@ -1,0 +1,68 @@
+---
+import type { Strings } from '../i18n/zh';
+
+interface Props {
+  t: Strings;
+}
+const { t } = Astro.props;
+---
+
+<footer class="footer">
+  <div class="container footer__row">
+    <div>
+      <p class="footer__brand">肤镜 <span>SKINLENS</span></p>
+      <p class="footer__tag">{t.footer.tagline}</p>
+    </div>
+    <nav class="footer__links" aria-label="footer">
+      <a href={t.hero.ctaPrimaryHref} rel="noopener">{t.footer.tryOnline}</a>
+      <a href={t.tech.githubHref} rel="noopener">{t.footer.github}</a>
+    </nav>
+  </div>
+  <div class="container footer__copy">{t.footer.copyright}</div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--hairline);
+    padding: 40px 0 32px;
+  }
+  .footer__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .footer__brand {
+    font-weight: 800;
+    color: var(--rose-wood);
+  }
+  .footer__brand span {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--muted-soft);
+    margin-left: 4px;
+  }
+  .footer__tag {
+    font-size: 12px;
+    color: var(--muted-soft);
+    margin-top: 4px;
+  }
+  .footer__links {
+    display: flex;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--brown);
+  }
+  .footer__links a {
+    text-decoration: none;
+  }
+  .footer__links a:hover {
+    color: var(--rose-deep);
+  }
+  .footer__copy {
+    margin-top: 26px;
+    font-size: 12px;
+    color: var(--muted-soft);
+  }
+</style>

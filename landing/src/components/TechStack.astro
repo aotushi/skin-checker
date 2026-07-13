@@ -1,0 +1,137 @@
+---
+import type { Strings } from '../i18n/zh';
+
+interface Props {
+  t: Strings;
+}
+const { t } = Astro.props;
+const [uniName, uniTargets, flutterName, flutterTargets] = t.tech.archTop;
+---
+
+<section id="tech">
+  <div class="container">
+    <p class="sec-label">{t.tech.label}</p>
+    <h2 class="sec-title">{t.tech.title}</h2>
+    <p class="sec-sub">{t.tech.sub}</p>
+
+    <!-- 架构图:双前端栈 → 统一 API → 三资源 -->
+    <div class="arch card" role="img" aria-label={t.tech.archMid}>
+      <div class="arch__row arch__row--top">
+        <div class="arch__box">
+          <strong>{uniName}</strong>
+          <span>{uniTargets}</span>
+        </div>
+        <div class="arch__box">
+          <strong>{flutterName}</strong>
+          <span>{flutterTargets}</span>
+        </div>
+      </div>
+      <div class="arch__joint" aria-hidden="true"></div>
+      <div class="arch__mid">{t.tech.archMid}</div>
+      <div class="arch__joint" aria-hidden="true"></div>
+      <div class="arch__row arch__row--bottom">
+        {t.tech.archBottom.map((b) => <div class="arch__box arch__box--res">{b}</div>)}
+      </div>
+    </div>
+
+    <div class="points">
+      {
+        t.tech.points.map((p) => (
+          <article class="point">
+            <h3 class="point__t">{p.t}</h3>
+            <p class="point__d">{p.d}</p>
+          </article>
+        ))
+      }
+    </div>
+
+    <a class="btn btn-ghost tech__github" href={t.tech.githubHref} rel="noopener">
+      {t.tech.github} · GitHub
+    </a>
+  </div>
+</section>
+
+<style>
+  .arch {
+    margin-top: 36px;
+    padding: 28px;
+  }
+  .arch__row {
+    display: grid;
+    gap: 14px;
+  }
+  .arch__row--top {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .arch__row--bottom {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .arch__box {
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--tint-brown);
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .arch__box strong {
+    display: block;
+    font-size: 14px;
+    color: var(--rose-wood);
+  }
+  .arch__box span {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .arch__box--res {
+    background: var(--tint-gold);
+    font-size: 13px;
+    color: var(--brown);
+  }
+  .arch__joint {
+    width: 2px;
+    height: 18px;
+    margin: 6px auto;
+    background: var(--hairline);
+  }
+  .arch__mid {
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--cta-from), var(--cta-to));
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    padding: 14px 16px;
+  }
+
+  .points {
+    margin-top: 36px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 32px;
+  }
+  .point__t {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--rose-deep);
+    margin-bottom: 6px;
+  }
+  .point__d {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .tech__github {
+    margin-top: 36px;
+    font-size: 14px;
+  }
+
+  @media (max-width: 720px) {
+    .points {
+      grid-template-columns: 1fr;
+    }
+    .arch__row--bottom {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
