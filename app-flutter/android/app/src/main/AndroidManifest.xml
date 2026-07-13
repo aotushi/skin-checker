@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- release 包访问 /analyze /history 必需(debug manifest 的 INTERNET 只并入 debug 构建) -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="skin_checker"
         android:name="${applicationName}"

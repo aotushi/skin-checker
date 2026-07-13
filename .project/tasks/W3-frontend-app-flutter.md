@@ -77,6 +77,7 @@
 - **web 冒烟(面板 block camera = 天然降级用例)**:拍照页直开渲染不崩,语义树 9 节点全在(返回/标题/「将正脸置于取景框内」/正脸/自然光/不化妆/隐私句/相册选图/拍照),日志零 overflow/exception;format + analyze 双绿。真机实时预览路径留装机复测。
 - **⚠️ web 冒烟工具坑(本轮新增)**:web-server 设备改代码必须重启 flutter run(dwds 无重编译通道,hot restart 假成功);面板浏览器 camera 权限 block 后 tab 渲染管线可能整体冻结(rAF 0 帧),resize 不再触发重排,语义树是冻结前旧视口残影 → **先 resize 后 reload** 让首帧直接在目标视口渲染;`ext.flutter.debugDumpApp`(node WebSocket 连 VM service)可拿 MediaQuery 实证逻辑视口;面板对 canvas 页 screenshot 超时、语义节点 getBoundingClientRect 因多层 transform 不可靠,以语义 DOM 文本 + debugDump 为证据。
 - 出包:`app-release.apk` **47.7MB**(camera 插件 +1.7MB,debug 签名同前)。
+- **⚠️ 装机复测第二轮:release 包缺 INTERNET 权限(2026-07-13 已修)**:真机点「开始分析」必报「网络异常,请检查连接后重试」—— flutter 模板的 `INTERNET` 权限只在 `src/debug`/`src/profile` manifest(注释明说仅供开发期调试通道),`src/main/AndroidManifest.xml` 默认**不声明**,release 构建不合并 debug manifest → 整包无网络权限,http 一律 SocketException 落网络异常兜底文案。CAMERA 能用是 camera 插件 manifest 自动 merge,`http` 纯 Dart 包不带 manifest;web 冒烟无 manifest 概念测不到,首次真机走到分析才暴露。修法:main manifest 加 `<uses-permission android:name="android.permission.INTERNET"/>`,重出 APK 并 `aapt dump permissions` 实证 INTERNET 已进包(线上 API 同步 curl 200 排除服务端因素)。
 
 ## ⚠️ 注意
 
@@ -104,3 +105,4 @@
 | 2026-07-10 | 切片 F ✅:合规文案核对(免责落点符合 ADR 0008、flutter 全量中文文案抽取对照 app-uni 零出入无新造、违禁词扫描全为否定式声明文案);修根 README 合规段旧规则「结果页+启动页」→「收敛结果页一处」;app 代码零改动 | Claude |
 | 2026-07-13 | 切片 G 出包 ✅:`app-release.apk` 46.0MB(debug 签名);排障本机 AF_UNIX connect EINVAL 致 gradle loopback 全挂 → `JAVA_TOOL_OPTIONS` 强制 UDS 回退 TCP workaround 入档;Android Studio(D 盘)/JBR 21/SDK 环境入档;装机自测留用户 | Claude |
 | 2026-07-13 | 切片 H ✅:装机反馈改造 —— camera 插件页面内实时取景直拍(前置优先/降级 image_picker 全链兜底/生命周期挂 observer;flutter 独有扩展,uni 侧无)+ `_FaceGuide` 随取景区放大居中(高度预算含文案防溢出);web 冒烟降级路径通过、语义全在;APK 重出 47.7MB;web-server 无热重载/面板 camera block 冻结渲染两坑入档 | Claude |
+| 2026-07-13 | 修装机复测「开始分析」网络异常:main manifest 补 `INTERNET` 权限(flutter 模板只给 debug/profile,release 整包无网络权限致 http 全挂);重出 APK,aapt 实证权限进包;坑入档切片 H | Claude |
