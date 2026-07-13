@@ -3,7 +3,7 @@
 # W3 · 前端 app-flutter(flutter → Android APK)
 
 **最后更新**: 2026-07-13
-**状态:** 🟡 进行中(切片 A–F ✅ + G 出包 ✅ + H 装机反馈改造 ✅;剩装机复测,真机在用户侧)
+**状态:** 🟢 完成(切片 A–H 全 ✅;**用户真机装机复测通过(2026-07-13)**:实时取景直拍 + 分析全流程可用)
 
 > 目标:flutter 端复刻 app-uni 已验证的四页闭环(首页/拍照/结果卡/我的),消费同一 CF 后端与契约,产出 Android APK —— 兑现「uniapp + flutter 双端」定位。**不重新设计**:产品形态、文案、16 型语义、合规规则全部沿用 app-uni 定稿,flutter 只做技术栈平移。
 
@@ -67,7 +67,7 @@
 - `flutter build apk --release` ✅:`build/app/outputs/flutter-apk/app-release.apk`(46.0MB,fat APK 含全 ABI),debug key 签名(`build.gradle.kts` release 沿用 signingConfig debug,上架再议)。
 - Android 环境(本机记录):Android Studio 装 **D 盘** `D:\Program Files\Android\Android Studio`(flutter doctor 不自动识别,注册表 `HKLM\SOFTWARE\Android Studio` 定位);JDK 用其 JBR 21,已 `flutter config --jdk-dir` 持久指向;SDK `%LOCALAPPDATA%\Android\Sdk`(cmdline-tools 缺失不挡 build,AGP 构建中还自动装了 CMake 3.22.1)。
 - **⚠️ gradle loopback 坑(本机 build 必读)**:`flutter build apk` 一律报 `Unable to establish loopback connection` —— 根因是本机 **AF_UNIX `connect` 系统性 EINVAL**(afunix 驱动 RUNNING、Claude 沙箱内外一致,疑 WFP/winsock 层拦截),JDK 21 NIO Selector 的 wakeup pipe 优先走 Unix domain socket,UDS listener bind 成功后**不再回退 TCP**,gradle client 与 daemon 两侧全死在 `Selector.open()`。**修法:build 前 `export JAVA_TOOL_OPTIONS="-Djdk.net.unixdomain.tmpdir=C:/nonexistent-force-tcp-fallback"`**(指不存在目录 → UDS bind 失败 → 回退 TCP loopback pipe;env 覆盖 client/daemon/一切子 JVM)。⚠️ 写进 `org.gradle.jvmargs` 无效:gradle 把自定义 `-D` 当运行时可变属性延迟 setProperty,赶不上 JDK 静态初始化,daemon 照样死。根因未修,用户自己 Android Studio 构建预计同样中招(`netsh winsock reset` / 排查代理组件属用户决策)。
-- ⬜ 手机 + 平板装机跑通拍照全流程 —— 真机在用户侧,留用户自测(image_picker 相机/相册首次真机验证;release 包 API 走线上 `skin.9shi.cc/api`)。
+- ✅ 手机装机跑通拍照全流程(2026-07-13 用户复测确认:APK 安装可用,实时取景直拍 + 「开始分析」出报告;经两轮修复 —— 取景区改造见切片 H、INTERNET 权限见下)。
 - 与 uniapp APK(HBuilderX 云打包,ADR 0009 双栈)各自出包,互不依赖。
 
 ### ✅ H. 装机反馈改造:页面内实时取景 + 取景框放大(2026-07-13)
@@ -106,3 +106,4 @@
 | 2026-07-13 | 切片 G 出包 ✅:`app-release.apk` 46.0MB(debug 签名);排障本机 AF_UNIX connect EINVAL 致 gradle loopback 全挂 → `JAVA_TOOL_OPTIONS` 强制 UDS 回退 TCP workaround 入档;Android Studio(D 盘)/JBR 21/SDK 环境入档;装机自测留用户 | Claude |
 | 2026-07-13 | 切片 H ✅:装机反馈改造 —— camera 插件页面内实时取景直拍(前置优先/降级 image_picker 全链兜底/生命周期挂 observer;flutter 独有扩展,uni 侧无)+ `_FaceGuide` 随取景区放大居中(高度预算含文案防溢出);web 冒烟降级路径通过、语义全在;APK 重出 47.7MB;web-server 无热重载/面板 camera block 冻结渲染两坑入档 | Claude |
 | 2026-07-13 | 修装机复测「开始分析」网络异常:main manifest 补 `INTERNET` 权限(flutter 模板只给 debug/profile,release 整包无网络权限致 http 全挂);重出 APK,aapt 实证权限进包;坑入档切片 H | Claude |
+| 2026-07-13 | **W3 收官 🟢**:用户真机装机复测通过(APK 可安装可使用,实时取景直拍 + 分析全流程 OK),验收三条全达成 | Claude |
