@@ -1,6 +1,6 @@
 # NOW · skin-checker 当前状态
 
-**最后更新:** 2026-07-13(**W3 收官 🟢** 用户真机复测通过;**uniapp App(APK)云打包配置就绪**:manifest 补 Camera 模块 + 应用名「肤镜」,`uni build -p app` 过 + 产物实证,出包 = HBuilderX 云打包留用户,ADR 0009 双栈;**W4 落地页上线 🟢**:`landing/` Astro 双语站部署 Pages `skin-checker-doc` + GitHub Release v0.1.0 挂 flutter APK,绑域 `doc.skin.9shi.cc` 留用户)
+**最后更新:** 2026-07-13(**W3 收官 🟢** 用户真机复测通过;**uniapp APK 出包 ✅**:用户 HBuilderX 云打包成功(14.95MB),已补传 Release v0.1.0 + 落地页第三卡启用,装机自测留用户;**W4 落地页上线 🟢**:`landing/` Astro 双语站部署 Pages `skin-checker-doc` + GitHub Release v0.1.0 挂双 APK(flutter 47.7MB / uniapp 14.95MB),绑域 `doc.skin.9shi.cc` 留用户)
 
 ## 部署(2026-07-09,用户同意远程操作后执行)
 
@@ -9,8 +9,8 @@
 - **Pages**:项目 `skin-checker`(production branch master),H5 产物直传部署,`skin-checker.pages.dev` 已 200。
 - **域名已生效(2026-07-10)**:用户已在 dashboard 绑 `skin.9shi.cc` → `https://skin.9shi.cc` = H5、`/api/*` = worker,线上可用。如需 git 自动部署,可在 dashboard 把仓库连到既有 worker/Pages 项目(`[Skip CI]` 前缀会跳过自动构建,注意)。
 - **🐛 H5 线上 3 项 UI 问题(2026-07-10 实测,同日已修,本地已验证)**:① 预览不显示(`height:100%` 在不定高 flex 链塌 0 高 → 改绝对定位铺满);②③ 拍照页 / 我的页矮视口滚动条(`100vh→100dvh` 双声明 + 取景区/空态可收缩)。仅动 3 文件 CSS;**已部署并线上验证生效(2026-07-13,用户 push 触发 CF 构建)**:线上样式命中三项修复特征(`.viewer__img` absolute / `.cap` 与 `uni-page-body` 100dvh),实测拍照页 375×550 无滚动、我的页 812 高无滚动、相册选图预览 331×508 正常渲染;我的页小屏(<696 可见高)空态残余滚动为已知项维持。详见 `tasks/W2` 「🐛 已知问题」各 ✅ 小节。
-- **APK(HBuilderX,留用户)**:云打包配置已就绪(2026-07-13)—— appid `__UNI__8A0107B` + manifest 已固化 `modules.Camera`(App 端 chooseImage 原生依赖,无需再手勾)+ 应用名「肤镜」;INTERNET 权限 DCloud 基座自带。用户侧:HBuilderX 打开 `app-uni` 工程 → 发行 → 原生App-云打包 → Android(公共测试证书),装机自测拍照全流程。小程序真机延后(届时后台配 uploadFile 合法域名 `skin.9shi.cc`)。
-- **落地页(W4,2026-07-13)**:`landing/`(Astro 双语)→ Pages 项目 `skin-checker-doc`(产物直传,`skin-checker-doc.pages.dev` 已 200,根 301→/zh/);**flutter APK 走 GitHub Release v0.1.0**(`releases/latest` 固定链,47.7MB + SHA-1 in notes);**剩用户 dashboard 绑 `doc.skin.9shi.cc`**(Pages → skin-checker-doc → Custom domains);uniapp APK 出包后补传 Release + 启用落地页第三卡(`landing/src/i18n/{zh,en}.ts`)再部署。详见 `tasks/W4-landing-page.md`。
+- **uniapp APK 已出包(2026-07-13)**:用户 HBuilderX 云打包成功,产物 `app-uni/dist/release/apk/__UNI__8A0107B__20260713141805.apk`(14.95MB,测试证书);已上传 GitHub Release v0.1.0(asset `skinlens-uniapp-v0.1.0-android.apk`,SHA-1 `12248f10…55b1`,notes 双包对照表)。**剩用户侧:装机自测拍照全流程**。小程序真机延后(届时后台配 uploadFile 合法域名 `skin.9shi.cc`)。
+- **落地页(W4,2026-07-13)**:`landing/`(Astro 双语)→ Pages 项目 `skin-checker-doc`(产物直传,`skin-checker-doc.pages.dev` 已 200,根 301→/zh/);**双 APK 走 GitHub Release v0.1.0**(`releases/latest` 固定链,flutter 47.7MB + uniapp 14.95MB,SHA-1 均 in notes);下载三卡全启用(uniapp 第三卡 2026-07-13 出包后同日启用并重部署,线上抽查生效);**剩用户 dashboard 绑 `doc.skin.9shi.cc`**(Pages → skin-checker-doc → Custom domains)。详见 `tasks/W4-landing-page.md`。
 
 ## 阶段
 
@@ -41,7 +41,7 @@
 - 🟡 微信小程序端代码 + 编译层已过一遍(审计无逻辑属性 / CSS 变量本就落 `page` / 补 `uni.loadFontFace` 静默降级 / `build:mp-weixin` 编译通过 + 产物双证);**待真机**:`mp-weixin.appid` 空(测试号可预览,发布填自有)+ woff2 字体配 `downloadFile` 合法域名,渲染 / Fraunces 效果需微信开发者工具确认(本环境无)。
 - ✅ 与 server `/analyze` 联调通(2026-07-08,切片 E):`utils/api.ts` 传图 → envelope 暂存直达结果卡,保存沿用 server id;本地 server 起 8890(`pnpm dev --port 8890`,8787/8788 被他项目占)。
 - 📋 结果页分享(2026-07-08 审计,**未排期**,详见 `tasks/W2` 切片 G):16 型标签内容天然适合分享,但前提 = 联调完成 + 有公开可达端;切法 P1 小程序转发卡片 + H5 兜底(排联调后)→ P2 canvas 海报(缓)→ V2 链接分享(需公开 report 端点,不做现在);免责须延伸到分享物、海报不含人脸。
-- 🆕 uniapp App(APK)目标(2026-07-08 决,ADR 0009):手机 / 平板装机,与 flutter APK 并存双栈;平板用 CSS max-width 容器限宽居中(不走 rpx:`maxWidth` 仅 H5、rpx 封顶字段 Vue3 App 存疑)。限宽容器已落地(定值 600px,`App.vue` 全局 `.skn-shell` + 四页 / tab / 弹层套用,拍照页深色底全屏、内容居中)、App 端 Fraunces 字体已接(`loadFontFace` 条件编译放宽到 `APP-PLUS || MP-WEIXIN`,`uni build -p app` 编译通过 + 产物含字体调用);✅ 云打包配置就绪(2026-07-13):manifest 补 `modules.Camera`(App 端 chooseImage 原生依赖,原空 `{}` 出包必挂)+ 应用名「肤镜」+ API_BASE 复核(App build 走线上完整 URL);剩 HBuilderX 出包(本环境无,留用户,步骤见上「部署」段)。
+- 🆕 uniapp App(APK)目标(2026-07-08 决,ADR 0009):手机 / 平板装机,与 flutter APK 并存双栈;平板用 CSS max-width 容器限宽居中(不走 rpx:`maxWidth` 仅 H5、rpx 封顶字段 Vue3 App 存疑)。限宽容器已落地(定值 600px,`App.vue` 全局 `.skn-shell` + 四页 / tab / 弹层套用,拍照页深色底全屏、内容居中)、App 端 Fraunces 字体已接(`loadFontFace` 条件编译放宽到 `APP-PLUS || MP-WEIXIN`,`uni build -p app` 编译通过 + 产物含字体调用);✅ 云打包配置就绪(2026-07-13):manifest 补 `modules.Camera`(App 端 chooseImage 原生依赖,原空 `{}` 出包必挂)+ 应用名「肤镜」+ API_BASE 复核(App build 走线上完整 URL);✅ 出包完成(2026-07-13,用户 HBuilderX 云打包,14.95MB)并上传 Release v0.1.0 + 落地页第三卡启用,装机自测留用户(见上「部署」段)。
 
 **后端(W1 收尾,自然暂停点):**
 - ✅ 切片 D 完成(2026-07-09):真实千问 VL 调用通(`src/qwen.ts`,用户 MaaS 专属端点 `/compatible-mode/v1` + `qwen3-vl-plus`,base64 传图 + prompt 约束 + 宽松解析 + validateReport 后校验;空 key 仍 mock)。真图实测 `/analyze` 200 → 落库 → 删图 → `/history` 读回。远程部署时 key 用 `wrangler secret` 配。详见 `tasks/W1-backend-pipeline.md`。

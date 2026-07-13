@@ -32,4 +32,4 @@ npx wrangler pages deploy dist --project-name=skin-checker-doc --branch=master
 
 ## 合规口径
 
-全程「参考 / 建议」,不得诊断 / 疗效宣称;免责文案与 `shared/skin-report.schema.json` 的 `disclaimer` 一致。uniapp APK 出包后:更新 `src/i18n/{zh,en}.ts` 中 download 第三卡(去掉 disabled,填 Release 链接)。
+全程「参考 / 建议」,不得诊断 / 疗效宣称;免责文案与 `shared/skin-report.schema.json` 的 `disclaimer` 一致。下载三卡(H5 / flutter APK / uniapp APK)已全部启用,APK 均指 GitHub Release `releases/latest` 固定链;发新版 APK 只需发新 Release tag,落地页无需改版。

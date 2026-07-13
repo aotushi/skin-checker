@@ -19,7 +19,7 @@
 - **Hero**:双机位视觉(线上真截 首页+报告页,face-scan.svg 网格垫底)+ 双 CTA(在线体验 / 下载 Android 版)+ inline 免责短句。
 - **Features** 2×2:AI 分区分析 / 16 型四维光谱 / 护肤建议 / 隐私优先。
 - **HowItWorks** 三步:拍摄正脸 → AI 分析(含 422 质检指引)→ 查看报告。
-- **Download** 三卡:H5(→ skin.9shi.cc)/ Flutter APK(→ `github.com/aotushi/skin-checker/releases/latest`,固定链免改版)/ uniapp APK(`aria-disabled` 「即将提供」,出包后启用)。
+- **Download** 三卡:H5(→ skin.9shi.cc)/ Flutter APK / uniapp APK(均 → `github.com/aotushi/skin-checker/releases/latest`,固定链免改版;uniapp 卡初版为 disabled「即将提供」,2026-07-13 出包后启用)。
 - **TechStack**:HTML 架构图(uniapp·Vue3 + Flutter → Workers+Hono 统一 API → D1/R2/千问 VL)+ 工程 6 点(契约 SSOT / token SSOT / 边缘架构 / AI 工程化 / 隐私由架构保证 / 双端差异化)+ GitHub 链接。
 - **Compliance**:免责声明(与 schema `disclaimer` 字段一致)+ 隐私承诺双卡。
 - **Footer**:品牌 + 在线体验 / GitHub。
@@ -42,8 +42,9 @@
 
 ### ✅ F. GitHub Release v0.1.0(APK 承载,2026-07-13,经用户同意)
 - `gh release create v0.1.0 --target master`(7632e60):asset `skinlens-flutter-v0.1.0-android.apk`(47.7MB,SHA-1 `fb455b11…bb11` 写入 notes);notes 含测试证书/未知来源说明 + H5/落地页入口 + 免责句。
-- `releases/latest` 302 → v0.1.0 已验证,落地页固定链生效;uniapp APK 出包后补传同一 Release 或发新版。
+- `releases/latest` 302 → v0.1.0 已验证,落地页固定链生效。
 - tag 经 API 创建,不触发 CF Builds(其只监听分支 push)。
+- **uniapp APK 补传(2026-07-13 同日,用户 HBuilderX 出包后)**:`gh release upload v0.1.0` 加 `skinlens-uniapp-v0.1.0-android.apk`(14.95MB,SHA-1 `12248f10…55b1`);notes 改双包对照表(大小/特点/SHA-1)。
 
 ### ✅ G. Pages 部署(2026-07-13,经用户同意的方案)
 - `wrangler pages project create skin-checker-doc --production-branch=master` + `wrangler pages deploy dist`(产物直传,与 skin-checker H5 项目同模式,不连 git)。
@@ -52,7 +53,7 @@
 - **剩用户侧**:dashboard → Pages → skin-checker-doc → Custom domains → 绑 `doc.skin.9shi.cc`(9shi.cc 已在 CF,自动出 CNAME)。
 
 ### 遗留(挂起项)
-- uniapp APK 出包(HBuilderX,用户侧)后:① 上传 Release;② 启用落地页第三卡(`src/i18n/{zh,en}.ts` download 第三项去 disabled 填链接)→ 重 build 重 deploy。
+- ~~uniapp APK 出包后补传 Release + 启用第三卡~~ → **已完成(2026-07-13)**:APK 已上传 v0.1.0,`src/i18n/{zh,en}.ts` 第三卡去 disabled 填 `releases/latest`,重 build + Playwright 本地断言(三卡全 `<a>`)+ 重 deploy,线上抽查生效。
 - dev server:父目录 `E:\code\github\.claude\launch.json` 已加 `skin-landing`(port 4321)。
 
 ## 验收
@@ -66,3 +67,4 @@
 | 日期 | 变更内容 | 修改人 |
 |------|---------|--------|
 | 2026-07-13 | 建 W4:landing/ Astro 双语落地页全量建成(8 组件 + SEO 全套 + 素材可再生);本地 build + Playwright 四组视口验证(修 hero 网格出血 7px 溢出);GitHub Release v0.1.0 挂 flutter APK(47.7MB + SHA-1);Pages 项目 skin-checker-doc 建成并部署,线上全路径验证通过;绑域 doc.skin.9shi.cc 留用户 | Claude |
+| 2026-07-13 | uniapp APK 收尾:用户 HBuilderX 出包(14.95MB)→ 补传 Release v0.1.0(notes 改双包对照表)→ 第三卡启用(zh/en 去 disabled,cta 指 releases/latest,补测试证书句)→ build + Playwright 本地断言 → 重 deploy,线上抽查生效(zh「前往下载」×2 / en 无 Coming soon) | Claude |
