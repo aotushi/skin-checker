@@ -3,7 +3,7 @@
 # W3 · 前端 app-flutter(flutter → Android APK)
 
 **最后更新**: 2026-07-13
-**状态:** 🟡 进行中(切片 A–F ✅ + G 出包 ✅;剩装机自测,真机在用户侧)
+**状态:** 🟡 进行中(切片 A–F ✅ + G 出包 ✅ + H 装机反馈改造 ✅;剩装机复测,真机在用户侧)
 
 > 目标:flutter 端复刻 app-uni 已验证的四页闭环(首页/拍照/结果卡/我的),消费同一 CF 后端与契约,产出 Android APK —— 兑现「uniapp + flutter 双端」定位。**不重新设计**:产品形态、文案、16 型语义、合规规则全部沿用 app-uni 定稿,flutter 只做技术栈平移。
 
@@ -70,6 +70,14 @@
 - ⬜ 手机 + 平板装机跑通拍照全流程 —— 真机在用户侧,留用户自测(image_picker 相机/相册首次真机验证;release 包 API 走线上 `skin.9shi.cc/api`)。
 - 与 uniapp APK(HBuilderX 云打包,ADR 0009 双栈)各自出包,互不依赖。
 
+### ✅ H. 装机反馈改造:页面内实时取景 + 取景框放大(2026-07-13)
+- **起因(用户首次装机反馈)**:① 取景框位置过于靠顶部、整体面积较小;② APK 没有实时摄像头画面。两问题一次取景区改造解决。
+- **实时取景(flutter 端扩展,超出 app-uni 能力的双端差异点)**:`camera ^0.12.0+1`(Android = camera_android_camerax,CAMERA 权限插件自动 merge 进 manifest,无手改)。前置镜头优先(`firstWhere front` fallback 首个),`ResolutionPreset.veryHigh` + `enableAudio: false`;`CameraPreview` 用 FittedBox(cover)+ previewSize 宽高互换铺满取景区(竖屏假设),溢出由外层圆角 clip 裁切。**「拍照」钮改页面内直拍**:`takePicture` → bytes 进原确认态(重拍/开始分析结构不变)→ `pausePreview`;`_reset` 时 `resumePreview` 或重建;`WidgetsBindingObserver` 生命周期(inactive/paused dispose,resumed 且无已拍图重建)。**全链降级**:初始化/拍摄任何失败(含无权限、web 无摄像头)静默回落 image_picker 系统相机(= uni 侧原体验),空态仍显引导框;按钮文案零新造。**注意 uni APK 侧无此能力**(chooseImage 只能拉系统相机),为 flutter 侧独有扩展,双端差异入档。
+- **取景框放大居中(_FaceGuide 重构)**:原 OverflowBox 固定 150×196 顶部偏置 → LayoutBuilder 随取景区自适应(宽 72% 封顶 320;高度预算先扣 44「间距+文案行高」再取 82%,防极矮取景区 Column 溢出;矮到 <24 整体隐去兜底),框+文案整体居中;脸形 rrect 比例与虚线参数原样保留。
+- **web 冒烟(面板 block camera = 天然降级用例)**:拍照页直开渲染不崩,语义树 9 节点全在(返回/标题/「将正脸置于取景框内」/正脸/自然光/不化妆/隐私句/相册选图/拍照),日志零 overflow/exception;format + analyze 双绿。真机实时预览路径留装机复测。
+- **⚠️ web 冒烟工具坑(本轮新增)**:web-server 设备改代码必须重启 flutter run(dwds 无重编译通道,hot restart 假成功);面板浏览器 camera 权限 block 后 tab 渲染管线可能整体冻结(rAF 0 帧),resize 不再触发重排,语义树是冻结前旧视口残影 → **先 resize 后 reload** 让首帧直接在目标视口渲染;`ext.flutter.debugDumpApp`(node WebSocket 连 VM service)可拿 MediaQuery 实证逻辑视口;面板对 canvas 页 screenshot 超时、语义节点 getBoundingClientRect 因多层 transform 不可靠,以语义 DOM 文本 + debugDump 为证据。
+- 出包:`app-release.apk` **47.7MB**(camera 插件 +1.7MB,debug 签名同前)。
+
 ## ⚠️ 注意
 
 - **工具链(ADR 0004)**:`dart format` + `flutter analyze` + `flutter test`;Vite+/oxc 不适用 Dart,**不引** ESLint 系。正式测试后置策略与 W1/W2 一致(MVP 手动 E2E 兜底),`flutter test` 起步只挂冒烟级。
@@ -95,3 +103,4 @@
 | 2026-07-10 | 切片 E ✅:`utils/history.dart`(shared_preferences,KEY/MAX/存序平移 uni history.ts)+ ResultPage 真保存(沿用 server id/createdAt,防重)+ MinePage 历史列表回看(RouteObserver.didPopNext ≈ uni onShow);web 冒烟保存→列表→回看→刷新持久化全通;format+analyze 双绿 | Claude |
 | 2026-07-10 | 切片 F ✅:合规文案核对(免责落点符合 ADR 0008、flutter 全量中文文案抽取对照 app-uni 零出入无新造、违禁词扫描全为否定式声明文案);修根 README 合规段旧规则「结果页+启动页」→「收敛结果页一处」;app 代码零改动 | Claude |
 | 2026-07-13 | 切片 G 出包 ✅:`app-release.apk` 46.0MB(debug 签名);排障本机 AF_UNIX connect EINVAL 致 gradle loopback 全挂 → `JAVA_TOOL_OPTIONS` 强制 UDS 回退 TCP workaround 入档;Android Studio(D 盘)/JBR 21/SDK 环境入档;装机自测留用户 | Claude |
+| 2026-07-13 | 切片 H ✅:装机反馈改造 —— camera 插件页面内实时取景直拍(前置优先/降级 image_picker 全链兜底/生命周期挂 observer;flutter 独有扩展,uni 侧无)+ `_FaceGuide` 随取景区放大居中(高度预算含文案防溢出);web 冒烟降级路径通过、语义全在;APK 重出 47.7MB;web-server 无热重载/面板 camera block 冻结渲染两坑入档 | Claude |
