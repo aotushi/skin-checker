@@ -2,7 +2,7 @@
 
 # W2 · 前端 app-uni(uniapp → H5 / 微信小程序 / App(APK))
 
-**最后更新**: 2026-07-10
+**最后更新**: 2026-07-13
 
 > 目标:uniapp 端把已验证的 mock 后端契约落成可见成品,H5 优先、微信小程序随后。求职展示核心是「能跑的 demo」,故先做前端两端可见成品,后端正式回归测试后置(见 `W1-backend-pipeline.md` 注)。
 
@@ -29,6 +29,7 @@
 | 2026-07-09 | **H5 上线**:`utils/api.ts` 的 `API_BASE` 条件化(`import.meta.env.DEV` ? 本地 8890 : `https://skin.9shi.cc`,均带 `/api` 后缀对齐 server basePath);`vue-tsc` + `build:h5` 过,产物验证烘进线上地址、无 127.0.0.1 残留;Pages 项目 `skin-checker` 直传部署,`skin-checker.pages.dev` 200。用户已填 manifest App appid(`__UNI__8A0107B`);待用户:dashboard 绑 `skin.9shi.cc` + HBuilderX 云打包 APK | Claude |
 | 2026-07-10 | 域名 `skin.9shi.cc` 已生效,用户线上实测报 3 项 UI 问题;Playwright 打线上站复现定位根因(预览 `height:100%` 塌 0 高 / `100vh`+内容硬地板致矮视口滚动条),**仅记录未动代码**,详见「🐛 已知问题」区块 | Claude |
 | 2026-07-10 | 🐛 B1–B3 同日修复并本地验证:预览图/空态改绝对定位铺满(摆脱不定高链,B1)+ 全页 `100vh→100dvh` 双声明 + 取景区 `min-height:360→0` 可收缩(B2/B3)。Playwright 打本地 dev(9100)全矩阵:预览 346×541 可见(原 331×0),拍照页 844/660/553 视口溢出全 0(553 引导框 flex 自然缩小无裁切),我的页 844/700/660(带 1 条历史)溢出全 0;空态地板 696 与线上量测吻合,小屏(<696 可见高)空态残余滚动已记录未压。仅动 3 文件 CSS(capture.vue / App.vue / mine.vue),脚本与模板零改;**待构建部署上线** | Claude |
+| 2026-07-13 | App(APK)云打包配置就绪(切片 F):manifest 补 `modules.Camera`(原空,App 端 chooseImage 必需)+ 应用名改「肤镜」;`uni build -p app` 编译过,产物 manifest 三项实证(name/id/Camera);API_BASE App 端走完整线上 URL 复核 ✓;INTERNET 权限 DCloud 基座自带无需手补;剩 HBuilderX 云打包(用户侧) | Claude |
 
 ## 工具链(见 ADR 0004 的 2026-07-06 修订)
 
@@ -79,7 +80,8 @@
 - 平板策略:一层 CSS max-width 容器(600px + 居中留白)限宽,H5 / 小程序 / App 统一;**不**做多列响应式、**不**走 rpx(`maxWidth` 配置仅 H5、rpx 封顶字段官方标注「App vue2 非 nvue」、Vue3 存疑)。
 - ✅ 限宽容器已落地:`App.vue` 全局 `.skn-shell`(`max-width:600px` + 物理 `margin:auto` 居中,Skyline 安全),首页 / 结果 / 我的根容器 + 底部 tab + 我的弹层面板套用;沉浸深色拍照页深色底全屏、仅新增 `.cap__inner` 内容居中(避免平板露浅底)。H5 平板宽验证居中 + 背景无缝。
 - ✅ App 端 Fraunces 字体已接:`App.vue` onLaunch 的 `loadFontFace` 分支从 `#ifdef MP-WEIXIN` 放宽为 `#ifdef APP-PLUS || MP-WEIXIN`(H5 仍走 index.html 的 Google Fonts link;App / 小程序运行时加载、`fail` 静默降级到 serif)。`uni build -p app` 编译通过,产物 `app-service.js` 含 `loadFontFace({global:!0,family:"Fraunces"…})`;真机字体渲染留用户(同小程序)。
-- 待实现:`manifest.json` App appid;`#ifdef APP-PLUS` 其余能力(相机 / 存储权限等)按需补齐;出包 = HBuilderX 云打包 / 本地离线 SDK(`uni build -p app` 只产资源,本环境无 HBuilderX,留用户)。
+- ✅ 云打包配置就绪(2026-07-13):appid `__UNI__8A0107B`(用户 2026-07-09 已填)+ **manifest 补 `modules.Camera`**(`uni.chooseImage` 相机/相册在 App 端的原生模块依赖,原为空 `{}` 云打包出来拍照必失败)+ 应用名 `skin-check` → **「肤镜」**(App 桌面显示名对齐产品定稿);Android permissions 沿用模板(含 CAMERA;INTERNET 由 DCloud 云打包基座固定自带,不同于 flutter 模板坑);API_BASE 复核:App 端 build 走完整线上 URL `https://skin.9shi.cc/api`,原生请求无同域/CORS 依赖 ✓。`uni build -p app` 编译通过,产物 `dist/build/app/manifest.json` 实证三项(name 肤镜 / id __UNI__8A0107B / permissions 含 Camera 模块)。
+- ⬜ 出包 = HBuilderX 云打包(本环境无 HBuilderX,留用户):HBuilderX 导入 `dist/build/app` 资源(或直接打开 `app-uni` 工程)→ 发行 → 原生App-云打包 → Android,使用公共测试证书即可;装机自测拍照全流程。
 
 ### ⬜ G. 结果页分享(2026-07-08 审计立项,未排期)
 
