@@ -1,6 +1,6 @@
 # NOW · skin-checker 当前状态
 
-**最后更新:** 2026-07-14(**W5 🟡 后端联调完成 + H5 切换就绪**:FC 线上真 key 全通(公网域名 `https://skin-checker-egkggmemue.cn-hangzhou.fcapp.run`),大陆链路 **FC ~4s vs Workers ~35s(~9 倍)**;H5 生产 `API_BASE` 已切 FC 并本地全验,**剩 Pages 部署待用户同意**,详见 `tasks/W5-server-fc-migration.md` / ADR 0010)
+**最后更新:** 2026-07-14(**W5 🟢 三切片全部上线**:FC 后端真 key 全通(公网域名 `https://skin-checker-egkggmemue.cn-hangzhou.fcapp.run`),大陆链路 **FC ~4s vs Workers ~35s(~9 倍)**;H5 生产 `API_BASE` 已切 FC 并部署 Pages 生效(线上 api chunk 运行值 = FC 域名),**剩用户真机真脸自测**,详见 `tasks/W5-server-fc-migration.md` / ADR 0010)
 
 ## 部署(2026-07-09,用户同意远程操作后执行)
 
@@ -14,7 +14,7 @@
 
 ## 阶段
 
-🟡 **W5 server 迁阿里云 FC(2026-07-14 启动,切片 A 完成):** 起因 = 大陆用户 `/analyze` 过长(CF 美西 PoP + 原图直传);方案 = server 加 FC(Web 函数,cn-hangzhou)为第二部署目标,Workers 保留(否决香港中转)。**切片 A 代码映射完成**:业务收敛 `src/app.ts`(`createApp` 工厂),平台差异进 `src/platform.ts`(`PlatformDeps`:图片暂存 / 历史 / 密钥),双入口 `index.ts`(Workers:R2+D1+secret)/ `index.fc.ts`(FC:`@hono/node-server` :9000、图片内存直读不落存储、历史 no-op V2 预留、key 走 FC 环境变量);`pnpm build:fc` esbuild 单文件 153KB。本地验证:FC mock `/analyze` 200 全链 + 真 key 非人脸 422(真调百炼 2.0s)+ Workers `wrangler dev` 回归三接口无破坏。FC 函数用户已建(0.25vCPU/0.5GB/最小实例 0/并发 20/Node.js 22 Debian 11/`npm run start`/:9000/超时 60s/公网开;SLS 未开通故日志未启用)。**剩:ZIP 上传替换示例代码 + FC 环境变量配 key + 默认域名冒烟 + 耗时对比**;前端压图(H5 原图直传)为另一大头独立切片。详见 `tasks/W5-server-fc-migration.md` + `docs/adr/0010`。
+🟢 **W5 server 迁阿里云 FC(2026-07-14 启动,同日三切片全部上线):** 起因 = 大陆用户 `/analyze` 过长(CF 美西 PoP + 原图直传);方案 = server 加 FC(Web 函数,cn-hangzhou)为第二部署目标,Workers 保留(否决香港中转)。**切片 A 代码映射**:业务收敛 `src/app.ts`(`createApp` 工厂),平台差异进 `src/platform.ts`(`PlatformDeps`:图片暂存 / 历史 / 密钥),双入口 `index.ts`(Workers:R2+D1+secret)/ `index.fc.ts`(FC:`@hono/node-server` :9000、图片内存直读不落存储、历史 no-op V2 预留、key 走 FC 环境变量);`pnpm build:fc` esbuild 单文件。**切片 B FC 部署联调**:ZIP 上线 + 触发器改无需认证 + `QWEN_API_KEY` 配置(用户)后线上全通(mock 200 全链 + 真 key 422),公网域名 `https://skin-checker-egkggmemue.cn-hangzhou.fcapp.run`;**大陆链路实测 FC ~4s vs Workers ~35s(同图 2MB 真调,~9 倍提升)**。**切片 C H5 切换**:生产 `API_BASE` `#ifdef H5` 切 FC 域名(小程序/App 仍走 Workers),本地全验后部署 Pages,生产域名 `skin.9shi.cc` 验证生效(api chunk 运行值 = FC 域名)。**剩:用户真机真脸自测(补 200 路径,预期 ~35s→~5s)**;前端压图(H5 原图直传)为另一大头独立切片。详见 `tasks/W5-server-fc-migration.md` + `docs/adr/0010`。
 
 🟢 **W4 落地页完成(2026-07-13):** `landing/` Astro 5 双语静态站(/zh/ 默认 + /en/,根 CDN 级 301;文案单一来源 `src/i18n/zh.ts` + `Strings` 类型对齐 en)—— Nav/双机位 Hero(线上真截)/功能 2×2/三步/下载三卡(H5 + flutter APK→`releases/latest` + uniapp「即将提供」)/架构图 + 工程 6 点/合规双卡/Footer;SEO 全套(canonical/hreflang x-default→zh/OG 1200×630/JSON-LD/sitemap/robots),素材全可再生(og-src.html 定格截图)。验证:build 3 页 + Playwright 四组视口目检 + 链接断言(修 hero 网格出血 7px 溢出 → `overflow-x: clip`);线上 pages.dev 全路径 200。GitHub Release v0.1.0(tag@7632e60)挂 `skinlens-flutter-v0.1.0-android.apk`,`releases/latest` 302 实测。详见 `tasks/W4-landing-page.md`。
 
@@ -45,10 +45,10 @@
 - 📋 结果页分享(2026-07-08 审计,**未排期**,详见 `tasks/W2` 切片 G):16 型标签内容天然适合分享,但前提 = 联调完成 + 有公开可达端;切法 P1 小程序转发卡片 + H5 兜底(排联调后)→ P2 canvas 海报(缓)→ V2 链接分享(需公开 report 端点,不做现在);免责须延伸到分享物、海报不含人脸。
 - 🆕 uniapp App(APK)目标(2026-07-08 决,ADR 0009):手机 / 平板装机,与 flutter APK 并存双栈;平板用 CSS max-width 容器限宽居中(不走 rpx:`maxWidth` 仅 H5、rpx 封顶字段 Vue3 App 存疑)。限宽容器已落地(定值 600px,`App.vue` 全局 `.skn-shell` + 四页 / tab / 弹层套用,拍照页深色底全屏、内容居中)、App 端 Fraunces 字体已接(`loadFontFace` 条件编译放宽到 `APP-PLUS || MP-WEIXIN`,`uni build -p app` 编译通过 + 产物含字体调用);✅ 云打包配置就绪(2026-07-13):manifest 补 `modules.Camera`(App 端 chooseImage 原生依赖,原空 `{}` 出包必挂)+ 应用名「肤镜」+ API_BASE 复核(App build 走线上完整 URL);✅ 出包完成(2026-07-13,用户 HBuilderX 云打包,14.95MB)并上传 Release v0.1.0 + 落地页第三卡启用,装机自测留用户(见上「部署」段)。
 
-**后端(W5 FC 迁移,后端联调完成 2026-07-14):**
+**后端(W5 FC 迁移,三切片全部上线 2026-07-14):**
 - ✅ 切片 A 平台适配层:`platform.ts` + `app.ts` 工厂 + 双入口 + `build:fc`/`start:fc`;`tsc` 全绿;本地 FC mock 200 全链 / 真 key 422 / Workers 回归通过;ADR 0010。
 - ✅ 切片 B FC 部署联调:ZIP 上线(WebIDE 验证 = esbuild 产物)→ 触发器改无需认证(签名认证在网关挡匿名请求,实测 400)→ mock 冒烟全过 → `QWEN_API_KEY` 配置(用户)→ 真 key 422 验证。公网域名 **`https://skin-checker-egkggmemue.cn-hangzhou.fcapp.run`**;耗时对比(同一张 2MB 图真调):**FC ~4s vs Workers ~35s,~9 倍提升**(Workers 慢在大陆→美西上传 + R2 中转 + 跨洋调百炼)。真人脸 200 留前端切换后真机验证。
-- 🟡 切片 C 前端切换(2026-07-14):H5 生产 `API_BASE` 已切 FC 域名(`api.ts` `#ifdef H5` 赋值覆盖式条件编译;小程序/App 仍走 `skin.9shi.cc`——fcapp.run 无 ICP 备案进不了小程序合法域名);本地全验(vue-tsc / H5·mp-weixin 双端产物 grep / 浏览器跨域端到端 canvas 图真调 422 + CORS 全通)。**剩 `dist/build/h5` 部署 Pages 项目 `skin-checker` 待用户同意**;上线后用户真机真脸自测(补 200 路径)。
+- ✅ 切片 C 前端切换(2026-07-14):H5 生产 `API_BASE` 已切 FC 域名(`api.ts` `#ifdef H5` 赋值覆盖式条件编译;小程序/App 仍走 `skin.9shi.cc`——fcapp.run 无 ICP 备案进不了小程序合法域名);本地全验(vue-tsc / H5·mp-weixin 双端产物 grep / 浏览器跨域端到端 canvas 图真调 422 + CORS 全通)后,用户同意执行 `wrangler pages deploy dist/build/h5` 部署 Pages,生产域名 `skin.9shi.cc` 验证生效(index.html 主入口 = 新构建,api chunk 线上运行值 = FC 域名;首拉曾撞 CDN 旧缓存数秒)。**剩用户真机真脸自测(补 200 路径,预期 ~35s→~5s)**。
 - ⏳ 用户侧:开通 SLS 后在函数「日志」配置启用日志监控(否则线上盲调)。
 - 📋 前端 canvas 压图(H5 `sizeType:['compressed']` 不生效,原图 3-10MB 直传,为耗时最大头)独立切片待排。
 
