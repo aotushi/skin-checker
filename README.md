@@ -29,7 +29,7 @@
 
 | 目录 | 用途 | 状态 |
 | --- | --- | --- |
-| `server/` | Cloudflare Workers + Hono,三端共享后端 | 🟢 W1 完成并上线(真实 VL + 输入质检 422) |
+| `server/` | Hono 三端共享后端,双部署目标:CF Workers + 阿里云 FC(ADR 0010) | 🟢 W1 完成并上线;🟡 W5 FC 迁移中(平台适配层已落地,本地双链路验证过) |
 | `app-uni/` | uniapp → H5 + 微信小程序 + App(APK) | 🟡 W2:四页 + 自绘底部 tab + 科普 + 本地历史,H5 已通、导航闭环、**与 server 联调通(真传图 → 结果卡)**;小程序端编译层已过,待真机;**App(APK)已出包(2026-07-13,HBuilderX 云打包 14.95MB)并上传 Release v0.1.0**,装机自测留用户(ADR 0009) |
 | `app-flutter/` | flutter → APK | 🟢 W3 完成:四页闭环 + `/analyze` 真联调 + 本地历史 + 合规核对 + **页面内实时取景直拍**(camera 插件,flutter 独有扩展)+ APK 出包(47.7MB debug 签名),**用户真机装机复测通过(2026-07-13)**(见 `.project/tasks/W3-frontend-app-flutter.md`) |
 | `landing/` | Astro 双语落地页 → Pages `skin-checker-doc`(`doc.skin.9shi.cc`) | 🟢 W4 完成:线上 pages.dev 已 200,绑域留用户(见 `.project/tasks/W4-landing-page.md`) |
@@ -39,12 +39,14 @@
 
 ## 技术栈
 
-- **后端:** Cloudflare Workers + Hono + D1(历史)+ R2(图片临时)
+- **后端:** Hono(跨 runtime)双部署目标 —— Cloudflare Workers(D1 历史 + R2 图片临时)+ 阿里云 FC Web 函数(大陆链路,图片内存直读、历史 V2 预留),见 ADR 0010
 - **AI:** 通义千问 VL(OpenAI 兼容接口)/ Gemini,多模态视觉分析
 - **契约:** JSON Schema 单一真相源,后端约束 LLM 输出 + 生成两端类型(见 `shared/README.md`)
 - **前端 A:** uniapp(Vue 技栈)　**前端 B:** flutter
 
 ## 当前状态
+
+🟡 **W5 server 迁阿里云 FC(2026-07-14 启动):** 大陆用户 `/analyze` 耗时优化 —— server 映射双部署目标(一套 Hono 业务:`app.ts` 工厂 + `platform.ts` 平台接口,Workers 入口 `index.ts` / FC 入口 `index.fc.ts`),`pnpm build:fc` 出单文件 ZIP 包;本地双链路验证过(FC mock 200 全链 + 真 key 422 + Workers 回归)。FC 函数已建(cn-hangzhou),剩上传联调 + 耗时对比。详见 `.project/tasks/W5-server-fc-migration.md` 与 `docs/adr/0010-dual-deploy-worker-and-fc.md`。
 
 🟢 **W4 落地页上线(2026-07-13):** `landing/` Astro 5 双语静态站(/zh/ + /en/,SEO 全套),部署 Cloudflare Pages `skin-checker-doc`(产物直传,根 301→/zh/);下载区三入口全启用 = H5(skin.9shi.cc)+ flutter APK + uniapp APK(均走 **GitHub Release v0.1.0** `releases/latest` 固定链,双包 47.7MB / 14.95MB,SHA-1 in notes)。自定义域 `doc.skin.9shi.cc` 绑定留用户 dashboard。详见 `.project/tasks/W4-landing-page.md` 与 `landing/README.md`。
 

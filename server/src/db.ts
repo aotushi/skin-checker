@@ -1,15 +1,9 @@
 import type { SkinReport } from './types/skin-report'
+import type { HistoryRow } from './platform'
 
-// D1 历史:只存结构化结果,不存原图(ADR 0003)。
+// D1 历史:只存结构化结果,不存原图(ADR 0003)。仅 Workers 入口使用(FC 侧历史为 V2 预留)。
 // report_json 存完整 SkinReport(契约 SSOT),另拆 code/name/time 供列表查询。
-
-export interface HistoryRow {
-  id: string
-  createdAt: number
-  skinTypeCode: string
-  skinTypeName: string
-  report: SkinReport
-}
+// HistoryRow 形状定义在 platform.ts(两平台共用)。
 
 interface ReportRecord {
   id: string

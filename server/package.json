@@ -6,14 +6,18 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "typegen": "wrangler types",
-    "gen:skinmap": "node scripts/gen-skin-type-map.mjs"
+    "gen:skinmap": "node scripts/gen-skin-type-map.mjs",
+    "build:fc": "node scripts/build-fc.mjs",
+    "start:fc": "node --env-file=.dev.vars dist/fc/index.mjs"
   },
   "dependencies": {
     "@cfworker/json-schema": "^4.1.1",
+    "@hono/node-server": "^1.19.9",
     "hono": "^4.12.25"
   },
   "devDependencies": {
     "@types/node": "^25.9.3",
+    "esbuild": "^0.27.3",
     "typescript": "^6.0.3",
     "wrangler": "^4.101.0"
   },

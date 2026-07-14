@@ -1,6 +1,6 @@
 # NOW · skin-checker 当前状态
 
-**最后更新:** 2026-07-13(**W3 收官 🟢** 用户真机复测通过;**uniapp APK 出包 ✅**:用户 HBuilderX 云打包成功(14.95MB),已补传 Release v0.1.0 + 落地页第三卡启用,装机自测留用户;**W4 落地页上线 🟢**:`landing/` Astro 双语站部署 Pages `skin-checker-doc` + GitHub Release v0.1.0 挂双 APK(flutter 47.7MB / uniapp 14.95MB),绑域 `doc.skin.9shi.cc` 留用户)
+**最后更新:** 2026-07-14(**W5 启动 🟡 server 迁阿里云 FC**:大陆链路优化,平台适配层落地 —— 一套业务双部署目标(Workers + FC Web 函数),本地双链路验证过(FC mock 200 全链 / 真 key 422 / Workers 回归);FC 函数用户已在控制台创建(cn-hangzhou),剩 ZIP 上传 + 线上联调,详见 `tasks/W5-server-fc-migration.md` / ADR 0010)
 
 ## 部署(2026-07-09,用户同意远程操作后执行)
 
@@ -13,6 +13,8 @@
 - **落地页(W4,2026-07-13)**:`landing/`(Astro 双语)→ Pages 项目 `skin-checker-doc`(产物直传,`skin-checker-doc.pages.dev` 已 200,根 301→/zh/);**双 APK 走 GitHub Release v0.1.0**(`releases/latest` 固定链,flutter 47.7MB + uniapp 14.95MB,SHA-1 均 in notes);下载三卡全启用(uniapp 第三卡 2026-07-13 出包后同日启用并重部署,线上抽查生效);**剩用户 dashboard 绑 `doc.skin.9shi.cc`**(Pages → skin-checker-doc → Custom domains)。详见 `tasks/W4-landing-page.md`。
 
 ## 阶段
+
+🟡 **W5 server 迁阿里云 FC(2026-07-14 启动,切片 A 完成):** 起因 = 大陆用户 `/analyze` 过长(CF 美西 PoP + 原图直传);方案 = server 加 FC(Web 函数,cn-hangzhou)为第二部署目标,Workers 保留(否决香港中转)。**切片 A 代码映射完成**:业务收敛 `src/app.ts`(`createApp` 工厂),平台差异进 `src/platform.ts`(`PlatformDeps`:图片暂存 / 历史 / 密钥),双入口 `index.ts`(Workers:R2+D1+secret)/ `index.fc.ts`(FC:`@hono/node-server` :9000、图片内存直读不落存储、历史 no-op V2 预留、key 走 FC 环境变量);`pnpm build:fc` esbuild 单文件 153KB。本地验证:FC mock `/analyze` 200 全链 + 真 key 非人脸 422(真调百炼 2.0s)+ Workers `wrangler dev` 回归三接口无破坏。FC 函数用户已建(0.25vCPU/0.5GB/最小实例 0/并发 20/Node.js 22 Debian 11/`npm run start`/:9000/超时 60s/公网开;SLS 未开通故日志未启用)。**剩:ZIP 上传替换示例代码 + FC 环境变量配 key + 默认域名冒烟 + 耗时对比**;前端压图(H5 原图直传)为另一大头独立切片。详见 `tasks/W5-server-fc-migration.md` + `docs/adr/0010`。
 
 🟢 **W4 落地页完成(2026-07-13):** `landing/` Astro 5 双语静态站(/zh/ 默认 + /en/,根 CDN 级 301;文案单一来源 `src/i18n/zh.ts` + `Strings` 类型对齐 en)—— Nav/双机位 Hero(线上真截)/功能 2×2/三步/下载三卡(H5 + flutter APK→`releases/latest` + uniapp「即将提供」)/架构图 + 工程 6 点/合规双卡/Footer;SEO 全套(canonical/hreflang x-default→zh/OG 1200×630/JSON-LD/sitemap/robots),素材全可再生(og-src.html 定格截图)。验证:build 3 页 + Playwright 四组视口目检 + 链接断言(修 hero 网格出血 7px 溢出 → `overflow-x: clip`);线上 pages.dev 全路径 200。GitHub Release v0.1.0(tag@7632e60)挂 `skinlens-flutter-v0.1.0-android.apk`,`releases/latest` 302 实测。详见 `tasks/W4-landing-page.md`。
 
@@ -43,6 +45,12 @@
 - 📋 结果页分享(2026-07-08 审计,**未排期**,详见 `tasks/W2` 切片 G):16 型标签内容天然适合分享,但前提 = 联调完成 + 有公开可达端;切法 P1 小程序转发卡片 + H5 兜底(排联调后)→ P2 canvas 海报(缓)→ V2 链接分享(需公开 report 端点,不做现在);免责须延伸到分享物、海报不含人脸。
 - 🆕 uniapp App(APK)目标(2026-07-08 决,ADR 0009):手机 / 平板装机,与 flutter APK 并存双栈;平板用 CSS max-width 容器限宽居中(不走 rpx:`maxWidth` 仅 H5、rpx 封顶字段 Vue3 App 存疑)。限宽容器已落地(定值 600px,`App.vue` 全局 `.skn-shell` + 四页 / tab / 弹层套用,拍照页深色底全屏、内容居中)、App 端 Fraunces 字体已接(`loadFontFace` 条件编译放宽到 `APP-PLUS || MP-WEIXIN`,`uni build -p app` 编译通过 + 产物含字体调用);✅ 云打包配置就绪(2026-07-13):manifest 补 `modules.Camera`(App 端 chooseImage 原生依赖,原空 `{}` 出包必挂)+ 应用名「肤镜」+ API_BASE 复核(App build 走线上完整 URL);✅ 出包完成(2026-07-13,用户 HBuilderX 云打包,14.95MB)并上传 Release v0.1.0 + 落地页第三卡启用,装机自测留用户(见上「部署」段)。
 
+**后端(W5 FC 迁移,进行中):**
+- ✅ 切片 A 平台适配层(2026-07-14):`platform.ts` + `app.ts` 工厂 + 双入口 + `build:fc`/`start:fc`;`tsc` 全绿;本地 FC mock 200 全链 / 真 key 422 / Workers 回归通过;ADR 0010。
+- ⏳ 切片 B FC 部署联调:`pnpm build:fc` → `dist/fc/` 打 ZIP → 控制台上传;FC 环境变量配 `QWEN_API_KEY`;默认域名 `/api/health`、`/api/analyze` 冒烟 + 大陆耗时对比;前端 `API_BASE` 分流策略另议(小程序合法域名 / FC 自定义域名均卡 ICP 备案,前期 H5 用 FC 默认域名 + CORS)。
+- ⏳ 用户侧:开通 SLS 后在函数「日志」配置启用日志监控(否则线上盲调)。
+- 📋 前端 canvas 压图(H5 `sizeType:['compressed']` 不生效,原图 3-10MB 直传,为耗时最大头)独立切片待排。
+
 **后端(W1 收尾,自然暂停点):**
 - ✅ 切片 D 完成(2026-07-09):真实千问 VL 调用通(`src/qwen.ts`,用户 MaaS 专属端点 `/compatible-mode/v1` + `qwen3-vl-plus`,base64 传图 + prompt 约束 + 宽松解析 + validateReport 后校验;空 key 仍 mock)。真图实测 `/analyze` 200 → 落库 → 删图 → `/history` 读回。远程部署时 key 用 `wrangler secret` 配。详见 `tasks/W1-backend-pipeline.md`。
 - ✅ 切片 E 输入质检完成(2026-07-10,起因:线上非人脸照仍出报告):`qwen.ts` gate 前置判定 + `extractGate` fail-open,`index.ts` 不合格返 422 + `{error: 指引}`,拒绝不落库、前端零改、契约未动;本地验证 mock 回归 / 非人脸 422 / too_far 422 / 特写 200 / H5 端到端全通(详见 `tasks/W1` 切片 E)。**已提交推送(2026-07-10,commit 9f23446,git 连仓自动部署 worker)**。
@@ -58,6 +66,7 @@
 - 设计 token SSOT(DTCG;app-uni 用自写 gen 脚本)→ `docs/adr/0007-…`
 - 免责声明单处收敛 → `docs/adr/0008-…`
 - uniapp 也出 App(APK)+ 平板限宽 → `docs/adr/0009-…`
+- server 双部署目标(Workers + 阿里云 FC)→ `docs/adr/0010-…`
 
 ## 备注
 

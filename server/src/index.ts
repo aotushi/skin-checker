@@ -1,76 +1,37 @@
-import { Hono } from 'hono'
-import { cors } from 'hono/cors'
+import { createApp } from './app'
 import { putTempImage, getTempImageBytes, deleteTempImage } from './storage'
-import { analyzeImage, extractGate } from './qwen'
-import { assembleReport } from './derive'
-import { validateReport } from './validate'
 import { insertReport, listHistory } from './db'
+import type { PlatformDeps } from './platform'
 
-// basePath('/api'):生产路由 skin.9shi.cc/api/* 会把完整路径(含 /api)转给 worker,
-// 本地 dev 同样走 /api/*,前端 API_BASE 统一带 /api 后缀。
-const app = new Hono<{ Bindings: Env }>().basePath('/api')
+// Cloudflare Workers 入口:R2 暂存中转 + D1 历史 + wrangler secret 注入。
+// 业务路由见 app.ts;平台差异接口见 platform.ts(ADR 0010)。
 
-// CORS:H5 端(浏览器)跨域 fetch 必需;微信小程序 / APP 走原生请求不受 CORS(但需各端后台配合法域名)。
-// MVP 先放开所有源(接口无 cookie / 无凭证);部署时收紧到实际前端域名。
-app.use('/*', cors())
-
-const MAX_IMAGE_BYTES = 10 * 1024 * 1024 // 10MB 上限
-
-app.get('/health', (c) => c.json({ ok: true, service: 'skin-checker-server' }))
-
-// 分析:上传正脸照 → 存 R2 临时对象 → 千问VL 分析(同调用内含输入质检,不合格 422)
-// → 后端派生 code/name + 注入 disclaimer → 契约校验 → 落库(只存结构化结果)
-// → 删临时图(ADR 0003,finally 确保执行,质检拒绝路径同样覆盖)。
-app.post('/analyze', async (c) => {
-  const body = await c.req.parseBody()
-  const file = body['image']
-  if (!(file instanceof File)) return c.json({ error: '缺少 image 文件字段' }, 400)
-  if (!file.type.startsWith('image/')) return c.json({ error: '仅支持图片' }, 400)
-  if (file.size > MAX_IMAGE_BYTES) return c.json({ error: '图片过大(上限 10MB)' }, 413)
-
-  const key = await putTempImage(c.env.IMG_BUCKET, file)
-  try {
-    const bytes = await getTempImageBytes(c.env.IMG_BUCKET, key)
-    if (!bytes) return c.json({ error: '临时图片读取失败' }, 500)
-
-    const raw = await analyzeImage({ apiKey: c.env.QWEN_API_KEY }, bytes, file.type)
-
-    // 输入质检(W1 切片 E):非人脸/翻拍/距离/质量不合格 → 422 + 具体重拍指引。
-    // 公共契约不动(拒绝走既有 {error} 形态),前端 catch 直接 toast 并留在拍照页可重拍。
-    const gate = extractGate(raw)
-    if (!gate.pass) {
-      console.log(JSON.stringify({ level: 'info', msg: 'analyze rejected by input gate', reason: gate.reason }))
-      return c.json({ error: gate.message }, 422)
-    }
-
-    const report = assembleReport(raw)
-
-    const check = validateReport(report)
-    if (!check.valid) return c.json({ error: '分析结果不符合契约', details: check.errors }, 502)
-
-    const id = crypto.randomUUID()
-    const createdAt = Date.now()
-    await insertReport(c.env.DB, id, createdAt, report)
-    return c.json({ id, createdAt, report })
-  } finally {
-    // 无论成败都删临时图(ADR 0003);删失败仅记日志,R2 生命周期兜底。
-    try {
-      await deleteTempImage(c.env.IMG_BUCKET, key)
-    } catch (err) {
-      console.error(JSON.stringify({ level: 'error', msg: 'temp image delete failed', key, err: String(err) }))
-    }
+function workersDeps(env: Env): PlatformDeps {
+  return {
+    async stashImage(file) {
+      const key = await putTempImage(env.IMG_BUCKET, file)
+      const bytes = await getTempImageBytes(env.IMG_BUCKET, key)
+      if (!bytes) {
+        // 刚写入即读空,视作存储异常:删除兜底后抛错(app.onError → 500)。
+        await deleteTempImage(env.IMG_BUCKET, key).catch(() => {})
+        throw new Error('临时图片读取失败')
+      }
+      return {
+        bytes,
+        cleanup: async () => {
+          // 删失败仅记日志(cleanup 约定不抛),R2 生命周期兜底。
+          try {
+            await deleteTempImage(env.IMG_BUCKET, key)
+          } catch (err) {
+            console.error(JSON.stringify({ level: 'error', msg: 'temp image delete failed', key, err: String(err) }))
+          }
+        },
+      }
+    },
+    saveReport: (id, createdAt, report) => insertReport(env.DB, id, createdAt, report),
+    listHistory: () => listHistory(env.DB),
+    qwenApiKey: env.QWEN_API_KEY,
   }
-})
+}
 
-// 历史:读回结构化结果(不含原图),按时间倒序。
-app.get('/history', async (c) => {
-  const items = await listHistory(c.env.DB)
-  return c.json({ items })
-})
-
-app.onError((err, c) => {
-  console.error(JSON.stringify({ level: 'error', msg: 'unhandled error', path: c.req.path, err: String(err) }))
-  return c.json({ error: '服务器内部错误' }, 500)
-})
-
-export default app
+export default createApp<{ Bindings: Env }>((c) => workersDeps(c.env))
