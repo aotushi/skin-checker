@@ -1,6 +1,6 @@
 # NOW · skin-checker 当前状态
 
-**最后更新:** 2026-07-14(**W5 🟡 server 迁阿里云 FC**:平台适配层落地 + 本地双链路验证过;**FC 代码包已上线**(cn-hangzhou,公网域名 `https://skin-checker-egkggmemue.cn-hangzhou.fcapp.run`,触发器已改无需认证),mock 冒烟全过 —— 真图 2MB `/api/analyze` 0.57s(大陆→杭州);剩 FC 环境变量配 `QWEN_API_KEY`(用户自填)+ 真 key 验证 + 耗时对比,详见 `tasks/W5-server-fc-migration.md` / ADR 0010)
+**最后更新:** 2026-07-14(**W5 🟢 server FC 后端联调完成**:FC 线上真 key 全通(cn-hangzhou,公网域名 `https://skin-checker-egkggmemue.cn-hangzhou.fcapp.run`,无需认证 + `QWEN_API_KEY` 已配),大陆链路耗时对比 **FC ~4s vs Workers ~35s(~9 倍提升)**;剩前端 `API_BASE` 切换策略(另议),详见 `tasks/W5-server-fc-migration.md` / ADR 0010)
 
 ## 部署(2026-07-09,用户同意远程操作后执行)
 
@@ -45,9 +45,10 @@
 - 📋 结果页分享(2026-07-08 审计,**未排期**,详见 `tasks/W2` 切片 G):16 型标签内容天然适合分享,但前提 = 联调完成 + 有公开可达端;切法 P1 小程序转发卡片 + H5 兜底(排联调后)→ P2 canvas 海报(缓)→ V2 链接分享(需公开 report 端点,不做现在);免责须延伸到分享物、海报不含人脸。
 - 🆕 uniapp App(APK)目标(2026-07-08 决,ADR 0009):手机 / 平板装机,与 flutter APK 并存双栈;平板用 CSS max-width 容器限宽居中(不走 rpx:`maxWidth` 仅 H5、rpx 封顶字段 Vue3 App 存疑)。限宽容器已落地(定值 600px,`App.vue` 全局 `.skn-shell` + 四页 / tab / 弹层套用,拍照页深色底全屏、内容居中)、App 端 Fraunces 字体已接(`loadFontFace` 条件编译放宽到 `APP-PLUS || MP-WEIXIN`,`uni build -p app` 编译通过 + 产物含字体调用);✅ 云打包配置就绪(2026-07-13):manifest 补 `modules.Camera`(App 端 chooseImage 原生依赖,原空 `{}` 出包必挂)+ 应用名「肤镜」+ API_BASE 复核(App build 走线上完整 URL);✅ 出包完成(2026-07-13,用户 HBuilderX 云打包,14.95MB)并上传 Release v0.1.0 + 落地页第三卡启用,装机自测留用户(见上「部署」段)。
 
-**后端(W5 FC 迁移,进行中):**
-- ✅ 切片 A 平台适配层(2026-07-14):`platform.ts` + `app.ts` 工厂 + 双入口 + `build:fc`/`start:fc`;`tsc` 全绿;本地 FC mock 200 全链 / 真 key 422 / Workers 回归通过;ADR 0010。
-- 🟡 切片 B FC 部署联调:ZIP 已上线 ✓(WebIDE 验证 = esbuild 产物);触发器改无需认证 ✓(签名认证在网关挡匿名请求,实测 400);公网域名 **`https://skin-checker-egkggmemue.cn-hangzhou.fcapp.run`** mock 冒烟全过(health 冷 1.36s/热 0.22s;真图 2MB analyze 0.57s 含上传)。剩:FC 环境变量配 `QWEN_API_KEY`(key 值用户自填,不配恒走 mock)→ 真 key 422/200 验证 + 与 Workers 大陆耗时对比;前端 `API_BASE` 分流策略另议(小程序合法域名 / FC 自定义域名均卡 ICP 备案,前期 H5 用 FC 默认域名 + CORS)。
+**后端(W5 FC 迁移,后端联调完成 2026-07-14):**
+- ✅ 切片 A 平台适配层:`platform.ts` + `app.ts` 工厂 + 双入口 + `build:fc`/`start:fc`;`tsc` 全绿;本地 FC mock 200 全链 / 真 key 422 / Workers 回归通过;ADR 0010。
+- ✅ 切片 B FC 部署联调:ZIP 上线(WebIDE 验证 = esbuild 产物)→ 触发器改无需认证(签名认证在网关挡匿名请求,实测 400)→ mock 冒烟全过 → `QWEN_API_KEY` 配置(用户)→ 真 key 422 验证。公网域名 **`https://skin-checker-egkggmemue.cn-hangzhou.fcapp.run`**;耗时对比(同一张 2MB 图真调):**FC ~4s vs Workers ~35s,~9 倍提升**(Workers 慢在大陆→美西上传 + R2 中转 + 跨洋调百炼)。真人脸 200 留前端切换后真机验证。
+- ⏳ 前端 `API_BASE` 分流策略另议(小程序合法域名 / FC 自定义域名均卡 ICP 备案,前期 H5 用 FC 默认域名 + CORS)。
 - ⏳ 用户侧:开通 SLS 后在函数「日志」配置启用日志监控(否则线上盲调)。
 - 📋 前端 canvas 压图(H5 `sizeType:['compressed']` 不生效,原图 3-10MB 直传,为耗时最大头)独立切片待排。
 

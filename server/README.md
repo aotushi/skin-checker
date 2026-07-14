@@ -1,6 +1,6 @@
 # server · Hono 三端共享后端(双部署目标:CF Workers + 阿里云 FC)
 
-🟢 **W1 完成并上线(Workers)**;🟡 **W5 进行中:映射阿里云 FC 第二部署目标**(大陆链路优化,见 `../docs/adr/0010-dual-deploy-worker-and-fc.md`)。链路细节见 `../.project/tasks/W1-backend-pipeline.md` / `W5-server-fc-migration.md`。
+🟢 **W1 完成并上线(Workers)**;🟢 **W5 阿里云 FC 第二部署目标已上线联调完成**(大陆链路 ~9 倍提升,见 `../docs/adr/0010-dual-deploy-worker-and-fc.md`)。链路细节见 `../.project/tasks/W1-backend-pipeline.md` / `W5-server-fc-migration.md`。
 
 ## 栈与结构
 
@@ -27,7 +27,7 @@ pnpm start:fc     # 本地跑 FC 入口(node --env-file=.dev.vars,:9000;不带 e
 ## 部署
 
 - **Workers**:`pnpm deploy`(路由 `skin.9shi.cc/api/*`;R2/D1/secret 见 wrangler.jsonc)。
-- **FC**(cn-hangzhou,函数 `skin-checker`):`pnpm build:fc` 后把 `dist/fc/` 内两个文件压成 ZIP,控制台上传;启动命令 `npm run start`、监听端口 9000;`QWEN_API_KEY` 配在 FC 环境变量(高级配置 → 更多配置)。自定义域名卡 ICP 备案,前期用默认域名 + CORS。
+- **FC**(cn-hangzhou,函数 `skin-checker`):`pnpm build:fc` 后把 `dist/fc/` 内两个文件压成 ZIP,控制台上传;启动命令 `npm run start`、监听端口 9000;`QWEN_API_KEY` 配在 FC 环境变量(配置 → 高级配置);HTTP 触发器认证方式须为**无需认证**(签名认证会在网关挡匿名请求)。线上默认域名 `https://skin-checker-egkggmemue.cn-hangzhou.fcapp.run`(自定义域名卡 ICP 备案,前期默认域名 + CORS);大陆链路实测 ~9 倍快于 Workers(W5 文档有数据)。
 
 ## 密钥
 
