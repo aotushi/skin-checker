@@ -3,7 +3,7 @@
 # W5 · server 迁移阿里云 FC(双部署目标)
 
 **最后更新**: 2026-07-14
-**状态:** 🟢 切片 A+B+C+D 上线(FC 真 key 全通 **~9 倍**;H5 已切 FC 部署验证;flutter 新包已传 Release,uniapp 待用户云打包)+ 🟡 切片 E 限流+CORS 本地全验**待重部署**(FC ZIP 已重打留用户上传;Workers `wrangler deploy` 待同意);⏳ 用户真机真脸自测收官
+**状态:** 🟢 切片 A+B+C+D 上线(FC 真 key 全通 **~9 倍**;H5 已切 FC 部署验证;flutter 新包已传 Release,uniapp 待用户云打包)+ 🟡 切片 E 限流+CORS **Workers 已部署生效**(线上验证过),FC 侧 ZIP 已重打**留用户控制台上传**;⏳ 用户真机真脸自测收官
 
 > 目标:优化大陆用户 `/analyze` 耗时(CF 美西 PoP 往返 + 原图直传所致)。方案 = server 增加阿里云 FC(Web 函数)为第二部署目标,一套业务两处部署(见 `docs/adr/0010-dual-deploy-worker-and-fc.md`);Workers 保留。FC 函数已由用户在控制台创建(cn-hangzhou / `skin-checker` / 0.25 vCPU / 0.5GB / 最小实例 0 / 并发 20 / 自定义运行时 Node.js 22 Debian 11 / `npm run start` / 端口 9000 / 超时 60s / 公网开;日志监控未开——账号未开通 SLS)。
 
@@ -57,7 +57,8 @@
   - **IP 取法(防伪造)**:Workers 用 `CF-Connecting-IP`(平台注入不可伪造);FC 取 `X-Forwarded-For` **最后一跳**(网关 append 语义,首跳客户端可伪造不可信);兜底 `'unknown'`。
   - **CORS 收紧**:`cors()` 全放行 → 函数式白名单(`https://skin.9shi.cc` + 本地 dev `localhost`/`127.0.0.1` 任意端口)。只约束浏览器 —— 小程序/App/脚本原生请求无 Origin 不经此层、不受误伤;非浏览器滥用面由限流兜底(默认 fcapp.run 域名同样生效)。
 - ✅ 本地验证(2026-07-14,mock FC 实例 :9000 + wrangler dev :8890 双跑):带图 mock `/analyze` 200 全链回归;CORS 三组(白名单预检/简单请求回显 ACAO、`evil.example` 无 ACAO、无 Origin 原生请求 200 不受影响);12 连打空 POST → 10×400 后精准 2×429(429 体 = `{error: 请求过于频繁…}`);**首跳轮换伪造 XFF 不能绕过**(末跳取值),换末跳独立桶不误伤;Workers 侧同套全过(注:wrangler dev 代理会把响应 ACAO 里的生产域名改写成本地地址,判定信号 = 头存在与否,语义正确)。
-- ⏳ 待重部署:FC ZIP 已重打(`dist/fc/fc.zip`,35KB,同路径覆盖)留用户控制台上传;Workers `wrangler deploy` 待用户同意后执行。
+- ✅ Workers 已部署生效(2026-07-14,用户同意后 `wrangler deploy`,版本 c09a5f36):线上验证 health 200、白名单预检回显 ACAO、`evil.example` 无 ACAO、空 POST 400。注:部署后数十秒内有**混版传播窗口**(首测 evil 曾拿到旧版 `ACAO: *`,20s 后复测两次均新行为)。
+- ⏳ FC 侧待重部署:ZIP 已重打(`dist/fc/fc.zip`,35KB,同路径覆盖)留用户控制台上传;上传前 FC 线上仍是无限流/全放行旧版。
 - 配套用户侧(建议):FC 控制台「最大实例数」封顶 + 云监控调用量告警 + 阿里云费用预算告警。
 
 ### ⏳ 遗留(挂起项)
@@ -81,3 +82,4 @@
 | 2026-07-14 | 切片 D:APK 双端切 FC(uniapp `#ifdef H5 \|\| APP-PLUS` / flutter release URL);双端产物实证运行值 = FC、小程序不受影响;flutter 重出包 47.7MB(SHA-1 `2e8cbff5…`)待上传,uniapp 待用户云打包 | Claude |
 | 2026-07-14 | flutter 新包上传 Release v0.1.0(同名替换,latest 链接回拉 SHA-1 校验一致,notes 更新);uniapp 包留用户云打包后重传 | Claude |
 | 2026-07-14 | 切片 E 安全加固:`/analyze` per-IP 限流(10 次/分,XFF 取末跳防伪造)+ CORS 白名单收紧(app.ts 共享层,双入口同吃);mock FC + wrangler dev 双跑全验(429/CORS/伪造 XFF 矩阵);FC ZIP 重打待用户上传,Workers 部署待同意 | Claude |
+| 2026-07-14 | 切片 E Workers 侧上线:用户同意后 `wrangler deploy`(c09a5f36)+ 线上验证(白名单回显 / evil 无 ACAO / 空 POST 400;记混版传播窗口坑);FC ZIP 留用户上传;commit 已 push | Claude |
