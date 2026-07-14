@@ -47,7 +47,8 @@
 - 动机:两 APK(flutter release / uniapp App)原指 Workers,大陆装机用户同吃 ~35s 慢链路;App 原生请求不受小程序「合法域名/ICP」限制,直连 fcapp.run 无障碍。
 - uniapp:`api.ts` 条件编译 `#ifdef H5` → `#ifdef H5 || APP-PLUS`。验证:vue-tsc 过;`uni build -p app` 产物运行值 = FC(`let c="…9shi.cc";c="…fcapp.run"` 覆盖式,同 H5);mp-weixin 产物仅含 `skin.9shi.cc`(小程序不受影响,仍卡 ICP);H5 行为不变,无需重部署 Pages。
 - flutter:`api.dart` release URL → FC 域名;`dart format` + `flutter analyze` 双绿;`flutter build apk --release` → **47.7MB**(49,982,028 bytes),SHA-1 `2e8cbff5625728e9408039158fbb489e8b9ceaba`;APK 内 libapp.so 实证仅含 FC URL、无旧域名。
-- ⏳ 出包上架:flutter 新 APK 待重传 GitHub Release(用户同意后);uniapp 需用户 HBuilderX 云打包(`dist/build/app` 已就绪)后重传。已装旧包用户仍走 Workers —— 双入口长期并存,行为由同一套 `app.ts` 保证。
+- ✅ flutter 新包上传 Release v0.1.0(2026-07-14,用户同意后 `--clobber` 替换同名 asset,落地页 `releases/latest` 链接不变):notes SHA-1 已更新 + 加注 FC 切换说明;`releases/latest/download/…` 回拉校验 SHA-1 与本地构建一致。
+- ⏳ uniapp 需用户 HBuilderX 云打包(`dist/build/app` 已就绪)后重传(Release notes 已注「uniapp 包待同步更新」)。已装旧包用户仍走 Workers —— 双入口长期并存,行为由同一套 `app.ts` 保证。
 
 ### ⏳ 遗留(挂起项)
 - 账号未开通 SLS,FC 日志监控未启用 —— 用户自行开通后在函数「日志」配置打开,否则线上问题盲调。
@@ -68,3 +69,4 @@
 | 2026-07-14 | 切片 C:H5 生产 API_BASE 切 FC 域名(`#ifdef H5` 赋值覆盖式条件编译);vue-tsc + 双端产物 grep + 浏览器跨域端到端(canvas 图真调 422)全验;剩 Pages 部署待用户同意 | Claude |
 | 2026-07-14 | 切片 C 收官:用户同意后 H5 产物部署 Pages,生产域名 `skin.9shi.cc` 验证生效(api chunk 运行值 = FC 域名);W5 三切片全部上线,剩用户真机真脸自测 | Claude |
 | 2026-07-14 | 切片 D:APK 双端切 FC(uniapp `#ifdef H5 \|\| APP-PLUS` / flutter release URL);双端产物实证运行值 = FC、小程序不受影响;flutter 重出包 47.7MB(SHA-1 `2e8cbff5…`)待上传,uniapp 待用户云打包 | Claude |
+| 2026-07-14 | flutter 新包上传 Release v0.1.0(同名替换,latest 链接回拉 SHA-1 校验一致,notes 更新);uniapp 包留用户云打包后重传 | Claude |
