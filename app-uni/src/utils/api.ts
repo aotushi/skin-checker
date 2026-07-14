@@ -1,8 +1,9 @@
 // server 联调(W2 切片 E):uni.uploadFile 传图到 /analyze,返回报告 envelope { id, createdAt, report }。
 // API_BASE:dev = 本地 wrangler dev(pnpm dev --port 8890),build 按端分流(W5,ADR 0010):
-// - H5 → 阿里云 FC 默认域名(大陆链路 ~9 倍快;跨域,依赖 server 侧 cors() 全开);
-// - 小程序 / App → 仍走 Workers skin.9shi.cc(FC 默认域名 fcapp.run 无 ICP 备案,进不了
-//   小程序合法域名;App 原生请求不受限但暂不切,与小程序同源便于回归)。
+// - H5 / App → 阿里云 FC 默认域名(大陆链路 ~9 倍快;H5 跨域依赖 server 侧 cors(),
+//   App 原生请求不受 CORS 与合法域名限制);
+// - 小程序 → 仍走 Workers skin.9shi.cc(FC 默认域名 fcapp.run 无 ICP 备案,进不了
+//   小程序合法域名)。
 // server 挂 basePath('/api'),各处都带 /api 后缀。
 // 「分析 → 结果卡」的 envelope 用模块级暂存单次取用传递(redirectTo 不便携带大对象;
 // 不自动写历史,保存仍由用户在结果卡点「保存报告」)。
@@ -10,7 +11,7 @@
 import type { SkinReport } from '@/types/skin-report'
 
 let prodBase = 'https://skin.9shi.cc/api'
-// #ifdef H5
+// #ifdef H5 || APP-PLUS
 prodBase = 'https://skin-checker-egkggmemue.cn-hangzhou.fcapp.run/api'
 // #endif
 const API_BASE = import.meta.env.DEV ? 'http://127.0.0.1:8890/api' : prodBase

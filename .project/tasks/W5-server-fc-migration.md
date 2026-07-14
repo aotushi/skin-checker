@@ -3,7 +3,7 @@
 # W5 · server 迁移阿里云 FC(双部署目标)
 
 **最后更新**: 2026-07-14
-**状态:** 🟢 切片 A+B+C 全部上线(FC 后端真 key 全通 **~9 倍提升**;H5 生产已切 FC 域名并部署验证);⏳ 用户真机真脸自测收官
+**状态:** 🟢 切片 A+B+C 全部上线(FC 后端真 key 全通 **~9 倍提升**;H5 生产已切 FC 域名并部署验证)+ 切片 D APK 双端已切 FC(flutter 新包已出待上传;uniapp 待用户云打包);⏳ 用户真机真脸自测收官
 
 > 目标:优化大陆用户 `/analyze` 耗时(CF 美西 PoP 往返 + 原图直传所致)。方案 = server 增加阿里云 FC(Web 函数)为第二部署目标,一套业务两处部署(见 `docs/adr/0010-dual-deploy-worker-and-fc.md`);Workers 保留。FC 函数已由用户在控制台创建(cn-hangzhou / `skin-checker` / 0.25 vCPU / 0.5GB / 最小实例 0 / 并发 20 / 自定义运行时 Node.js 22 Debian 11 / `npm run start` / 端口 9000 / 超时 60s / 公网开;日志监控未开——账号未开通 SLS)。
 
@@ -43,6 +43,12 @@
 - ✅ 部署(2026-07-14,用户同意后执行):`wrangler pages deploy dist/build/h5 --project-name=skin-checker` → `https://2c22fce9.skin-checker.pages.dev`;生产域名 `skin.9shi.cc` 验证已生效(index.html 主入口 = 新构建 `index-DbQlR8Zl.js`,api chunk 线上内容确认运行值 = FC 域名;首拉曾撞 CDN 旧缓存,数秒后传播完成)。
 - ⏳ 用户真机 H5 真脸自测(顺带补 200 路径线上验证;预期 `/analyze` 从 ~35s 降到 ~5s)。
 
+### ✅ D. APK 双端切 FC(2026-07-14,用户指示;推翻切片 C「App 暂不切」决策)
+- 动机:两 APK(flutter release / uniapp App)原指 Workers,大陆装机用户同吃 ~35s 慢链路;App 原生请求不受小程序「合法域名/ICP」限制,直连 fcapp.run 无障碍。
+- uniapp:`api.ts` 条件编译 `#ifdef H5` → `#ifdef H5 || APP-PLUS`。验证:vue-tsc 过;`uni build -p app` 产物运行值 = FC(`let c="…9shi.cc";c="…fcapp.run"` 覆盖式,同 H5);mp-weixin 产物仅含 `skin.9shi.cc`(小程序不受影响,仍卡 ICP);H5 行为不变,无需重部署 Pages。
+- flutter:`api.dart` release URL → FC 域名;`dart format` + `flutter analyze` 双绿;`flutter build apk --release` → **47.7MB**(49,982,028 bytes),SHA-1 `2e8cbff5625728e9408039158fbb489e8b9ceaba`;APK 内 libapp.so 实证仅含 FC URL、无旧域名。
+- ⏳ 出包上架:flutter 新 APK 待重传 GitHub Release(用户同意后);uniapp 需用户 HBuilderX 云打包(`dist/build/app` 已就绪)后重传。已装旧包用户仍走 Workers —— 双入口长期并存,行为由同一套 `app.ts` 保证。
+
 ### ⏳ 遗留(挂起项)
 - 账号未开通 SLS,FC 日志监控未启用 —— 用户自行开通后在函数「日志」配置打开,否则线上问题盲调。
 - 前端 canvas 压图(H5 `sizeType:['compressed']` 不生效,原图 3-10MB 直传)为耗时另一大头,独立切片待排。
@@ -61,3 +67,4 @@
 | 2026-07-14 | 切片 B 收官:QWEN_API_KEY 配置(用户)+ 真 key 422 验证 ✓;耗时对比 FC ~4s vs Workers ~35s(**~9 倍**),W5 后端联调完成;剩前端 API_BASE 切换(另议) | Claude |
 | 2026-07-14 | 切片 C:H5 生产 API_BASE 切 FC 域名(`#ifdef H5` 赋值覆盖式条件编译);vue-tsc + 双端产物 grep + 浏览器跨域端到端(canvas 图真调 422)全验;剩 Pages 部署待用户同意 | Claude |
 | 2026-07-14 | 切片 C 收官:用户同意后 H5 产物部署 Pages,生产域名 `skin.9shi.cc` 验证生效(api chunk 运行值 = FC 域名);W5 三切片全部上线,剩用户真机真脸自测 | Claude |
+| 2026-07-14 | 切片 D:APK 双端切 FC(uniapp `#ifdef H5 \|\| APP-PLUS` / flutter release URL);双端产物实证运行值 = FC、小程序不受影响;flutter 重出包 47.7MB(SHA-1 `2e8cbff5…`)待上传,uniapp 待用户云打包 | Claude |

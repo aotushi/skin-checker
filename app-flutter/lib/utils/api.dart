@@ -1,5 +1,6 @@
 // server 联调(W3 切片 D):multipart 传图到 /analyze,返回报告 envelope { id, createdAt, report }。
-// API_BASE:debug 运行 = 本地 wrangler dev(pnpm dev --port 8890),release 构建 = 线上 skin.9shi.cc;
+// API_BASE:debug 运行 = 本地 wrangler dev(pnpm dev --port 8890),release 构建 = 阿里云 FC
+// 默认域名(W5,ADR 0010:大陆链路 ~9 倍快;App 原生请求不受 CORS 限制,Workers skin.9shi.cc 在线兜底)。
 // server 挂 basePath('/api'),两处都带 /api 后缀 —— 对齐 app-uni utils/api.ts 的 DEV/build 切换。
 import 'dart:convert';
 
@@ -11,7 +12,7 @@ import '../models/skin_report.dart';
 
 const _apiBase = kDebugMode
     ? 'http://127.0.0.1:8890/api'
-    : 'https://skin.9shi.cc/api';
+    : 'https://skin-checker-egkggmemue.cn-hangzhou.fcapp.run/api';
 
 class AnalysisEnvelope {
   const AnalysisEnvelope({
