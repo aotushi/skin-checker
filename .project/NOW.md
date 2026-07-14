@@ -1,6 +1,6 @@
 # NOW · skin-checker 当前状态
 
-**最后更新:** 2026-07-14(**W5 🟢 server FC 后端联调完成**:FC 线上真 key 全通(cn-hangzhou,公网域名 `https://skin-checker-egkggmemue.cn-hangzhou.fcapp.run`,无需认证 + `QWEN_API_KEY` 已配),大陆链路耗时对比 **FC ~4s vs Workers ~35s(~9 倍提升)**;剩前端 `API_BASE` 切换策略(另议),详见 `tasks/W5-server-fc-migration.md` / ADR 0010)
+**最后更新:** 2026-07-14(**W5 🟡 后端联调完成 + H5 切换就绪**:FC 线上真 key 全通(公网域名 `https://skin-checker-egkggmemue.cn-hangzhou.fcapp.run`),大陆链路 **FC ~4s vs Workers ~35s(~9 倍)**;H5 生产 `API_BASE` 已切 FC 并本地全验,**剩 Pages 部署待用户同意**,详见 `tasks/W5-server-fc-migration.md` / ADR 0010)
 
 ## 部署(2026-07-09,用户同意远程操作后执行)
 
@@ -48,7 +48,7 @@
 **后端(W5 FC 迁移,后端联调完成 2026-07-14):**
 - ✅ 切片 A 平台适配层:`platform.ts` + `app.ts` 工厂 + 双入口 + `build:fc`/`start:fc`;`tsc` 全绿;本地 FC mock 200 全链 / 真 key 422 / Workers 回归通过;ADR 0010。
 - ✅ 切片 B FC 部署联调:ZIP 上线(WebIDE 验证 = esbuild 产物)→ 触发器改无需认证(签名认证在网关挡匿名请求,实测 400)→ mock 冒烟全过 → `QWEN_API_KEY` 配置(用户)→ 真 key 422 验证。公网域名 **`https://skin-checker-egkggmemue.cn-hangzhou.fcapp.run`**;耗时对比(同一张 2MB 图真调):**FC ~4s vs Workers ~35s,~9 倍提升**(Workers 慢在大陆→美西上传 + R2 中转 + 跨洋调百炼)。真人脸 200 留前端切换后真机验证。
-- ⏳ 前端 `API_BASE` 分流策略另议(小程序合法域名 / FC 自定义域名均卡 ICP 备案,前期 H5 用 FC 默认域名 + CORS)。
+- 🟡 切片 C 前端切换(2026-07-14):H5 生产 `API_BASE` 已切 FC 域名(`api.ts` `#ifdef H5` 赋值覆盖式条件编译;小程序/App 仍走 `skin.9shi.cc`——fcapp.run 无 ICP 备案进不了小程序合法域名);本地全验(vue-tsc / H5·mp-weixin 双端产物 grep / 浏览器跨域端到端 canvas 图真调 422 + CORS 全通)。**剩 `dist/build/h5` 部署 Pages 项目 `skin-checker` 待用户同意**;上线后用户真机真脸自测(补 200 路径)。
 - ⏳ 用户侧:开通 SLS 后在函数「日志」配置启用日志监控(否则线上盲调)。
 - 📋 前端 canvas 压图(H5 `sizeType:['compressed']` 不生效,原图 3-10MB 直传,为耗时最大头)独立切片待排。
 
