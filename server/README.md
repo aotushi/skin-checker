@@ -14,6 +14,8 @@
 | `src/index.ts` | **Workers 入口**:R2 暂存中转(ADR 0003)+ D1 历史 + secret |
 | `src/index.fc.ts` | **FC 入口**(Web 函数):`@hono/node-server` 监听 9000;图片内存直读不落存储;历史 no-op(V2 预留);key 走 FC 环境变量 |
 
+- **滥用防护(W5 切片 E,`app.ts` 共享层)**:`/analyze` per-IP 限流 10 次/分(超限 429 `{error}`;Workers 取 `CF-Connecting-IP`,FC 取 `X-Forwarded-For` 末跳防伪造)+ CORS 白名单(`skin.9shi.cc` + 本地 dev;原生无 Origin 请求不受影响)。公开匿名接口无真认证可做(客户端凭证必然公开),配套 FC 控制台最大实例数封顶 + 告警。
+
 ## 本地开发
 
 ```bash

@@ -29,7 +29,7 @@
 
 | 目录 | 用途 | 状态 |
 | --- | --- | --- |
-| `server/` | Hono 三端共享后端,双部署目标:CF Workers + 阿里云 FC(ADR 0010) | 🟢 W1 完成并上线;🟢 W5 完成(FC 线上真 key 全通,大陆链路 ~9 倍提升;H5 生产已切 FC 链路) |
+| `server/` | Hono 三端共享后端,双部署目标:CF Workers + 阿里云 FC(ADR 0010) | 🟢 W1 完成并上线;🟢 W5 完成(FC 线上真 key 全通,大陆链路 ~9 倍提升;H5 生产已切 FC 链路);🟡 切片 E 安全加固(`/analyze` 限流 + CORS 白名单)本地全验待重部署 |
 | `app-uni/` | uniapp → H5 + 微信小程序 + App(APK) | 🟡 W2:四页 + 自绘底部 tab + 科普 + 本地历史,H5 已通、导航闭环、**与 server 联调通(真传图 → 结果卡)**;小程序端编译层已过,待真机;**App(APK)已出包(2026-07-13,HBuilderX 云打包 14.95MB)并上传 Release v0.1.0**,装机自测留用户(ADR 0009) |
 | `app-flutter/` | flutter → APK | 🟢 W3 完成:四页闭环 + `/analyze` 真联调 + 本地历史 + 合规核对 + **页面内实时取景直拍**(camera 插件,flutter 独有扩展)+ APK 出包(47.7MB debug 签名),**用户真机装机复测通过(2026-07-13)**(见 `.project/tasks/W3-frontend-app-flutter.md`) |
 | `landing/` | Astro 双语落地页 → Pages `skin-checker-doc`(`doc.skin.9shi.cc`) | 🟢 W4 完成:线上 pages.dev 已 200,绑域留用户(见 `.project/tasks/W4-landing-page.md`) |

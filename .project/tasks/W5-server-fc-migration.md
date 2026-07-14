@@ -3,7 +3,7 @@
 # W5 · server 迁移阿里云 FC(双部署目标)
 
 **最后更新**: 2026-07-14
-**状态:** 🟢 切片 A+B+C 全部上线(FC 后端真 key 全通 **~9 倍提升**;H5 生产已切 FC 域名并部署验证)+ 切片 D APK 双端已切 FC(flutter 新包已出待上传;uniapp 待用户云打包);⏳ 用户真机真脸自测收官
+**状态:** 🟢 切片 A+B+C+D 上线(FC 真 key 全通 **~9 倍**;H5 已切 FC 部署验证;flutter 新包已传 Release,uniapp 待用户云打包)+ 🟡 切片 E 限流+CORS 本地全验**待重部署**(FC ZIP 已重打留用户上传;Workers `wrangler deploy` 待同意);⏳ 用户真机真脸自测收官
 
 > 目标:优化大陆用户 `/analyze` 耗时(CF 美西 PoP 往返 + 原图直传所致)。方案 = server 增加阿里云 FC(Web 函数)为第二部署目标,一套业务两处部署(见 `docs/adr/0010-dual-deploy-worker-and-fc.md`);Workers 保留。FC 函数已由用户在控制台创建(cn-hangzhou / `skin-checker` / 0.25 vCPU / 0.5GB / 最小实例 0 / 并发 20 / 自定义运行时 Node.js 22 Debian 11 / `npm run start` / 端口 9000 / 超时 60s / 公网开;日志监控未开——账号未开通 SLS)。
 
@@ -50,6 +50,16 @@
 - ✅ flutter 新包上传 Release v0.1.0(2026-07-14,用户同意后 `--clobber` 替换同名 asset,落地页 `releases/latest` 链接不变):notes SHA-1 已更新 + 加注 FC 切换说明;`releases/latest/download/…` 回拉校验 SHA-1 与本地构建一致。
 - ⏳ uniapp 需用户 HBuilderX 云打包(`dist/build/app` 已就绪)后重传(Release notes 已注「uniapp 包待同步更新」)。已装旧包用户仍走 Workers —— 双入口长期并存,行为由同一套 `app.ts` 保证。
 
+### 🟡 E. 安全加固:`/analyze` 限流 + CORS 收紧(2026-07-14,用户指示「不带 token」)
+- 背景:FC 默认域名公开匿名可调,`/analyze` 每次都真调计费 VL(422 gate 判定本身也是一次完整调用,不省钱);无自定义域名 → WAF/API 网关不可用,客户端凭证必然公开(APK 可提取,已实证)做不了真认证 → 防线 = **代码级限流 + CORS 收紧**(本切片)+ 用户侧 FC 最大实例数封顶/告警(第①层)。
+- 实现(`src/app.ts` 共享层,双入口同吃):
+  - **per-IP 限流**:`/analyze` 10 次/分钟/IP(固定窗口,实例级内存 Map);超限 429 走既有 `{error}` 形态,两端前端 toast 零改动;检查放 `parseBody` 之前零成本拒绝;Map>5000 清一轮过期桶防无界增长。FC 配合「最大实例数」封顶后近似全局;Workers 为 isolate 级尽力而为。
+  - **IP 取法(防伪造)**:Workers 用 `CF-Connecting-IP`(平台注入不可伪造);FC 取 `X-Forwarded-For` **最后一跳**(网关 append 语义,首跳客户端可伪造不可信);兜底 `'unknown'`。
+  - **CORS 收紧**:`cors()` 全放行 → 函数式白名单(`https://skin.9shi.cc` + 本地 dev `localhost`/`127.0.0.1` 任意端口)。只约束浏览器 —— 小程序/App/脚本原生请求无 Origin 不经此层、不受误伤;非浏览器滥用面由限流兜底(默认 fcapp.run 域名同样生效)。
+- ✅ 本地验证(2026-07-14,mock FC 实例 :9000 + wrangler dev :8890 双跑):带图 mock `/analyze` 200 全链回归;CORS 三组(白名单预检/简单请求回显 ACAO、`evil.example` 无 ACAO、无 Origin 原生请求 200 不受影响);12 连打空 POST → 10×400 后精准 2×429(429 体 = `{error: 请求过于频繁…}`);**首跳轮换伪造 XFF 不能绕过**(末跳取值),换末跳独立桶不误伤;Workers 侧同套全过(注:wrangler dev 代理会把响应 ACAO 里的生产域名改写成本地地址,判定信号 = 头存在与否,语义正确)。
+- ⏳ 待重部署:FC ZIP 已重打(`dist/fc/fc.zip`,35KB,同路径覆盖)留用户控制台上传;Workers `wrangler deploy` 待用户同意后执行。
+- 配套用户侧(建议):FC 控制台「最大实例数」封顶 + 云监控调用量告警 + 阿里云费用预算告警。
+
 ### ⏳ 遗留(挂起项)
 - 账号未开通 SLS,FC 日志监控未启用 —— 用户自行开通后在函数「日志」配置打开,否则线上问题盲调。
 - 前端 canvas 压图(H5 `sizeType:['compressed']` 不生效,原图 3-10MB 直传)为耗时另一大头,独立切片待排。
@@ -70,3 +80,4 @@
 | 2026-07-14 | 切片 C 收官:用户同意后 H5 产物部署 Pages,生产域名 `skin.9shi.cc` 验证生效(api chunk 运行值 = FC 域名);W5 三切片全部上线,剩用户真机真脸自测 | Claude |
 | 2026-07-14 | 切片 D:APK 双端切 FC(uniapp `#ifdef H5 \|\| APP-PLUS` / flutter release URL);双端产物实证运行值 = FC、小程序不受影响;flutter 重出包 47.7MB(SHA-1 `2e8cbff5…`)待上传,uniapp 待用户云打包 | Claude |
 | 2026-07-14 | flutter 新包上传 Release v0.1.0(同名替换,latest 链接回拉 SHA-1 校验一致,notes 更新);uniapp 包留用户云打包后重传 | Claude |
+| 2026-07-14 | 切片 E 安全加固:`/analyze` per-IP 限流(10 次/分,XFF 取末跳防伪造)+ CORS 白名单收紧(app.ts 共享层,双入口同吃);mock FC + wrangler dev 双跑全验(429/CORS/伪造 XFF 矩阵);FC ZIP 重打待用户上传,Workers 部署待同意 | Claude |

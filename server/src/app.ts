@@ -14,14 +14,53 @@ import type { PlatformDeps } from './platform'
 
 const MAX_IMAGE_BYTES = 10 * 1024 * 1024 // 10MB 上限
 
+// —— /analyze 滥用防护(W5 切片 E):公开匿名接口,每次调用都真调计费 VL ——
+// 实例级内存限流:同 IP 每分钟最多 RATE_LIMIT 次,超限 429(走既有 {error} 形态,前端 toast 即可)。
+// 计数器实例间不共享:FC 侧配合控制台「最大实例数」封顶后即近似全局限流;Workers 侧为 isolate 级尽力而为。
+const RATE_LIMIT = 10
+const RATE_WINDOW_MS = 60_000
+const rateBuckets = new Map<string, { count: number; windowStart: number }>()
+
+// 客户端 IP:Workers 用 CF-Connecting-IP(平台注入,不可伪造);FC 取 X-Forwarded-For
+// 最后一跳(网关在既有值后追加真实 IP,首个条目可被客户端伪造,不可信)。
+function clientIp(c: Context): string {
+  const cf = c.req.header('cf-connecting-ip')
+  if (cf) return cf
+  const xff = c.req.header('x-forwarded-for')
+  if (xff) {
+    const hops = xff.split(',')
+    return hops[hops.length - 1]!.trim()
+  }
+  return 'unknown'
+}
+
+function overRateLimit(ip: string): boolean {
+  const now = Date.now()
+  // 防 Map 无界增长:桶数超阈值时清一轮过期桶
+  if (rateBuckets.size > 5_000) {
+    for (const [k, v] of rateBuckets) {
+      if (now - v.windowStart >= RATE_WINDOW_MS) rateBuckets.delete(k)
+    }
+  }
+  const bucket = rateBuckets.get(ip)
+  if (!bucket || now - bucket.windowStart >= RATE_WINDOW_MS) {
+    rateBuckets.set(ip, { count: 1, windowStart: now })
+    return false
+  }
+  bucket.count += 1
+  return bucket.count > RATE_LIMIT
+}
+
 export function createApp<E extends HonoEnv = HonoEnv>(
   resolveDeps: (c: Context<E>) => PlatformDeps,
 ): Hono<E> {
   const app = new Hono<E>().basePath('/api')
 
-  // CORS:H5 端(浏览器)跨域 fetch 必需;微信小程序 / APP 走原生请求不受 CORS(但需各端后台配合法域名)。
-  // MVP 先放开所有源(接口无 cookie / 无凭证);部署时收紧到实际前端域名。
-  app.use('/*', cors())
+  // CORS:收紧到 H5 生产域名 + 本地 dev(W5 切片 E;接口无 cookie / 无凭证)。
+  // 只约束浏览器跨域 —— 小程序 / App / 脚本的原生请求无 Origin 不经此层,
+  // 滥用面由上方限流 + FC 实例数封顶兜底(默认 fcapp.run 域名同样生效)。
+  const ALLOWED_ORIGIN = /^https:\/\/skin\.9shi\.cc$|^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/
+  app.use('/*', cors({ origin: (origin) => (ALLOWED_ORIGIN.test(origin) ? origin : null) }))
 
   app.get('/health', (c) => c.json({ ok: true, service: 'skin-checker-server' }))
 
@@ -29,6 +68,9 @@ export function createApp<E extends HonoEnv = HonoEnv>(
   // → 后端派生 code/name + 注入 disclaimer → 契约校验 → 落库(只存结构化结果;FC 为 no-op)
   // → 清理暂存图(ADR 0003,finally 确保执行,质检拒绝路径同样覆盖)。
   app.post('/analyze', async (c) => {
+    // 限流放最前(解析 body 之前),超限请求零成本拒绝。
+    if (overRateLimit(clientIp(c))) return c.json({ error: '请求过于频繁,请稍候再试' }, 429)
+
     const deps = resolveDeps(c)
     const body = await c.req.parseBody()
     const file = body['image']
