@@ -2,7 +2,7 @@
 
 # W4 · 项目落地页(landing → doc.skin.9shi.cc)
 
-**最后更新**: 2026-07-13
+**最后更新**: 2026-07-14
 **状态:** 🟢 完成(线上 `skin-checker-doc.pages.dev` 全路径验证通过;自定义域 `doc.skin.9shi.cc` 绑定留用户 dashboard 操作)
 
 > 目标:为项目提供介绍落地页,部署 Cloudflare Pages,地址 `doc.skin.9shi.cc`。结构参考 `resume/site-extensions/e1-google-ad-timing-probe/landing/` 既有样板;内容按项目生成。经用户确认:**Astro 静态站 / 中英双语 / 产品+技术混合基调 / 出口 = H5 + APK 双入口**;APK 承载定为 **GitHub Releases**(Pages 单文件 25MiB 限制装不下 47.7MB APK)。
@@ -68,3 +68,4 @@
 |------|---------|--------|
 | 2026-07-13 | 建 W4:landing/ Astro 双语落地页全量建成(8 组件 + SEO 全套 + 素材可再生);本地 build + Playwright 四组视口验证(修 hero 网格出血 7px 溢出);GitHub Release v0.1.0 挂 flutter APK(47.7MB + SHA-1);Pages 项目 skin-checker-doc 建成并部署,线上全路径验证通过;绑域 doc.skin.9shi.cc 留用户 | Claude |
 | 2026-07-13 | uniapp APK 收尾:用户 HBuilderX 出包(14.95MB)→ 补传 Release v0.1.0(notes 改双包对照表)→ 第三卡启用(zh/en 去 disabled,cta 指 releases/latest,补测试证书句)→ build + Playwright 本地断言 → 重 deploy,线上抽查生效(zh「前往下载」×2 / en 无 Coming soon) | Claude |
+| 2026-07-14 | 技术区架构文案随 W5 更新(zh/en 同步):archMid 改「Hono 统一 API · 双云部署:阿里云 FC(大陆直连)+ Cloudflare Workers(小程序/兜底)」;archBottom 三框改 D1/R2 标注 Workers 链路、千问 VL 标注 FC 同区域直连、新增「滥用防护 · per-IP 限流 + CORS 白名单」;points[2] 由「Cloudflare 边缘架构」整点替换为「双云双部署,一套业务」(原「H5 与 API 同域免 CORS」已不成立);build + dev server 双语双视口文案/几何断言 → 重 deploy(`3dfda63e.skin-checker-doc.pages.dev`),线上 zh/en curl 抽查生效 | Claude |

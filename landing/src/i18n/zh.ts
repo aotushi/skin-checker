@@ -116,8 +116,12 @@ export const zh = {
     title: '一套后端,双栈四端',
     sub: '这也是一个跨端工程样本:uniapp 与 Flutter 两套前端栈复刻同一套 API 与视觉,契约与设计 token 均为单一真相源。',
     archTop: ['uniapp · Vue3', 'H5 / 微信小程序 / App(APK)', 'Flutter', 'Android APK(实时取景)'],
-    archMid: 'Cloudflare Workers + Hono · 统一 API(skin.9shi.cc/api)',
-    archBottom: ['D1 · 报告存储', 'R2 · 图片暂存(用后即删)', '通义千问 VL · 多模态分析'],
+    archMid: 'Hono 统一 API · 双云部署:阿里云 FC(大陆直连)+ Cloudflare Workers(小程序/兜底)',
+    archBottom: [
+      'D1 / R2 · 报告与图片暂存(Workers 链路,图片用后即删)',
+      '通义千问 VL · 多模态分析(FC 同区域直连)',
+      '滥用防护 · per-IP 限流 + CORS 白名单',
+    ],
     points: [
       {
         t: '契约单一真相源',
@@ -128,8 +132,8 @@ export const zh = {
         d: 'DTCG 格式 design-tokens.json 一份源,生成 SCSS 变量与 Dart 常量,双端视觉零漂移。',
       },
       {
-        t: 'Cloudflare 边缘架构',
-        d: 'Workers + Hono 承接 API,D1 存报告、R2 暂存图片;H5 与 API 同域部署,免 CORS。',
+        t: '双云双部署,一套业务',
+        d: '同一套 Hono 业务经平台适配层双部署:大陆流量直连杭州 FC(分析耗时约 35s → 5s),小程序走 Cloudflare Workers;接口内建 per-IP 限流与 CORS 白名单。',
       },
       {
         t: 'AI 工程化',

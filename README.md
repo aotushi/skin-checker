@@ -29,8 +29,8 @@
 
 | 目录 | 用途 | 状态 |
 | --- | --- | --- |
-| `server/` | Hono 三端共享后端,双部署目标:CF Workers + 阿里云 FC(ADR 0010) | 🟢 W1 完成并上线;🟢 W5 完成(FC 线上真 key 全通,大陆链路 ~9 倍提升;H5 生产已切 FC 链路);🟡 切片 E 安全加固(`/analyze` 限流 + CORS 白名单)Workers 已上线,FC ZIP 待上传 |
-| `app-uni/` | uniapp → H5 + 微信小程序 + App(APK) | 🟡 W2:四页 + 自绘底部 tab + 科普 + 本地历史,H5 已通、导航闭环、**与 server 联调通(真传图 → 结果卡)**;小程序端编译层已过,待真机;**App(APK)已出包(2026-07-13,HBuilderX 云打包 14.95MB)并上传 Release v0.1.0**,装机自测留用户(ADR 0009) |
+| `server/` | Hono 三端共享后端,双部署目标:CF Workers + 阿里云 FC(ADR 0010) | 🟢 W1 完成并上线;🟢 W5 完成(FC 线上真 key 全通,大陆链路 ~9 倍提升;H5 + 双 APK 生产已切 FC);🟢 切片 E 安全加固(`/analyze` 限流 + CORS 白名单)双链路上线(FC 线上限流实测;FC 网关会兜底回显 Origin,该链路防线=限流,见 W5 切片 E) |
+| `app-uni/` | uniapp → H5 + 微信小程序 + App(APK) | 🟡 W2:四页 + 自绘底部 tab + 科普 + 本地历史,H5 已通、导航闭环、**与 server 联调通(真传图 → 结果卡)**;小程序端编译层已过,待真机;**App(APK)已出包(2026-07-13,HBuilderX 云打包 14.95MB)并上传 Release v0.1.0;2026-07-14 随 W5 切 FC 重出重传(SHA-1 `f5334d6e…`)**,装机自测留用户(ADR 0009) |
 | `app-flutter/` | flutter → APK | 🟢 W3 完成:四页闭环 + `/analyze` 真联调 + 本地历史 + 合规核对 + **页面内实时取景直拍**(camera 插件,flutter 独有扩展)+ APK 出包(47.7MB debug 签名),**用户真机装机复测通过(2026-07-13)**(见 `.project/tasks/W3-frontend-app-flutter.md`) |
 | `landing/` | Astro 双语落地页 → Pages `skin-checker-doc`(`doc.skin.9shi.cc`) | 🟢 W4 完成:线上 pages.dev 已 200,绑域留用户(见 `.project/tasks/W4-landing-page.md`) |
 | `shared/` | **契约单一真相源**(`skin-report.schema.json`) | ✅ 已建 |
@@ -46,7 +46,7 @@
 
 ## 当前状态
 
-🟢 **W5 server 迁阿里云 FC 完成(2026-07-14):** 大陆用户 `/analyze` 耗时优化 —— server 映射双部署目标(一套 Hono 业务:`app.ts` 工厂 + `platform.ts` 平台接口,Workers 入口 `index.ts` / FC 入口 `index.fc.ts`),`pnpm build:fc` 出单文件 ZIP 包。FC 线上全通(cn-hangzhou,默认域名,无需认证 + `QWEN_API_KEY`):mock 200 全链 + 真 key 422;**大陆链路实测 FC ~4s vs Workers ~35s(同图 2MB 真调,~9 倍提升)**。前端分流:**H5 与 App(双 APK)生产走 FC,小程序仍走 Workers**(fcapp.run 无 ICP 进不了小程序合法域名)——H5 已部署 Pages 并线上验证生效(`skin.9shi.cc` api chunk 运行值 = FC 域名);flutter APK 已重出包(47.7MB,内含 FC URL 实证)待重传 Release,uniapp APK 待 HBuilderX 云打包;剩用户真机真脸自测(预期 ~35s→~5s)。详见 `.project/tasks/W5-server-fc-migration.md` 与 `docs/adr/0010-dual-deploy-worker-and-fc.md`。
+🟢 **W5 server 迁阿里云 FC 完成(2026-07-14,切片 A–E 全上线):** 大陆用户 `/analyze` 耗时优化 —— server 映射双部署目标(一套 Hono 业务:`app.ts` 工厂 + `platform.ts` 平台接口,Workers 入口 `index.ts` / FC 入口 `index.fc.ts`),`pnpm build:fc` 出单文件 ZIP 包。FC 线上全通(cn-hangzhou,默认域名,无需认证 + `QWEN_API_KEY`):mock 200 全链 + 真 key 422;**大陆链路实测 FC ~4s vs Workers ~35s(同图 2MB 真调,~9 倍提升)**。前端分流:**H5 与 App(双 APK)生产走 FC,小程序仍走 Workers**(fcapp.run 无 ICP 进不了小程序合法域名)——H5 已部署 Pages 并线上验证生效(`skin.9shi.cc` api chunk 运行值 = FC 域名);**双 APK 均已重出并重传 Release v0.1.0**(flutter 47.7MB SHA-1 `2e8cbff5…` / uniapp 14.95MB SHA-1 `f5334d6e…`,产物均实证内含 FC URL,回拉校验一致)。**切片 E 安全加固双链路上线**:`/analyze` per-IP 限流(10 次/分)+ CORS 白名单,Workers 部署验证 + FC 线上限流实测(12 连打 10×400→2×429);注意 FC 网关会对无 ACAO 响应兜底回显 Origin(CORS 在 FC 域名被网关放宽,该链路防线=限流)。剩用户真机真脸自测(预期 ~35s→~5s)+ 用户侧 FC 实例数封顶/告警。详见 `.project/tasks/W5-server-fc-migration.md` 与 `docs/adr/0010-dual-deploy-worker-and-fc.md`。
 
 🟢 **W4 落地页上线(2026-07-13):** `landing/` Astro 5 双语静态站(/zh/ + /en/,SEO 全套),部署 Cloudflare Pages `skin-checker-doc`(产物直传,根 301→/zh/);下载区三入口全启用 = H5(skin.9shi.cc)+ flutter APK + uniapp APK(均走 **GitHub Release v0.1.0** `releases/latest` 固定链,双包 47.7MB / 14.95MB,SHA-1 in notes)。自定义域 `doc.skin.9shi.cc` 绑定留用户 dashboard。详见 `.project/tasks/W4-landing-page.md` 与 `landing/README.md`。
 

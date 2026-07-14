@@ -117,8 +117,12 @@ export const en: Strings = {
     title: 'One backend, two stacks, four targets',
     sub: 'Also a cross-platform engineering sample: uniapp and Flutter frontends replicate the same API and visual language, with single sources of truth for both the data contract and design tokens.',
     archTop: ['uniapp · Vue3', 'H5 / WeChat MP / App (APK)', 'Flutter', 'Android APK (live viewfinder)'],
-    archMid: 'Cloudflare Workers + Hono · unified API (skin.9shi.cc/api)',
-    archBottom: ['D1 · report storage', 'R2 · transient images (deleted after use)', 'Qwen VL · multimodal analysis'],
+    archMid: 'Hono unified API · dual-cloud deploy: Alibaba Cloud FC (mainland direct) + Cloudflare Workers (mini program / fallback)',
+    archBottom: [
+      'D1 / R2 · reports & transient images (Workers path, deleted after use)',
+      'Qwen VL · multimodal analysis (same-region from FC)',
+      'Abuse guard · per-IP rate limit + CORS allowlist',
+    ],
     points: [
       {
         t: 'Single-source data contract',
@@ -129,8 +133,8 @@ export const en: Strings = {
         d: 'One DTCG design-tokens.json generates SCSS variables and Dart constants — zero visual drift between stacks.',
       },
       {
-        t: 'Cloudflare edge architecture',
-        d: 'Workers + Hono serve the API with D1 for reports and R2 for transient images; H5 and API share one domain, no CORS.',
+        t: 'Dual-cloud deploy, one codebase',
+        d: 'One Hono app ships to two clouds via a platform adapter: mainland traffic hits Hangzhou FC directly (analysis ~35s → ~5s), the mini program stays on Cloudflare Workers; the API ships per-IP rate limiting and a CORS allowlist.',
       },
       {
         t: 'AI engineering',
