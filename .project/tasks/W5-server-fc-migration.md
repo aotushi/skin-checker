@@ -3,7 +3,7 @@
 # W5 · server 迁移阿里云 FC(双部署目标)
 
 **最后更新**: 2026-07-14
-**状态:** 🟡 进行中(切片 A 代码映射完成并本地双链路验证;FC 侧上传/联调待做)
+**状态:** 🟡 进行中(切片 A 完成;切片 B 代码包已上线冒烟通过 mock 链路,剩 QWEN_API_KEY 配置 + 真 key 验证 + 耗时对比)
 
 > 目标:优化大陆用户 `/analyze` 耗时(CF 美西 PoP 往返 + 原图直传所致)。方案 = server 增加阿里云 FC(Web 函数)为第二部署目标,一套业务两处部署(见 `docs/adr/0010-dual-deploy-worker-and-fc.md`);Workers 保留。FC 函数已由用户在控制台创建(cn-hangzhou / `skin-checker` / 0.25 vCPU / 0.5GB / 最小实例 0 / 并发 20 / 自定义运行时 Node.js 22 Debian 11 / `npm run start` / 端口 9000 / 超时 60s / 公网开;日志监控未开——账号未开通 SLS)。
 
@@ -23,10 +23,12 @@
 - **FC 入口真 key**(`pnpm start:fc`):非人脸图真调百炼 VL → 422「未检测到人脸…」(gate 生效,2.0s)。
 - **Workers 回归**(`wrangler dev` :8890):health 200;真 key 422(R2 暂存 put/get/delete 路径通);`/history` 读回既有本地 D1 数据。写路径 `insertReport` 函数体零改动仅调用点搬迁。
 
-### ⏳ B. FC 部署联调(待做)
-- `pnpm build:fc` → `dist/fc/` 两文件打 ZIP → FC 控制台上传替换示例代码。
-- FC 环境变量配 `QWEN_API_KEY`(高级配置 → 更多配置 → 环境变量)。
-- 默认域名冒烟:`/api/health`、`/api/analyze`(真图 422/200)、耗时对比记录。
+### 🟡 B. FC 部署联调(进行中)
+- ✅ ZIP 上传(2026-07-14,用户操作):控制台 WebIDE 确认文件树 = `index.mjs` + `package.json`(代码大小 34KB),内容即 esbuild 产物。
+- ✅ 触发器认证方式「签名认证」→「无需认证」(2026-07-14,用户确认提交):默认触发器签名认证会在网关层拦匿名请求(实测 400 `MissingRequiredHeader: Date`,不到函数),H5 直连必须无需认证 —— 与 Workers 版 `skin.9shi.cc/api/*` 公开可调对等(10MB 限制 + 422 gate 兜滥用面)。
+- ✅ 公网域名冒烟(mock 链路,2026-07-14):**`https://skin-checker-egkggmemue.cn-hangzhou.fcapp.run`** —— `/api/health` 200(冷启动 1.36s / 热 0.22s);`/api/history` `{items:[]}`;404 探针过;缺 file 400;**真图 2MB POST `/api/analyze` → 200 mock envelope,0.57s(含上传,大陆→杭州)**。
+- ⏳ FC 环境变量配 `QWEN_API_KEY`(配置 → 环境变量;key 值用户自填):不配则线上恒走 mock。
+- ⏳ 配 key 后真调验证(非人脸图 422 / 人脸图 200)+ 与 Workers 版大陆链路耗时对比记录。
 - 前端 `API_BASE` 切换策略(H5/小程序按域名分流 or 全量切 FC)另议;小程序合法域名需 ICP 备案,FC 自定义域名同卡备案 —— 前期 H5 用 FC 默认域名 + CORS。
 
 ### ⏳ 遗留(挂起项)
@@ -43,3 +45,4 @@
 | 日期 | 变更内容 | 修改人 |
 |------|---------|--------|
 | 2026-07-14 | 建 W5:平台适配层落地(platform.ts + app.ts 工厂 + 双入口 + esbuild 单文件构建);本地双链路验证(FC mock 200 / 真 key 422 / Workers 回归);ADR 0010 | Claude |
+| 2026-07-14 | 切片 B 推进:ZIP 上线验证 ✓;触发器改无需认证(签名认证挡匿名请求)✓;公网域名 mock 冒烟全过(真图 2MB 0.57s);剩 QWEN_API_KEY + 真 key 验证 + 耗时对比 | Claude |

@@ -1,6 +1,6 @@
 # NOW · skin-checker 当前状态
 
-**最后更新:** 2026-07-14(**W5 启动 🟡 server 迁阿里云 FC**:大陆链路优化,平台适配层落地 —— 一套业务双部署目标(Workers + FC Web 函数),本地双链路验证过(FC mock 200 全链 / 真 key 422 / Workers 回归);FC 函数用户已在控制台创建(cn-hangzhou),剩 ZIP 上传 + 线上联调,详见 `tasks/W5-server-fc-migration.md` / ADR 0010)
+**最后更新:** 2026-07-14(**W5 🟡 server 迁阿里云 FC**:平台适配层落地 + 本地双链路验证过;**FC 代码包已上线**(cn-hangzhou,公网域名 `https://skin-checker-egkggmemue.cn-hangzhou.fcapp.run`,触发器已改无需认证),mock 冒烟全过 —— 真图 2MB `/api/analyze` 0.57s(大陆→杭州);剩 FC 环境变量配 `QWEN_API_KEY`(用户自填)+ 真 key 验证 + 耗时对比,详见 `tasks/W5-server-fc-migration.md` / ADR 0010)
 
 ## 部署(2026-07-09,用户同意远程操作后执行)
 
@@ -47,7 +47,7 @@
 
 **后端(W5 FC 迁移,进行中):**
 - ✅ 切片 A 平台适配层(2026-07-14):`platform.ts` + `app.ts` 工厂 + 双入口 + `build:fc`/`start:fc`;`tsc` 全绿;本地 FC mock 200 全链 / 真 key 422 / Workers 回归通过;ADR 0010。
-- ⏳ 切片 B FC 部署联调:`pnpm build:fc` → `dist/fc/` 打 ZIP → 控制台上传;FC 环境变量配 `QWEN_API_KEY`;默认域名 `/api/health`、`/api/analyze` 冒烟 + 大陆耗时对比;前端 `API_BASE` 分流策略另议(小程序合法域名 / FC 自定义域名均卡 ICP 备案,前期 H5 用 FC 默认域名 + CORS)。
+- 🟡 切片 B FC 部署联调:ZIP 已上线 ✓(WebIDE 验证 = esbuild 产物);触发器改无需认证 ✓(签名认证在网关挡匿名请求,实测 400);公网域名 **`https://skin-checker-egkggmemue.cn-hangzhou.fcapp.run`** mock 冒烟全过(health 冷 1.36s/热 0.22s;真图 2MB analyze 0.57s 含上传)。剩:FC 环境变量配 `QWEN_API_KEY`(key 值用户自填,不配恒走 mock)→ 真 key 422/200 验证 + 与 Workers 大陆耗时对比;前端 `API_BASE` 分流策略另议(小程序合法域名 / FC 自定义域名均卡 ICP 备案,前期 H5 用 FC 默认域名 + CORS)。
 - ⏳ 用户侧:开通 SLS 后在函数「日志」配置启用日志监控(否则线上盲调)。
 - 📋 前端 canvas 压图(H5 `sizeType:['compressed']` 不生效,原图 3-10MB 直传,为耗时最大头)独立切片待排。
 
