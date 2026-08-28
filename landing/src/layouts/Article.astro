@@ -1,0 +1,304 @@
+---
+import Base from './Base.astro';
+import Footer from '../components/Footer.astro';
+import { zh } from '../i18n/zh';
+
+// W6 切片 C 内容页布局:导航精简版(首页锚点在内容页无效,故不复用 Nav)+
+// 正文排版 + 页尾统一「关于肤镜 SKINLENS」实体模块(冻结口径,五页一致)。
+// 仅中文页,不传 hreflang;datePublished 部署上线时随实际日期校准。
+interface Props {
+  title: string;
+  description: string;
+  path: string; // 站内路径,如 '/zh/photo-guide/'
+  related?: { label: string; href: string }[];
+}
+
+const { title, description, path, related = [] } = Astro.props;
+const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const canonicalUrl = `${site}${path}`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  inLanguage: 'zh',
+  url: canonicalUrl,
+  datePublished: '2026-08-28',
+  author: { '@type': 'Organization', name: '肤镜 SKINLENS', url: 'https://skin.9shi.cc' },
+  publisher: { '@type': 'Organization', name: '肤镜 SKINLENS', url: 'https://skin.9shi.cc' },
+  about: {
+    '@type': 'SoftwareApplication',
+    name: 'SKINLENS 肤镜',
+    url: 'https://skin.9shi.cc',
+  },
+};
+---
+
+<Base
+  t={zh}
+  canonicalUrl={canonicalUrl}
+  title={`${title} · 肤镜 SKINLENS`}
+  description={description}
+  ogType="article"
+  jsonLd={jsonLd}
+>
+  <header class="anav">
+    <div class="container anav__row">
+      <a class="anav__brand" href="/zh/">
+        <span class="anav__logo" aria-hidden="true"></span>
+        <span class="anav__name">肤镜 <em>SKINLENS</em></span>
+      </a>
+      <div class="anav__actions">
+        <a class="anav__home" href="/zh/">返回首页</a>
+        <a class="btn btn-primary anav__cta" href="https://skin.9shi.cc" rel="noopener">在线体验</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <article class="article">
+      <header class="article__head">
+        <p class="sec-label">SKINLENS 指南</p>
+        <h1 class="article__title">{title}</h1>
+      </header>
+
+      <div class="article__body">
+        <slot />
+      </div>
+
+      <aside class="article__about card" aria-label="关于肤镜 SKINLENS">
+        <p class="article__about-title">关于肤镜 SKINLENS</p>
+        <p>
+          AI 肤质参考助手:拍一张正脸,视觉大模型逐区读取 T 区、双颊与下巴,输出油脂 · 敏感 ·
+          痘痘 · 色沉四维光谱与 16 型肤质定位,每一维附置信度。网页版无需下载,手机拍照即可使用:<a
+            href="https://skin.9shi.cc"
+            rel="noopener">skin.9shi.cc</a
+          >。照片分析后即删,历史仅存设备本地。结果由 AI 生成,仅供护肤参考,不构成医疗建议。
+        </p>
+      </aside>
+
+      {
+        related.length > 0 && (
+          <nav class="article__related" aria-label="延伸阅读">
+            <span>延伸阅读:</span>
+            {related.map((r) => (
+              <a href={r.href}>{r.label}</a>
+            ))}
+          </nav>
+        )
+      }
+    </article>
+  </main>
+
+  <Footer t={zh} />
+</Base>
+
+<style>
+  /* ── 精简导航(与 Nav.astro 同视觉,链接改指首页) ── */
+  .anav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(253, 244, 236, 0.86);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .anav__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    height: 60px;
+  }
+  .anav__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font-weight: 800;
+    color: var(--rose-wood);
+    white-space: nowrap;
+  }
+  .anav__logo {
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+    background: linear-gradient(135deg, var(--cta-from), var(--cta-to));
+  }
+  .anav__name em {
+    font-style: normal;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--muted-soft);
+    margin-left: 4px;
+  }
+  .anav__actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .anav__home {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--rose-deep);
+    text-decoration: none;
+    padding: 4px 10px;
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+  }
+  .anav__cta {
+    font-size: 13px;
+    padding: 8px 18px;
+  }
+
+  /* 与 Nav.astro 同规则:窄屏隐藏 CTA,留品牌 + 返回首页 pill */
+  @media (max-width: 720px) {
+    .anav__cta {
+      display: none;
+    }
+  }
+
+  /* ── 文章容器(720px 阅读宽,窄于首页 960) ── */
+  .article {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 24px 72px;
+  }
+  .article__head {
+    margin-bottom: 8px;
+  }
+  .article__title {
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.35;
+    color: var(--rose-wood);
+    margin-bottom: 8px;
+  }
+
+  /* ── 页尾实体模块 ── */
+  .article__about {
+    margin-top: 48px;
+    padding: 20px 22px;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--brown);
+  }
+  .article__about-title {
+    font-weight: 800;
+    color: var(--rose-wood);
+    margin-bottom: 6px;
+  }
+  .article__about a {
+    color: var(--rose-deep);
+    font-weight: 700;
+  }
+
+  /* ── 延伸阅读 ── */
+  .article__related {
+    margin-top: 20px;
+    font-size: 13.5px;
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+  }
+  .article__related a {
+    color: var(--rose-deep);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(168, 90, 72, 0.35);
+  }
+
+  @media (max-width: 640px) {
+    .article {
+      padding-top: 32px;
+    }
+    .article__title {
+      font-size: 24px;
+    }
+  }
+</style>
+
+<style is:global>
+  /* ── 正文排版:slot 内容属于页面作用域,须走全局选择器,统一以 .article__body 前缀限定 ── */
+  .article__body {
+    font-size: 16px;
+    line-height: 1.9;
+    color: var(--ink);
+  }
+  .article__body > p:first-child {
+    font-size: 17px;
+    color: var(--brown);
+  }
+  .article__body p {
+    margin: 14px 0;
+  }
+  .article__body h2 {
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.4;
+    color: var(--rose-wood);
+    margin: 44px 0 12px;
+    padding-top: 18px;
+    border-top: 1px solid var(--divider);
+  }
+  .article__body h3 {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--rose-deep);
+    margin: 28px 0 8px;
+  }
+  .article__body ul,
+  .article__body ol {
+    margin: 14px 0;
+    padding-left: 1.5em;
+  }
+  .article__body li {
+    margin: 8px 0;
+  }
+  .article__body strong {
+    font-weight: 700;
+    color: var(--rose-wood);
+  }
+  .article__body a {
+    color: var(--rose-deep);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(168, 90, 72, 0.35);
+  }
+  .article__body a:hover {
+    text-decoration-color: var(--rose-deep);
+  }
+  .article__body code {
+    font-size: 0.9em;
+    background: var(--note);
+    border-radius: 5px;
+    padding: 1px 6px;
+  }
+  .article__body table {
+    width: 100%;
+    /* collapse 会使圆角失效,用 separate + spacing 0 等效 */
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 18px 0;
+    font-size: 14px;
+    line-height: 1.7;
+    background: var(--card);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .article__body th {
+    text-align: left;
+    font-weight: 700;
+    color: var(--rose-wood);
+    background: var(--note);
+    padding: 10px 14px;
+  }
+  .article__body td {
+    padding: 10px 14px;
+    border-top: 1px solid var(--divider);
+    vertical-align: top;
+  }
+</style>

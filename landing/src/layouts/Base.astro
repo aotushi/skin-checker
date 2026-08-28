@@ -4,17 +4,37 @@ import type { Strings } from '../i18n/zh';
 interface Props {
   t: Strings;
   canonicalUrl: string;
-  hreflangEn: string;
-  hreflangZh: string;
+  // 内容页(仅中文、无 en 对应页)不传 hreflang,即不输出 alternate 链接
+  hreflangEn?: string;
+  hreflangZh?: string;
+  // 逐页元数据覆盖;不传时回落到 t.seo(首页行为不变)
+  title?: string;
+  description?: string;
+  ogType?: string;
+  jsonLd?: Record<string, unknown>;
 }
 
-const { t, canonicalUrl, hreflangEn, hreflangZh } = Astro.props;
+const {
+  t,
+  canonicalUrl,
+  hreflangEn,
+  hreflangZh,
+  title,
+  description,
+  ogType = 'website',
+  jsonLd,
+} = Astro.props;
 const { seo, ogLocale, lang } = t;
+
+const pageTitle = title ?? seo.title;
+const pageDesc = description ?? seo.description;
+const pageOgTitle = title ?? seo.ogTitle;
+const pageOgDesc = description ?? seo.ogDesc;
 
 const ogImage = `${Astro.site}og-image.png`;
 
 // SoftwareApplication 结构化数据;描述保持「参考非诊断」合规口径
-const jsonLd = {
+const defaultJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
   name: 'SKINLENS 肤镜',
@@ -26,6 +46,7 @@ const jsonLd = {
   url: canonicalUrl,
   softwareVersion: '0.1.0',
 };
+const structuredData = jsonLd ?? defaultJsonLd;
 ---
 
 <!doctype html>
@@ -35,19 +56,25 @@ const jsonLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Primary SEO -->
-    <title>{seo.title}</title>
-    <meta name="description" content={seo.description} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDesc} />
     <link rel="canonical" href={canonicalUrl} />
 
     <!-- hreflang:中文为默认语言(应用本身纯中文) -->
-    <link rel="alternate" hreflang="zh" href={hreflangZh} />
-    <link rel="alternate" hreflang="en" href={hreflangEn} />
-    <link rel="alternate" hreflang="x-default" href={hreflangZh} />
+    {
+      hreflangZh && hreflangEn && (
+        <>
+          <link rel="alternate" hreflang="zh" href={hreflangZh} />
+          <link rel="alternate" hreflang="en" href={hreflangEn} />
+          <link rel="alternate" hreflang="x-default" href={hreflangZh} />
+        </>
+      )
+    }
 
     <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={seo.ogTitle} />
-    <meta property="og:description" content={seo.ogDesc} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={pageOgTitle} />
+    <meta property="og:description" content={pageOgDesc} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
@@ -57,8 +84,8 @@ const jsonLd = {
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={seo.ogTitle} />
-    <meta name="twitter:description" content={seo.ogDesc} />
+    <meta name="twitter:title" content={pageOgTitle} />
+    <meta name="twitter:description" content={pageOgDesc} />
     <meta name="twitter:image" content={ogImage} />
 
     <!-- Theme -->
@@ -66,7 +93,7 @@ const jsonLd = {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <!-- JSON-LD -->
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
     <style is:global>
       /* ── 设计 token:取自 shared/design-tokens.json(DTCG SSOT),与应用端同源同色 ── */
